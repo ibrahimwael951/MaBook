@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme   {
+  --color-primary:#EDF7F6;
+  --color-seconder: #004643;
+  --color-third:#0C1618;
+}
+
+section{
+  @apply  text-third  dark:text-primary
+}
+ body{
+  @apply w-full mx-auto max-w-7xl mt-15 bg-primary dark:bg-third
+ }
+ 

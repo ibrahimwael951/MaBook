@@ -1,0 +1,65 @@
+"use client";
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { BookOpenText, Menu } from "lucide-react";
+import { Navbar as NavLinks } from "@/data/Quick_Links";
+import { ModeToggle } from "@/components/ThemeToggle";
+import Link from "next/link";
+const Navbar = () => {
+  const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
+  return (
+    <motion.nav className="fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 ">
+      <Link
+        href="/"
+        className="flex items-center gap-1 text-2xl font-extrabold"
+      >
+        <BookOpenText size={40} />
+        Ma Book
+      </Link>
+      <div className="hidden lg:flex items-center gap-x-2  ">
+        {NavLinks.map((item, i) => (
+          <Link key={i} href={item.href}>
+            <div className="md:text-xl">{item.title}</div>
+          </Link>
+        ))}
+      </div>
+      <button
+        className="lg:hidden cursor-pointer"
+        onClick={() => setIsMenuOpened((prev) => !prev)}
+      >
+        <Menu size={40} />
+      </button>
+
+      <AnimatePresence>
+        {isMenuOpened && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-third p-10 space-y-5"
+          >
+            <button
+              onClick={() => setIsMenuOpened((prev) => !prev)}
+              className=""
+            >
+              <Menu size={40} />
+            </button>
+            <div className="">
+              <h1 className="text-3xl font-extrabold">Quick Links</h1>
+              {NavLinks.map((item, i) => (
+                <Link key={i} href={item.href}>
+                  <div className="text-3xl font-semibold ml-4 mt-3">
+                    {item.title}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <ModeToggle />
+    </motion.nav>
+  );
+};
+
+export default Navbar;
