@@ -14,10 +14,13 @@
 }
 
  body{
-  @apply  bg-primary  text-third dark:bg-third dark:text-primary  
+  @apply  bg-primary  text-third dark:bg-third dark:text-primary   cursor-default
  }
  section{
-  @apply px-5 lg:px-10 w-full 
+  @apply px-5 lg:px-10 w-full overflow-x-hidden 
+ }
+ p{
+  @apply text-thirdLow dark:text-primLow
  }
  
  .font-eb-garamond {

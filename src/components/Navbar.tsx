@@ -11,7 +11,7 @@ const Navbar = () => {
     <motion.nav className="fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 z-50 ">
       <Link
         href="/"
-        className="flex items-center gap-1 text-2xl font-extrabold dark:bg-third dark:text-primary p-1.5 rounded-2xl"
+        className="flex items-center gap-1 text-2xl font-extrabold p-1.5 rounded-2xl"
       >
         <BookOpenText size={40} />
         Ma Book
@@ -36,7 +36,7 @@ const Navbar = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-third py-5 px-10 space-y-10"
+            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-primary dark:bg-third py-5 px-10 space-y-10"
           >
             <div className="flex w-full justify-between  ">
               

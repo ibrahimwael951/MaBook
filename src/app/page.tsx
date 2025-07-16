@@ -1,12 +1,13 @@
-import Content from "@/components/Content";
+import Books from "@/components/Books";
+import Futures from "@/components/Futures";
 import Hero from "@/components/Hero";
- 
- 
+
 export default function Home() {
   return (
-   <main>
-      <Hero/>
-      <Content/>
-   </main>
+    <main>
+      <Hero />
+      <Futures />
+      <Books />
+    </main>
   );
 }
