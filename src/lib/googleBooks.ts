@@ -1,6 +1,6 @@
 import {Book, GoogleBooksResponse } from "@/types/Books";
 
-const Google_Books_API = process.env.NEXT_PUBLIC_API_BOOKS;
+const Google_Books_API = "https://www.googleapis.com/books/v1/volumes"
 export async function searchBooks(
   query: string,
   maxResults: number = 10,
@@ -10,9 +10,9 @@ export async function searchBooks(
     q: query,
     maxResults: maxResults.toString(),
     startIndex: startIndex.toString(),
-    key: Google_Books_API || "",
+    key:  process.env.NEXT_PUBLIC_API_BOOKS || "",
   });
-  const res = await fetch(`${Google_Books_API}?${params}`);
+  const res = await fetch(` ${Google_Books_API}?${params}`);
 
   if (!res.ok) {
     throw new Error(`Error status:${res.status}`);
