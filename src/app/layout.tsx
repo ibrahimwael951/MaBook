@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NavbarDemo from "@/components/Navbar";
+import Navbar from "@/components/Navbar";
 import { EB_Garamond } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const eB_Garamond = EB_Garamond({
+const ebGaramond = EB_Garamond({
   subsets: ["latin"],
   weight: ["400", "700"],
-  variable: "--font-merriweather",
+  variable: "--font-eb-garamond",
   display: "swap",
 });
 
@@ -22,14 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${eB_Garamond.variable}`}>
-      <body className={``}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${ebGaramond.variable} font-eb-garamond`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-        > 
-          <NavbarDemo />
+          disableTransitionOnChange  
+        >
+          <Navbar />
           {children}
         </ThemeProvider>
       </body>

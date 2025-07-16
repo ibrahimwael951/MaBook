@@ -8,15 +8,15 @@ import Link from "next/link";
 const Navbar = () => {
   const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
   return (
-    <motion.nav className="fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 ">
+    <motion.nav className="fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 z-50 ">
       <Link
         href="/"
-        className="flex items-center gap-1 text-2xl font-extrabold"
+        className="flex items-center gap-1 text-2xl font-extrabold dark:bg-third dark:text-primary p-1.5 rounded-2xl"
       >
         <BookOpenText size={40} />
         Ma Book
       </Link>
-      <div className="hidden lg:flex items-center gap-x-2  ">
+      <div className="hidden lg:flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
         {NavLinks.map((item, i) => (
           <Link key={i} href={item.href}>
             <div className="md:text-xl">{item.title}</div>
@@ -24,7 +24,7 @@ const Navbar = () => {
         ))}
       </div>
       <button
-        className="lg:hidden cursor-pointer"
+        className="lg:hidden cursor-pointer dark:bg-third dark:text-primary p-1.5 rounded-2xl"
         onClick={() => setIsMenuOpened((prev) => !prev)}
       >
         <Menu size={40} />
@@ -36,14 +36,19 @@ const Navbar = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-third p-10 space-y-5"
+            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-third py-5 px-10 space-y-10"
           >
-            <button
-              onClick={() => setIsMenuOpened((prev) => !prev)}
-              className=""
-            >
-              <Menu size={40} />
-            </button>
+            <div className="flex w-full justify-between  ">
+              
+                <ModeToggle />
+             
+              <button
+                onClick={() => setIsMenuOpened((prev) => !prev)}
+                className=""
+              >
+                <Menu size={40} />
+              </button>
+            </div>
             <div className="">
               <h1 className="text-3xl font-extrabold">Quick Links</h1>
               {NavLinks.map((item, i) => (
@@ -57,7 +62,9 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <ModeToggle />
+      <div className="hidden lg:inline">
+        <ModeToggle />
+      </div>
     </motion.nav>
   );
 };

@@ -3,16 +3,35 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme   {
+@theme  inline {
   --color-primary:#EDF7F6;
+  --color-primLow:#9ca1a1;
   --color-seconder: #004643;
+  --color-secLow:#00464394;
   --color-third:#0C1618;
+  --color-thirdLow:#6f7272;
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
 }
 
-section{
-  @apply  text-third  dark:text-primary
-}
  body{
-  @apply w-full mx-auto max-w-7xl mt-15 bg-primary dark:bg-third
+  @apply  bg-primary  text-third dark:bg-third dark:text-primary  
+ }
+ section{
+  @apply px-5 lg:px-10 w-full 
  }
  
+ .font-eb-garamond {
+  font-family: var(--font-eb-garamond), serif;
+
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
