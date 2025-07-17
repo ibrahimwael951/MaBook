@@ -7,9 +7,10 @@ import { Book } from "@/types/Books";
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const book: Book | null = await getBookById(params.id);
+  const { id } = await params;
+  const book: Book | null = await getBookById(id);
 
   if (!book) {
     return {
@@ -17,6 +18,7 @@ export async function generateMetadata({
       description: "The requested book could not be found.",
     };
   }
+
   return {
     title: `${book.volumeInfo.title} - Book Details`,
     description:
@@ -37,9 +39,10 @@ export async function generateMetadata({
 export default async function BookDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const book = await getBookById(params.id);
+  const { id } = await params;
+  const book: Book | null = await getBookById(id);
 
   if (!book) {
     notFound();
