@@ -1,4 +1,4 @@
-import { Book, Home, Info, LucideIcon, Newspaper, Podcast } from "lucide-react";
+import { Book, Home, Info, LucideIcon, Podcast, UsersRound } from "lucide-react";
 
 interface NavLinks {
   title: string;
@@ -9,6 +9,6 @@ export const Navbar: NavLinks[] = [
   { title: "Home", href: "/", icon: Home },
   { title: "About", href: "/about", icon: Info },
   { title: "Books", href: "/books", icon: Book },
-  { title: "News", href: "/news", icon: Newspaper },
+  { title: "Community", href: "/community", icon: UsersRound  },
   { title: "Posts", href: "/posts", icon: Podcast },
 ];

@@ -28,7 +28,8 @@ export const Rotate_Scale_Tap = {
 };
 export const opacity = {
   initial: { opacity: 0 },
-  whileInView: { opacity: 1 },
+  exit: { opacity: 0 },
+  
 };
 export const opacityWithBlur = {
   initial: { filter: "blur(20px)", opacity: 0 },

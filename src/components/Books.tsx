@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { searchBooks } from "@/lib/googleBooks";
 import SearchBar from "@/components/SearchBar";
 import BookCard from "@/components/ui/BookCard";
-import BookModal from "@/components/BookModel";
+
 import { FadeDown, FadeLeft, FadeUp, ViewPort } from "@/animation";
 
 export default function Home() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
   const [totalResults, setTotalResults] = useState(0);
 
   const handleSearch = async (query: string) => {
@@ -77,11 +77,7 @@ export default function Home() {
 
         <AnimatePresence>
           {loading && (
-            <motion.div
-              {...FadeUp}
-              {...ViewPort}
-              className="text-center py-8"
-            >
+            <motion.div {...FadeUp} {...ViewPort} className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-40 w-40 border-b-2  border-third dark:border-primary"></div>
               <p className="mt-2 text-2xl ">Searching books...</p>
             </motion.div>
@@ -90,11 +86,7 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {books.map((book) => (
-            <BookCard
-              key={book.id}
-              book={book}
-              onClick={() => setSelectedBook(book)}
-            />
+            <BookCard key={book.id} book={book} />
           ))}
         </div>
 
@@ -102,13 +94,6 @@ export default function Home() {
           <div className="text-center py-12">
             <p className="text-2xl">Search for books to get started!</p>
           </div>
-        )}
-
-        {!loading && selectedBook && (
-          <BookModal
-            book={selectedBook}
-            onClose={() => setSelectedBook(null)}
-          />
         )}
       </div>
     </div>

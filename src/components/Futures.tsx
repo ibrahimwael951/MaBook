@@ -27,7 +27,7 @@ const Futures = () => {
   ];
 
   return (
-    <section className=" my-20 ">
+    <section className=" mb-20 ">
       <motion.h1 {...FadeLeft} {...ViewPort} className="text-7xl mb-10">
         Future
       </motion.h1>

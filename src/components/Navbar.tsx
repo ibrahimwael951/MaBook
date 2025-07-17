@@ -39,9 +39,8 @@ const Navbar = () => {
             className="absolute top-0 left-0  lg:hidden h-screen w-full bg-primary dark:bg-third py-5 px-10 space-y-10"
           >
             <div className="flex w-full justify-between  ">
-              
-                <ModeToggle />
-             
+              <ModeToggle />
+
               <button
                 onClick={() => setIsMenuOpened((prev) => !prev)}
                 className=""
@@ -51,13 +50,20 @@ const Navbar = () => {
             </div>
             <div className="">
               <h1 className="text-3xl font-extrabold">Quick Links</h1>
-              {NavLinks.map((item, i) => (
-                <Link key={i} href={item.href}>
-                  <div className="text-3xl font-semibold ml-4 mt-3">
+              <div className="space-y-5 mt-5">
+                {NavLinks.map((item, i) => (
+                  <Link
+                    key={i}
+                    href={item.href}
+                    onClick={() => setIsMenuOpened((prev) => !prev)}
+                    className="flex items-center gap-2 text-3xl font-semibold ml-4 "
+                  >
+                    <item.icon size={30} />
+
                     {item.title}
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
