@@ -17,7 +17,7 @@
   @apply  bg-primary  text-third dark:bg-third dark:text-primary   cursor-default
  }
  section{
-  @apply px-5 lg:px-10 w-full overflow-x-hidden 
+  @apply px-5 lg:px-10 w-full overflow-hidden 
  }
  p{
   @apply text-thirdLow dark:text-primLow

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BookOpenText, Menu } from "lucide-react";
 import { Navbar as NavLinks } from "@/data/Quick_Links";
-import { ModeToggle } from "@/components/ThemeToggle";
+import { ModeToggle } from "@/components/ui/ThemeToggle";
 import Link from "next/link";
 const Navbar = () => {
   const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);

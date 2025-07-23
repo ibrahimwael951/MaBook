@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Book, GoogleBooksResponse } from "@/types/Books";
 import { motion, AnimatePresence } from "framer-motion";
 import { searchBooks } from "@/lib/googleBooks";
-import SearchBar from "@/components/SearchBar";
-import BookCard from "@/components/ui/BookCard";
+import SearchBar from "@/components/Books/SearchBar";
+import BookCard from "@/components/Books/BookCard";
 
 import { FadeDown, FadeLeft, FadeUp, ViewPort } from "@/animation";
 
