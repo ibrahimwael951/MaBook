@@ -5,6 +5,9 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  bio: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
@@ -15,8 +18,14 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-
     required: true,
+  },
+  gender: {
+    required: true,
+    type: String,
+    enum: ["male", "female"],
+    lowercase: true,
+    trim: true,
   },
 });
 export const user = mongoose.model("user", UserSchema);
