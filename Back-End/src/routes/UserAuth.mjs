@@ -4,7 +4,7 @@ import { checkSchema, matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../util/Hashing.mjs";
 import passport from "passport";
 import { user } from "../mongoose/schema/UserAuth.mjs";
-import { resolveUserLoggedIn } from "../util/middlewares.mjs";
+import { resolveUserLoggedIn, SaveUserData } from "../util/middlewares.mjs";
 
 const router = Router();
 
@@ -14,7 +14,10 @@ router.post("/api/user", checkSchema(UserLoggingIn), async (req, res) => {
     return res.status(400).send({ Errors: result.array() });
   const data = matchedData(req);
   data.password = hashPassword(data.password);
-  const newUser = new user(data);
+  const newUser = new user({
+    ...data,
+    fullName: `${data.firstName} ${data.lastName}`,
+  });
   try {
     const saveUser = await newUser.save();
     return res.status(200).send(saveUser);
@@ -38,7 +41,7 @@ router.patch(
     const data = matchedData(req);
     const { findUserId } = req;
     try {
-     const updatedUser = await user.findOneAndUpdate(
+      const updatedUser = await user.findOneAndUpdate(
         { _id: findUserId },
         { $set: data },
         { new: true }
@@ -50,19 +53,35 @@ router.patch(
   }
 );
 
-router.get("/api/user/status", (req, res) => {
-  return req.user
-    ? res.send(req.user)
+router.get("/api/user/status", SaveUserData, (req, res) => {
+  const { SaveUserData } = req;
+  return SaveUserData
+    ? res.send(SaveUserData)
     : res.status(401).send({ msg: "Not Authentication" });
 });
 
+router.post("/api/user/logout", (req, res) => {
+  if (!req.user) res.status(401).send({ msg: "no Authentication" });
+  req.logout((err) => {
+    if (err) res.sendStatus(400);
+    res.sendStatus(200);
+  });
+});
+
 router.delete("/api/user/delete", resolveUserLoggedIn, async (req, res) => {
-  const { findUser } = req;
+  const { findUserId } = req;
+
   try {
-    await user.findByIdAndDelete({ findUser });
-    return res.sendStatus(200);
+    await user.findByIdAndDelete(findUserId);
+
+    req.logout((err) => {
+      if (err) {
+        return res.status(400).send(`Logout Error: ${err}`);
+      }
+      return res.sendStatus(200);
+    });
   } catch (err) {
-    return res.status(400).send(`Error: ${err}`);
+    return res.status(400).send(`Delete Error: ${err}`);
   }
 });
 

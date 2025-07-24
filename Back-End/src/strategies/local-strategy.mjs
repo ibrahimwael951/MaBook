@@ -4,14 +4,19 @@ import { user } from "../mongoose/schema/UserAuth.mjs";
 import { ComparePassword } from "../util/Hashing.mjs";
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
     const findUser = await user.findById(id);
     if (!findUser) throw new Error("user not found");
+
+    const saveUserData = findUser.toObject();
+    delete saveUserData.password;
+
     done(null, findUser);
+
   } catch (err) {
     done(err, null);
   }
@@ -30,9 +35,15 @@ export default passport.use(
         });
 
         if (!findUser) throw new Error("user not found");
-        if (!ComparePassword(password, findUser.password))
-          throw new Error("Invalid Credentials");
-        done(null, findUser);
+
+        const isMatched = await ComparePassword(password, findUser.password);
+        if (!isMatched) throw new Error("Invalid Credentials");
+
+        const saveUserData = findUser.toObject();
+        delete saveUserData.password;
+
+        done(null, saveUserData);
+
       } catch (err) {
         done(err, null);
       }

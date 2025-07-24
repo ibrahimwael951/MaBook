@@ -4,7 +4,7 @@
   "description": "Back-end for books reader community <3",
   "license": "MIT",
   "author": "Ibrahim Wael",
-  "type": "model",
+  "type": "module",
   "main": "server.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,5 +24,8 @@
     "passport": "^0.7.0",
     "passport-discord": "^0.1.4",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

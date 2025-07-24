@@ -14,6 +14,38 @@ export const UserLoggingIn = {
       errorMessage: "should at least 2-8 characters",
     },
   },
+  firstName: {
+    notEmpty: {
+      errorMessage: "should not be empty",
+    },
+    isString: {
+      errorMessage: "must be string",
+    },
+ 
+    isLength: {
+      options: {
+        min: 2,
+        max: 20,
+      },
+      errorMessage: "should be at least 2 characters",
+    },
+  },
+  lastName: {
+    notEmpty: {
+      errorMessage: "should not be empty",
+    },
+    isString: {
+      errorMessage: "must be string",
+    },
+ 
+    isLength: {
+      options: {
+        min: 2,
+        max: 20,
+      },
+      errorMessage: "should be at least 2 characters",
+    },
+  },
   email: {
     notEmpty: {
       errorMessage: "should not be empty",
@@ -58,6 +90,7 @@ export const UserLoggingIn = {
 
 export const UpDateUserData = {
   username: {
+    optional: true,
     notEmpty: {
       errorMessage: "should not be empty",
     },
@@ -84,18 +117,17 @@ export const UpDateUserData = {
       errorMessage: "should at least 5 characters",
     },
   },
-  password: {
+  gender: {
+    optional: true,
     notEmpty: {
       errorMessage: "should not be empty",
     },
     isString: {
       errorMessage: "must be string",
     },
-    isLength: {
-      options: {
-        min: 8,
-      },
-      errorMessage: "should at least 8 characters",
+    isIn: {
+      options: [["male", "female"]],
+      errorMessage: "must be one of 'male', 'female'",
     },
   },
 };

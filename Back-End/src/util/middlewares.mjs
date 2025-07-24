@@ -16,3 +16,12 @@ export const resolveUserLoggedIn = (req, res, next) => {
   req.findUserId = findUserId;
   next();
 };
+export const SaveUserData = async (req, res, next) => {
+  const UserLogged = req.user._id;
+  if (!UserLogged) res.status(404).send({ msg: "User Not Found" });
+  const findUser = await user.findById(UserLogged);
+  const SaveUserData = findUser.toObject();
+  delete SaveUserData.password;
+  req.SaveUserData = SaveUserData;
+  next();
+};

@@ -16,6 +16,20 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     match: [/\S+@\S+\.\S+/, "is invalid"],
   },
+  fullName: {
+    type: String,
+    trim: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   password: {
     type: String,
     required: true,
