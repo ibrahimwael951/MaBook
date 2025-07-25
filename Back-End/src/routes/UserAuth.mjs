@@ -46,7 +46,9 @@ router.patch(
         { $set: data },
         { new: true }
       );
-      return res.status(200).json(updatedUser);
+      const SaveUserData = updatedUser.toObject();
+      delete SaveUserData.password;
+      return res.status(200).json(SaveUserData);
     } catch (err) {
       res.status(400).send(`Error : ${err}`);
     }
@@ -61,7 +63,7 @@ router.get("/api/user/status", SaveUserData, (req, res) => {
 });
 
 router.post("/api/user/logout", (req, res) => {
-  if (!req.user) res.status(401).send({ msg: "no Authentication" });
+  if (!req.user) return res.status(401).send({ msg: "no Authentication" });
   req.logout((err) => {
     if (err) res.sendStatus(400);
     res.sendStatus(200);

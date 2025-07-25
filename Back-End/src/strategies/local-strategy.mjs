@@ -36,7 +36,7 @@ export default passport.use(
 
         if (!findUser) throw new Error("user not found");
 
-        const isMatched = await ComparePassword(password, findUser.password);
+        const isMatched = ComparePassword(password, findUser.password);
         if (!isMatched) throw new Error("Invalid Credentials");
 
         const saveUserData = findUser.toObject();

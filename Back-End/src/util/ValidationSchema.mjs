@@ -21,7 +21,7 @@ export const UserLoggingIn = {
     isString: {
       errorMessage: "must be string",
     },
- 
+
     isLength: {
       options: {
         min: 2,
@@ -37,7 +37,7 @@ export const UserLoggingIn = {
     isString: {
       errorMessage: "must be string",
     },
- 
+
     isLength: {
       options: {
         min: 2,
@@ -57,7 +57,7 @@ export const UserLoggingIn = {
       options: {
         max: 100,
       },
-      errorMessage: "should not exceed 100 characters",
+      errorMessage: "should be not exceed 100 characters",
     },
   },
   password: {
@@ -71,7 +71,7 @@ export const UserLoggingIn = {
       options: {
         min: 8,
       },
-      errorMessage: "should at least 8 characters",
+      errorMessage: "should be at least 8 characters",
     },
   },
   gender: {
@@ -102,7 +102,7 @@ export const UpDateUserData = {
         min: 2,
         max: 8,
       },
-      errorMessage: "should at least 2-8 characters",
+      errorMessage: "should be at least 2-8 characters",
     },
   },
   bio: {
@@ -114,7 +114,7 @@ export const UpDateUserData = {
       options: {
         min: 5,
       },
-      errorMessage: "should at least 5 characters",
+      errorMessage: "should be at least 5 characters",
     },
   },
   gender: {
@@ -128,6 +128,40 @@ export const UpDateUserData = {
     isIn: {
       options: [["male", "female"]],
       errorMessage: "must be one of 'male', 'female'",
+    },
+  },
+};
+
+export const PostSchema = {
+  description: {
+    notEmpty: {
+      errorMessage: "should not be empty",
+    },
+    isString: {
+      errorMessage: "must be string",
+    },
+    isLength: {
+      options: {
+        min: 2,
+      },
+      errorMessage: "should be at least 2 characters",
+    },
+  },
+};
+
+export const PostComment = {
+  text: {
+    notEmpty: {
+      errorMessage: "should not be empty",
+    },
+    isString: {
+      errorMessage: "must be string",
+    },
+    isLength: {
+      options: {
+        min: 2,
+      },
+      errorMessage: "should be at least 2 characters",
     },
   },
 };
