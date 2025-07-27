@@ -147,6 +147,10 @@ export const PostSchema = {
       errorMessage: "should be at least 2 characters",
     },
   },
+  image: {
+    optional: true,
+    isString: true,
+  },
 };
 
 export const PostComment = {

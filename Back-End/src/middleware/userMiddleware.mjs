@@ -43,7 +43,8 @@ export const SaveUserData = async (req, res, next) => {
 };
 export const findUserName = async (req, res, next) => {
   const userUsername = req.user.username;
-  if (!userUsername) return res.status(404).send({ mgs: "You must be logged in " });
+  if (!userUsername)
+    return res.status(404).send({ mgs: "You must be logged in " });
   const findUserName = await user.findOne({ username: userUsername });
   if (!findUserName) return res.status(404).send({ mgs: "user not found" });
 

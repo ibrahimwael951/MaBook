@@ -4,7 +4,7 @@ import { checkSchema, matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../util/Hashing.mjs";
 import passport from "passport";
 import { user } from "../mongoose/schema/UserAuth.mjs";
-import { resolveUserLoggedIn, SaveUserData } from "../util/middlewares.mjs";
+import { resolveUserLoggedIn, SaveUserData } from "../middleware/userMiddleware.mjs";
 
 const router = Router();
 

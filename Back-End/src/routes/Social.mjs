@@ -3,14 +3,14 @@ import {
   findPostIdAndAuthor,
   findUserName,
   getUserByUsername,
-} from "../util/middlewares.mjs";
+} from "../middleware/userMiddleware.mjs";
 import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
 import { PostComments } from "../mongoose/schema/PostsComments.mjs";
 import { PostComment } from "../util/ValidationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 
 const router = Router();
-router.get("/api/user/:username", getUserByUsername, async (req, res) => {
+router.get("/api/user/search/:username", getUserByUsername, async (req, res) => {
   const { findUser } = req;
   return res.status(200).send(findUser);
 });
