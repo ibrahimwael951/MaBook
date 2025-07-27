@@ -10,7 +10,7 @@ const Hero = () => {
       <Spotlight className="-top-0 left-0 md0 md:left-60 lg:left-96 " />
       <motion.h1 {...FadeUp} {...ViewPort} transition={{duration:0.4 }}
        className="text-8xl text-center ">
-        Latest Book <br />
+        Latest <span> Book</span> <br />
         Finding Waves
       </motion.h1>
       <motion.p {...FadeUp} {...ViewPort} transition={{duration:0.4,delay:0.2}} className="text-center">

@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BookOpenText, Menu } from "lucide-react";
+import {  Menu } from "lucide-react";
 import { Navbar as NavLinks } from "@/data/Quick_Links";
 import { ModeToggle } from "@/components/ui/ThemeToggle";
 import Link from "next/link";
+import Image from "next/image";
 const Navbar = () => {
   const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
   return (
@@ -13,7 +14,14 @@ const Navbar = () => {
         href="/"
         className="flex items-center gap-1 text-2xl font-extrabold p-1.5 rounded-2xl"
       >
-        <BookOpenText size={40} />
+        <Image
+        alt="logo"
+        src="/open-book.png"
+        width={50}
+        height={50}
+ 
+        />
+        {/* <BookOpenText size={40} /> */}
         Ma Book
       </Link>
       <div className="hidden lg:flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
@@ -29,6 +37,7 @@ const Navbar = () => {
       >
         <Menu size={40} />
       </button>
+
 
       <AnimatePresence>
         {isMenuOpened && (

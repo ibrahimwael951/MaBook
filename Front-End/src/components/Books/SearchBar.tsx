@@ -34,7 +34,7 @@ export default function SearchBar({ onSearch, loading ,delay }: SearchBarProps) 
         <button
           type="submit"
           disabled={loading || !query.trim()}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-seconder text-primary  px-6 py-2 rounded-md  disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-secondary text-primary  px-6 py-2 rounded-md  disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? 'Searching...' : 'Search'}
         </button>

@@ -6,8 +6,9 @@
 @theme  inline {
   --color-primary:#EDF7F6;
   --color-primLow:#9ca1a1;
-  --color-seconder: #004643;
-  --color-secLow:#00464394;
+  --color-secondary: #004643;
+  --color-secondaryHigh: #0c8882;
+  --color-secondaryLow:#00464394;
   --color-third:#0C1618;
   --color-thirdLow:#6f7272;
   --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
@@ -21,6 +22,9 @@
  }
  p{
   @apply text-thirdLow dark:text-primLow
+ }
+ span{
+  @apply text-secondaryHigh  
  }
  
  .font-eb-garamond {

@@ -62,7 +62,7 @@ export default function BookCard({ book }: BookCardProps) {
                 </span>
               )}
               {volumeInfo.pageCount && (
-                <span className="bg-seconder text-primary rounded px-2 py-1">
+                <span className="bg-secondary text-primary rounded px-2 py-1">
                   {volumeInfo.pageCount} pages
                 </span>
               )}

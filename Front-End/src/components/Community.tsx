@@ -10,7 +10,7 @@ const Community = () => {
     <section className="flex flex-col lg:flex-row items-center justify-evenly gap-10">
       <div className="text-center  max-w-2xl  space-y-7">
         <motion.h1 {...FadeLeft} {...ViewPort} className="text-6xl">
-          Attend for the Inspiration, Stay for the Community
+          Attend for the <span> Inspiration </span>, Stay for the Community
         </motion.h1>
         <motion.p {...FadeLeft} {...ViewPort} className="text-xl">
           Gain insights from leading speakers and connect with a community that
