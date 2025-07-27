@@ -5,7 +5,6 @@ import {
   getUserByUsername,
 } from "../util/middlewares.mjs";
 import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
-import { user } from "../mongoose/schema/UserAuth.mjs";
 import { PostComments } from "../mongoose/schema/PostsComments.mjs";
 import { PostComment } from "../util/ValidationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
@@ -35,7 +34,7 @@ router.get("/api/post/:id", async (req, res) => {
     const commentsCount = await PostComments.countDocuments({
       postId: post.toObject()._id,
     });
- 
+
     return res.status(200).json({
       post,
       commentsCount,

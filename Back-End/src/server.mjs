@@ -1,7 +1,6 @@
 import "dotenv/config";
 import express from "express";
 import passport from "passport";
-import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
@@ -12,7 +11,7 @@ const Port = process.env.PORT || 4000;
 const app = express();
 
 mongoose
-  .connect("mongodb://localhost/MaBook")
+  .connect(process.env.MONGOOSE_API_KEY)
   .then(console.log("connected to DataBase"))
   .catch((err)=>{
     console.log(`Error : ${err}`)
@@ -20,7 +19,7 @@ mongoose
 app.use(express.json());
 app.use(
   session({
-    secret: "01550522800",
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     cookie: {
@@ -35,6 +34,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(Router);
+app.get("/" ,(req,res)=>{
+  res.send("hello server is ready to work")
+})
 app.listen(Port, () => {
   console.log(`app is ready now ${Port}`);
 });

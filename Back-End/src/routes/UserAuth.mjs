@@ -19,7 +19,12 @@ router.post("/api/user", checkSchema(UserLoggingIn), async (req, res) => {
     fullName: `${data.firstName} ${data.lastName}`,
   });
   try {
-    const saveUser = await newUser.save();
+    const UserData = await newUser.save();
+    const saveUser = UserData.toObject();
+    delete saveUser._id;
+    delete saveUser.__v;
+    delete saveUser.password;
+
     return res.status(200).send(saveUser);
   } catch (err) {
     res.status(400).send(`Errors: ${err}`);
