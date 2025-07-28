@@ -18,7 +18,7 @@ const Community = () => {
           meaningful relationships begin.
         </motion.p>
         <Link href="/login">
-          <Button variant="outline">Join Us</Button>
+          <Button variant="outline" className="text-xl py-4">Join Us</Button>
         </Link>
       </div>
       <motion.div
