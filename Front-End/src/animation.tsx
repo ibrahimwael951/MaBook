@@ -5,7 +5,7 @@ export const ViewPort = {
   whileInView: { y: 0, x: 0, scale: 1, opacity: 1, filter: "blur(0px)" },
 };
 export const Animate = {
-  animate: { y: 0, x: 0, scale: 1, opacity: 1, filter: "blur(0px)" },
+  animate: { y: 0, x: 0, scale: 1, opacity: 1, filter: "blur(0px)" , transition:{duration:0.2}},
 };
 export const FadeUp = {
   initial: { y: 60, opacity: 0, filter: "blur(20px)" },
