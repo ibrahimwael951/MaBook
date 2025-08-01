@@ -20,6 +20,7 @@ interface NavLinks {
 interface DashLinks {
   title: string;
   href: string;
+  description: string;
   icon: LucideIcon;
 }
 export const Navbar: NavLinks[] = [
@@ -30,9 +31,34 @@ export const Navbar: NavLinks[] = [
   { title: "Posts", href: "/posts", icon: Podcast },
 ];
 export const DashboardLinks: DashLinks[] = [
-  { title: "Profile", href: "/dashboard/", icon: UserRoundPen  },
-  { title: "Settings", href: "/dashboard/", icon: Cog  },
-  { title: "My Blogs", href: "/dashboard/", icon: NotebookTabs },
-  { title: "Book Marks", href: "/dashboard/", icon: BookmarkCheck  },
-  { title: "Contact", href: "/dashboard/", icon: Headset  },
+  {
+    title: "Profile",
+    href: "/dashboard/",
+    icon: UserRoundPen,
+    description: "View and edit your personal information",
+  },
+  {
+    title: "Settings",
+    href: "/dashboard/",
+    icon: Cog,
+    description: "Manage your account preferences",
+  },
+  {
+    title: "My Blogs",
+    href: "/dashboard/",
+    icon: NotebookTabs,
+    description: "See and manage your published blogs",
+  },
+  {
+    title: "Book Marks",
+    href: "/dashboard/",
+    icon: BookmarkCheck,
+    description: "Access your saved bookmarks",
+  },
+  {
+    title: "Contact",
+    href: "/dashboard/",
+    icon: Headset,
+    description: "Get support or send us a message",
+  },
 ];

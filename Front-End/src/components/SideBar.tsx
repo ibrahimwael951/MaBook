@@ -10,7 +10,7 @@ const MotionLink = motion(Link);
 const MotionPanelRightOpen = motion(PanelRightOpen);
 const SideBar = () => {
   const { logout, user } = useAuth();
-  const [isSideBarOpened, setIsSideBarOpened] = useState<boolean>(true);
+  const [isSideBarOpened, setIsSideBarOpened] = useState<boolean>(false);
   const [isLogoutPopOpened, setIsLogoutPopOpened] = useState<boolean>(false);
 
   return (
@@ -82,12 +82,12 @@ const SideBar = () => {
             style={{ fontSize: "25px" }}
             className="py-2 p-5 bg-primary text-third rounded-full text-center  "
           >
-            {user?.fullName.charAt(1)}
+            {user?.fullName.charAt(0)}
           </div>
           {isSideBarOpened && (
             <div>
-              <h1 className="text-2xl">{user?.fullName}</h1>
-              <h2 className="text-xl">{user?.email}</h2>
+              <h1 className="text-2xl">{user?.username}</h1>
+              <h2 className="text-xl">{user?.fullName}</h2>
             </div>
           )}
         </div>

@@ -6,6 +6,7 @@ import { CopyX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Animate, FadeLeft, FadeUp, opacity } from "@/animation";
 import { LoginCredentials } from "@/types/Auth";
+import Loading from "@/components/Loading";
 export default function Page() {
   const { login, loading, error, clearError, user } = useAuth();
   const [closeErrorPop, setCloseErrorPop] = useState<boolean>(false);
@@ -44,12 +45,7 @@ export default function Page() {
       [e.target.name]: e.target.value,
     });
   };
-  if (loading || user)
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        loading
-      </div>
-    );
+  if (loading || user) return <Loading />;
   return (
     <div className="max-w-md mx-auto px-4 mt-20">
       <AnimatePresence>

@@ -1,22 +1,49 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu } from "lucide-react";
-import { Navbar as NavLinks } from "@/data/Quick_Links";
+import { DashboardLinks, Navbar as NavLinks } from "@/data/Quick_Links";
 import { ModeToggle } from "@/components/ui/ThemeToggle";
 import Link from "next/link";
 import Image from "next/image";
 import { Animate, FadeDown } from "@/animation";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 const Navbar = () => {
+  const { loading, user } = useAuth();
   const Pathname = usePathname();
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = 0;
+      if (window.scrollY > offset) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <motion.nav
       {...FadeDown}
       {...Animate}
       transition={{ duration: 0.36 }}
-      className="fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 z-50 "
+      className={`fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 z-50 ${
+        hasScrolled && "bg-primary dark:bg-third"
+      }`}
     >
       <Link
         href="/"
@@ -58,6 +85,7 @@ const Navbar = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
+            transition={{ duration: 0.15 }}
             className="absolute top-0 left-0  lg:hidden h-screen w-full bg-primary dark:bg-third py-5 px-10 space-y-10"
           >
             <div className="flex w-full justify-between  ">
@@ -87,7 +115,8 @@ const Navbar = () => {
                         }
                       }
                       className={`${
-                        Pathname === item.href && "bg-secondary my-2 text-white "
+                        Pathname === item.href &&
+                        "bg-secondary my-2 text-white "
                       } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
                     >
                       <item.icon size={30} />
@@ -102,10 +131,66 @@ const Navbar = () => {
         )}
       </AnimatePresence>
       <div className="hidden lg:inline">
-        <ModeToggle />
+        {loading ? (
+          <div 
+            className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg border border-third dark:border-primary duration-100"
+             > Loading</div>
+        ) : user ? (
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>
+                  <div className="py-2 px-5 text-xl flex justify-center items-center rounded-full dark:text-third text-primary  bg-third dark:bg-primary ">
+                    {user.fullName.charAt(0)}
+                  </div>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {DashboardLinks.map((item, i) => (
+                      <ListItem
+                        key={item.title}
+                        title={item.title}
+                        href={item.href}
+                      >
+                        {item.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        ) : (
+          <Link
+            href="/login"
+            className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg hover:bg-transparent dark:hover:bg-transparent hover:text-primary dark:hover:text-primary border border-third dark:border-primary duration-100"
+          >
+            Login
+          </Link>
+        )}
       </div>
     </motion.nav>
   );
 };
 
+function ListItem({
+  title,
+  children,
+  href,
+  ...props
+}: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
+  return (
+    <li {...props}>
+      <NavigationMenuLink
+        asChild
+        className="bg-primary hover:bg-primLow dark:bg-third dark:hover:bg-secondaryLow hover:text-white group"
+      >
+        <Link href={href}>
+          <div className="text-lg font-medium">{title}</div>
+          <p className=" group-hover:!text-white">{children}</p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+}
 export default Navbar;

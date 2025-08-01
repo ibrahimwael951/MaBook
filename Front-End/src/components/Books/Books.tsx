@@ -6,7 +6,7 @@ import { searchBooks } from "@/lib/googleBooks";
 import SearchBar from "@/components/Books/SearchBar";
 import BookCard from "@/components/Books/BookCard";
 
-import { FadeDown, FadeLeft, FadeUp, ViewPort } from "@/animation";
+import { FadeDown, FadeLeft, FadeUp, Animate } from "@/animation";
 
 export default function Home() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -37,14 +37,14 @@ export default function Home() {
         <div className="text-center mb-8">
           <motion.h1
             {...FadeUp}
-            {...ViewPort}
+            {...Animate}
             className="text-7xl font-bold  mb-4"
           >
             Book Search
           </motion.h1>
           <motion.p
             {...FadeDown}
-            {...ViewPort}
+            {...Animate}
             transition={{ delay: 0.1 }}
             className=" text-lg"
           >
@@ -59,7 +59,7 @@ export default function Home() {
           {error && (
             <motion.div
               {...FadeLeft}
-              {...ViewPort}
+              {...Animate}
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6"
             >
               {error}
@@ -69,7 +69,7 @@ export default function Home() {
 
         <AnimatePresence>
           {totalResults > 0 && (
-            <motion.div {...FadeLeft} {...ViewPort} className="mb-4 ">
+            <motion.div {...FadeLeft} {...Animate} className="mb-4 ">
               Found {totalResults.toLocaleString()} results
             </motion.div>
           )}
@@ -77,7 +77,7 @@ export default function Home() {
 
         <AnimatePresence>
           {loading && (
-            <motion.div {...FadeUp} {...ViewPort} className="text-center py-8">
+            <motion.div {...FadeUp} {...Animate} className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-40 w-40 border-b-2  border-third dark:border-primary"></div>
               <p className="mt-2 text-2xl ">Searching books...</p>
             </motion.div>
