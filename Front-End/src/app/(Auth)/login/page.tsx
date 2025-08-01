@@ -78,7 +78,7 @@ export default function Page() {
                     <h1 className="text-2xl">
                       {" "}
                       {error} : userName or Email invalid or maybe the password
-                      ":)"
+                      {":)"}
                     </h1>
                     <p>check Your UserName , Email and password again </p>
                   </>

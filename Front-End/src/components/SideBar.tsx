@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Animate, FadeUp, opacity } from "@/animation";
 const MotionLink = motion(Link);
 const MotionPanelRightOpen = motion(PanelRightOpen);
-const sideBar = () => {
+const SideBar = () => {
   const { logout, user } = useAuth();
   const [isSideBarOpened, setIsSideBarOpened] = useState<boolean>(true);
   const [isLogoutPopOpened, setIsLogoutPopOpened] = useState<boolean>(false);
@@ -176,4 +176,4 @@ const sideBar = () => {
   );
 };
 
-export default sideBar;
+export default SideBar;
