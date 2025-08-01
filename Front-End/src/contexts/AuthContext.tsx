@@ -65,11 +65,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Try to get current user (backend will check cookies)
         const user = await authAPI.getCurrentUser();
         dispatch({ type: "AUTH_SUCCESS", payload: user });
       } catch (error) {
-        // No valid session found or network error
+        console.log(error);
         console.log("No active session found");
         dispatch({ type: "SET_LOADING", payload: false });
       }
@@ -132,7 +131,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       dispatch({ type: "AUTH_SUCCESS", payload: user });
     } catch (error) {
       console.error("Failed to refresh user:", error);
-      // If refresh fails, user might be logged out
       dispatch({ type: "AUTH_LOGOUT" });
     }
   };

@@ -47,7 +47,7 @@ router.post(
 );
 
 router.post("/api/auth/login", passport.authenticate("local"), (req, res) => {
-  res.sendStatus(200);
+  res.status(200).send({ user: req.user });
 });
 
 router.patch(
