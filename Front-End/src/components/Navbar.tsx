@@ -37,7 +37,7 @@ const Navbar = () => {
                 }
               }
               className={`${
-                Pathname === item.href && "bg-secondary "
+                Pathname === item.href && "bg-secondary text-white "
               }  py-1 px-2 rounded-xl md:text-xl`}
             >
               {item.title}
@@ -87,7 +87,7 @@ const Navbar = () => {
                         }
                       }
                       className={`${
-                        Pathname === item.href && "bg-secondary my-2 "
+                        Pathname === item.href && "bg-secondary my-2 text-white "
                       } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
                     >
                       <item.icon size={30} />

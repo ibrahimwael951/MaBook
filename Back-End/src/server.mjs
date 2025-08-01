@@ -22,7 +22,7 @@ mongoose
   });
 
   app.use(cors({
-    origin: "http://127.0.0.1:5500", 
+    origin: "http://localhost:3000", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   }));
@@ -36,6 +36,9 @@ app.use(
     resave: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 7, // exp after one week
+      httpOnly: true,
+      sameSite: "lax", // or "none" in production with HTTPS
+      secure: false,   // must be false for localhost
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),

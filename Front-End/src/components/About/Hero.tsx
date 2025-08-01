@@ -19,7 +19,7 @@ const Hero = () => {
         >
           MaBook is a simple, friendly, and inspiring platform built for book
           lovers who want to share their reading journey with others. Whether
-          you're reading your first book or your 100th, MaBook gives you a space
+          you’re reading your first book or your 100th, MaBook gives you a space
           to express, connect, and inspire through books.
         </motion.p>
       </div>
