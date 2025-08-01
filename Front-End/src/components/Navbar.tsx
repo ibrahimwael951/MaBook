@@ -146,7 +146,7 @@ const Navbar = () => {
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {DashboardLinks.map((item, i) => (
+                    {DashboardLinks.map((item) => (
                       <ListItem
                         key={item.title}
                         title={item.title}
