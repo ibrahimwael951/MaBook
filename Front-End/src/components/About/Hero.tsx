@@ -7,9 +7,9 @@ const MotionImageDirect = motion(Image);
 
 const Hero = () => {
   return (
-    <section className="min-h-screen lg:h-screen flex justify-center items-center flex-col md:flex-row gap-10">
+    <section className="mt-20 lg:mt-40 mb-40 flex justify-center lg:justify-evenly items-center flex-col md:flex-row gap-10">
       <div className="space-y-4 max-w-xl">
-        <motion.h1 {...FadeLeft} {...Animate} className="text-5xl lg:text-6xl">
+        <motion.h1 {...FadeLeft} {...Animate} className="text-5xl lg:text-7xl">
           What is <span> MaBook?</span>
         </motion.h1>
         <motion.p
