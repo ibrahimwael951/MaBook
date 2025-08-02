@@ -30,7 +30,7 @@ const SideBar = () => {
             >
               <div>
                 <h1 className="text-2xl lg:text-3xl font-semibold ">
-                  Are u sure you want to Logout ??
+                  Are u sure you want to <span className="!text-red-600 dark:!text-red-600"> Logout </span> ??
                 </h1>
                 <p>
                   make sure you saved the password and username , cuz there is
@@ -44,13 +44,13 @@ const SideBar = () => {
                   onClick={() => setIsLogoutPopOpened(false)}
                   className="bg-primary dark:bg-third rounded-xl  p-2 text-xl"
                 >
-                  no, stay Login
+                  No, stay Login
                 </motion.button>
                 <motion.button
                   onClick={logout}
                   whileHover={{ y: -5, scale: 1.05 }}
                   whileTap={{ scale: 0.95, y: 0 }}
-                  className="bg-primary dark:bg-third rounded-xl  p-2 text-xl"
+                  className="bg-red-600 text-white rounded-xl  p-2 text-xl"
                 >
                   Yes, Logout
                 </motion.button>

@@ -1,5 +1,5 @@
 import Community from "@/components/Community";
-import Futures from "@/components/Futures";
+import Futures from "@/components/Features";
 import Hero from "@/components/Hero";
 
 
