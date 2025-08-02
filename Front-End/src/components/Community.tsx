@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { FadeLeft, FadeRight, ViewPort } from "@/animation";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import AnimatedImage from "./ui/AnimatedImage";
 const Community = () => {
   return (
     <section className="flex flex-col lg:flex-row items-center justify-evenly gap-10">
@@ -18,22 +19,17 @@ const Community = () => {
           meaningful relationships begin.
         </motion.p>
         <Link href="/login">
-          <Button variant="outline" className="text-xl py-4">Join Us</Button>
+          <Button variant="outline" className="text-xl py-4">
+            Join Us
+          </Button>
         </Link>
       </div>
-      <motion.div
-        {...FadeRight}
-        {...ViewPort}
-        className="w-full md:w-2/4 lg:w-2/5 max-w-2xl"
-      >
-        <Image
-          src="/Community.avif"
-          alt="Community image"
-          width={1000}
-          height={1000}
-          className="w-full rounded-2xl"
-        />
-      </motion.div>
+  
+      <AnimatedImage
+        src="/Community.avif"
+        alt="Community image"
+        className="w-full md:w-2/4 lg:w-2/5 max-w-2xl rounded-2xl"
+      />
     </section>
   );
 };

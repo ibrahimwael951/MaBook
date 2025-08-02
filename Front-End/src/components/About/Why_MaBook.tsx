@@ -2,19 +2,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FadeLeft, FadeUp, ViewPort } from "@/animation";
-import Image from "next/image";
-const MotionImage = motion(Image);
+import AnimatedImage from "../ui/AnimatedImage";
 const Why_MaBook = () => {
   return (
     <section className="flex flex-col-reverse md:flex-row gap-10 lg:gap-5 overflow-x-hidden ">
-      <MotionImage
-        {...FadeLeft}
-        {...ViewPort}
+      <AnimatedImage
         src="/young-man-examinating-book.jpg"
         alt="man reading book"
-        width={1000}
-        height={1000}
-        className="rounded-2xl w-full md:w-2/4 object-cover"
+        className="rounded-2xl w-full md:w-2/4 object-cover bg-red-500"
       />
       <div className=" space-y-5 w-full md:w-2/4">
         <motion.h1 {...FadeLeft} {...ViewPort} className="text-5xl lg:text-7xl">

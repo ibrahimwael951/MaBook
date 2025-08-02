@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
 import { Animate, FadeLeft, FadeRight } from "@/animation";
+import AnimatedImage from "../ui/AnimatedImage";
 const MotionImageDirect = motion(Image);
 
 const Hero = () => {
@@ -23,14 +24,10 @@ const Hero = () => {
           to express, connect, and inspire through books.
         </motion.p>
       </div>
-      <MotionImageDirect
-        {...FadeRight}
-        {...Animate}
+
+      <AnimatedImage
         src="/Community_about.jpg"
         alt="community image"
-        width={1000}
-        height={1000}
-        draggable={false}
         className="object-cover w-full max-w-xl  md:w-2/4 lg:h-2/3 rounded-2xl"
       />
     </section>

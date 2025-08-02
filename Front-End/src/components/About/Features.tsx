@@ -15,15 +15,15 @@ const Features = () => {
       </motion.h1>
 
       <div className="space-y-5">
-        {features.map((item) => (
+        {features.map((item, i) => (
           <motion.div
+            key={i}
             {...FadeUp}
             {...ViewPort}
             whileHover={{
               scale: 1.01,
               y: -2,
             }}
-            key={item.title}
             className="w-full  space-y-2 border-dashed border-2 p-4 rounded-2xl "
           >
             <h1 className="flex items-center gap-2 text-4xl">
