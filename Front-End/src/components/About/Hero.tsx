@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
-import { Animate, FadeLeft, FadeRight } from "@/animation";
+import { Animate, FadeLeft } from "@/animation";
 import AnimatedImage from "../ui/AnimatedImage";
-const MotionImageDirect = motion(Image);
 
 const Hero = () => {
   return (

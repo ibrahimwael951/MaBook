@@ -2,7 +2,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FadeLeft, FadeUp, ViewPort } from "@/animation";
-import Image from "next/image";
 import { features } from "@/data/Features";
 import AnimatedImage from "./ui/AnimatedImage";
 const Features = () => {

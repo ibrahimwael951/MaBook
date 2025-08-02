@@ -1,8 +1,7 @@
 "use client";
-import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
-import { FadeLeft, FadeRight, ViewPort } from "@/animation";
+import { FadeLeft, ViewPort } from "@/animation";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import AnimatedImage from "./ui/AnimatedImage";

@@ -1,7 +1,6 @@
 import {
   BookHeart,
   BookUp2,
-  Home,
   LucideIcon,
   MessageCircleOff,
   ThumbsUp,

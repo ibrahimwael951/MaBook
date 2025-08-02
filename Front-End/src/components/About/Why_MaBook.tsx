@@ -36,7 +36,7 @@ const Why_MaBook = () => {
             ))}
           </ul>
           <motion.p {...FadeUp} {...ViewPort} className="text-lg lg:text-xl">
-            Whether you're looking to inspire or get inspired, MaBook helps you
+            Whether you’re looking to inspire or get inspired, MaBook helps you
             connect through stories.
           </motion.p>
         </div>
