@@ -38,7 +38,7 @@ router.post(
         delete userToSend.__v;
         delete userToSend.password;
 
-        return res.status(200).send(userToSend);
+        return res.status(200).send({ user: userToSend });
       });
     } catch (err) {
       res.status(400).send(`Errors: ${err}`);
@@ -78,7 +78,7 @@ router.patch(
 router.get("/api/auth/status", SaveUserData, (req, res) => {
   const { SaveUserData } = req;
   return SaveUserData
-    ? res.send(SaveUserData)
+    ? res.send({ user: SaveUserData })
     : res.status(401).send({ msg: "Not Authentication" });
 });
 
