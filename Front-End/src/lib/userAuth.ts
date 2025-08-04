@@ -1,95 +1,58 @@
+import axios, { AxiosInstance } from "axios";
 import { LoginCredentials, RegisterCredentials, User } from "@/types/Auth";
- 
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_API || "http://localhost:4000";
+const api: AxiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_API || "http://localhost:4000",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export const authAPI = {
   async login(credentials: LoginCredentials): Promise<User> {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(credentials),
-    });
-
-    if (!response.ok) {
-      const error = await response
-        .json()
-        .catch(() => ({ message: "Login failed" }));
-      throw new Error(
-        error.message || `HTTP error! status: ${response.status}`
-      );
+    try {
+      const response = await api.post<{ user: User }>("/api/auth/login", credentials);
+      return response.data.user;
+    } catch (error: any) {
+      const msg = error.response?.data?.message || error.response?.data?.msg || error.message;
+      throw new Error(msg || "Login failed");
     }
-
-    const data = await response.json();
-    return data.user || data;
   },
 
   async register(credentials: RegisterCredentials): Promise<User> {
-    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(credentials),
-    });
-
-    if (!response.ok) {
-      const error = await response
-        .json()
-        .catch(() => ({ msg: "" }));
-      throw new Error(
-         error.msg || `use another email or username `
-      );
+    try {
+      const response = await api.post<{ user: User }>("/api/auth/register", credentials);
+      return response.data.user;
+    } catch (error: any) {
+      const msg = error.response?.data?.msg || error.response?.data?.message || "Use another email or username";
+      throw new Error(msg);
     }
-
-    const data = await response.json();
-    return data.user || data;
   },
 
   async getCurrentUser(): Promise<User> {
-    const response = await fetch(`${API_BASE_URL}/api/auth/status`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch user");
+    try {
+      const response = await api.get<{ user: User }>("/api/auth/status");
+      return response.data.user;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Failed to fetch user");
     }
-
-    const data = await response.json();
-    return data.user || data;
   },
 
   async logout(): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
+    try {
+      await api.post("/api/auth/logout");
+    } catch (error) {
       console.warn("Logout request failed, but continuing with local logout");
     }
   },
 
   async refreshToken(): Promise<User> {
-    const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to refresh token");
+    try {
+      const response = await api.post<{ user: User }>("/api/auth/refresh");
+      return response.data.user;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || "Failed to refresh token");
     }
-
-    const data = await response.json();
-    return data.user || data;
   },
 };
-
-
- 

@@ -64,7 +64,7 @@ export default function Page() {
     item: keyof RegisterCredentials;
     placeholder: string;
   }> = [
-    { item: "username", placeholder: "ibrhim809" },
+    { item: "username", placeholder: "ibrhimwael809" },
     { item: "firstName", placeholder: "Ibrahim" },
     { item: "lastName", placeholder: "Wael" },
     { item: "email", placeholder: "YourEmailAddress@gmail.com" },
