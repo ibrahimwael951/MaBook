@@ -1,19 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
-
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import { Animate, FadeUp } from "@/animation";
 
-export function ModeToggle() {
-  const { setTheme } = useTheme()
+export function ModeSelector() {
+  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -36,5 +37,25 @@ export function ModeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
+}
+export function ModeToggle() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const MotionSun = motion(Sun);
+  const MotionMoon = motion(Moon);
+  return (
+    <Button
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      className=""
+      variant="outline"
+    >
+      <AnimatePresence>
+        {resolvedTheme === "dark" ? (
+          <MotionSun {...FadeUp} {...Animate} />
+        ) : (
+          <MotionMoon {...FadeUp} {...Animate} />
+        )}
+      </AnimatePresence>
+    </Button>
+  );
 }

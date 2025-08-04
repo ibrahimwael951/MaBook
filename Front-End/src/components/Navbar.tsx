@@ -6,7 +6,6 @@ import { DashboardLinks, Navbar as NavLinks } from "@/data/Quick_Links";
 import { ModeToggle } from "@/components/ui/ThemeToggle";
 import Link from "next/link";
 import Image from "next/image";
-import { Animate, FadeDown } from "@/animation";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
