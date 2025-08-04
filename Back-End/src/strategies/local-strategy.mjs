@@ -15,8 +15,7 @@ passport.deserializeUser(async (id, done) => {
     const saveUserData = findUser.toObject();
     delete saveUserData.password;
 
-    done(null, findUser);
-
+    done(null, saveUserData);
   } catch (err) {
     done(err, null);
   }
@@ -43,7 +42,6 @@ export default passport.use(
         delete saveUserData.password;
 
         done(null, saveUserData);
-
       } catch (err) {
         done(err, null);
       }

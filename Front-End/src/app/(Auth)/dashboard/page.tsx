@@ -1,18 +1,20 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import SideBar from "@/components/SideBar";
+import SideBar from "@/components/dashboard/SideBar";
 import { Animate, FadeUp } from "@/animation";
 import Loading from "@/components/Loading";
 import { ModeToggle } from "@/components/ui/ThemeToggle";
 import { Camera, Mail, User } from "lucide-react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Page() {
   const { loading, user } = useAuth();
+  const [isSideBarOpened, setIsSideBarOpened] = useState<boolean>(false);
   const route = useRouter();
-
+  const isMobile = useIsMobile();
   useEffect(() => {
     if (!loading && !user) {
       route.push("login");
@@ -21,8 +23,13 @@ export default function Page() {
 
   if (loading || !user) return <Loading />;
   return (
-    <main className="">
-      <SideBar />
+    <motion.main
+      animate={{  marginLeft: !isMobile && isSideBarOpened ? "200px" : "0",  }}
+    >
+      <SideBar
+        isSideBarOpened={isSideBarOpened}
+        setIsSideBarOpened={setIsSideBarOpened}
+      />
       <div className="w-full h-screen flex justify-center items-center flex-col">
         <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
           <motion.div
@@ -68,6 +75,6 @@ export default function Page() {
         </div>
       </div>
       <ModeToggle />
-    </main>
+    </motion.main>
   );
 }

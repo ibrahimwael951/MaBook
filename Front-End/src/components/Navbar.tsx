@@ -38,8 +38,9 @@ const Navbar = () => {
   }, []);
   return (
     <motion.nav
-      {...FadeDown}
-      {...Animate}
+      initial={Pathname === "/dashboard" ? { y: 0 } : { y: "-100%" }}
+      animate={Pathname === "/dashboard" ? { y: "-100%" } : { y: 0 }}
+      exit={Pathname === "/dashboard" ? { y: 0 } : { y: "-100%" }}
       transition={{ duration: 0.36 }}
       className={`fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 z-50 ${
         hasScrolled && "bg-primary dark:bg-third"
@@ -132,9 +133,10 @@ const Navbar = () => {
       </AnimatePresence>
       <div className="hidden lg:inline">
         {loading ? (
-          <div 
-            className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg border border-third dark:border-primary duration-100"
-             > Loading</div>
+          <div className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg border border-third dark:border-primary duration-100">
+            {" "}
+            Loading
+          </div>
         ) : user ? (
           <NavigationMenu>
             <NavigationMenuList>

@@ -1,4 +1,4 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
 import passport from "passport";
 import session from "express-session";
@@ -7,26 +7,27 @@ import mongoose from "mongoose";
 import Router from "./routes/server.mjs";
 import "./strategies/local-strategy.mjs";
 import cors from "cors";
-
+dotenv.config();
 
 const Port = process.env.PORT || 4000;
 const app = express();
 
-
-
 mongoose
   .connect(process.env.MONGOOSE_API_KEY)
-  .then(console.log("connected to DataBase"))
+  .then(() => {
+    console.log("✅ Connected to Database");
+  })
   .catch((err) => {
-    console.log(`Error : ${err}`);
+    console.error("❌ Connection error:", err);
   });
 
-  app.use(cors({
-    origin: ["http://localhost:3000", "http://192.168.1.6:3000"], 
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://192.168.1.6:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-  }));
-
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(
@@ -38,7 +39,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 7, // exp after one week
       httpOnly: true,
       sameSite: "lax", // or "none" in production with HTTPS
-      secure: false,   // must be false for localhost
+      secure: false, // must be false for localhost
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
