@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
-import { findUserName } from "../middleware/userMiddleware.mjs";
 import { PostSchema } from "../util/ValidationSchema.mjs";
 import upload from "../middleware/multer.mjs";
 import cloudinary from "../util/Cloudinary.mjs";

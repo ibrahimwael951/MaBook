@@ -169,3 +169,30 @@ export const PostComment = {
     },
   },
 };
+
+export const CheckUsername = {
+  username: {
+    isString: {
+      errorMessage: "must be string",
+    },
+    isLength: {
+      options: {
+        min: 2,
+      },
+      errorMessage: "should be at least 2 characters",
+    },
+  },
+};
+export const CheckEmail = {
+  email: {
+    isString: {
+      errorMessage: "must be string",
+    },
+    isLength: {
+      options: {
+        min: 2,
+      },
+      errorMessage: "should be at least 2 characters",
+    },
+  },
+};

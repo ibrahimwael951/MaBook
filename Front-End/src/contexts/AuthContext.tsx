@@ -135,6 +135,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const checkUsername = async (username: string): Promise<true> => {
+    try {
+      await authAPI.checkUsername(username);
+      return true;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Username check failed";
+      throw new Error(message);
+    }
+  };
+  const CheckEmail = async (email: string): Promise<true> => {
+    try {
+      await authAPI.CheckEmail(email);
+      return true;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Email check failed";
+      throw new Error(message);
+    }
+  };
+
   const value: AuthContextType = {
     ...state,
     login,
@@ -142,6 +163,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     clearError,
     refreshUser,
+    checkUsername,
+    CheckEmail
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

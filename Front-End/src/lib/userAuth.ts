@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosError } from "axios";
 import { LoginCredentials, RegisterCredentials, User } from "@/types/Auth";
 
 const api: AxiosInstance = axios.create({
@@ -14,9 +14,12 @@ export const authAPI = {
     try {
       const response = await api.post<{ user: User }>("/api/auth/login", credentials);
       return response.data.user;
-    } catch (error: any) {
-      const msg = error.response?.data?.message || error.response?.data?.msg || error.message;
-      throw new Error(msg || "Login failed");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const msg = error.response?.data?.message || error.response?.data?.msg || error.message;
+        throw new Error(msg || "Login failed");
+      }
+      throw new Error("Login failed due to unexpected error");
     }
   },
 
@@ -24,9 +27,12 @@ export const authAPI = {
     try {
       const response = await api.post<{ user: User }>("/api/auth/register", credentials);
       return response.data.user;
-    } catch (error: any) {
-      const msg = error.response?.data?.msg || error.response?.data?.message || "Use another email or username";
-      throw new Error(msg);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const msg = error.response?.data?.msg || error.response?.data?.message || "Use another email or username";
+        throw new Error(msg);
+      }
+      throw new Error("Registration failed due to unexpected error");
     }
   },
 
@@ -34,15 +40,18 @@ export const authAPI = {
     try {
       const response = await api.get<{ user: User }>("/api/auth/status");
       return response.data.user;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Failed to fetch user");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.message || "Failed to fetch user");
+      }
+      throw new Error("Failed to fetch user due to unexpected error");
     }
   },
 
   async logout(): Promise<void> {
     try {
       await api.post("/api/auth/logout");
-    } catch (error) {
+    } catch {
       console.warn("Logout request failed, but continuing with local logout");
     }
   },
@@ -51,8 +60,45 @@ export const authAPI = {
     try {
       const response = await api.post<{ user: User }>("/api/auth/refresh");
       return response.data.user;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Failed to refresh token");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.message || "Failed to refresh token");
+      }
+      throw new Error("Failed to refresh token due to unexpected error");
     }
   },
+  
+  async checkUsername(username: string): Promise<true> {
+    try {
+      await api.post("/api/check/username", { username });
+      return true; 
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const msg =
+          error.response?.data?.msg ||
+          error.response?.data?.message ||
+          "Username check failed";
+        throw new Error(msg);
+      }
+      throw new Error("Unexpected error during username check");
+    }
+  },
+
+  async CheckEmail(email :string) : Promise<true>{
+    try{
+      await api.post("/api/check/email",{email});
+      return true;
+    }
+    catch (err){
+      if (err instanceof AxiosError) {
+        const msg =
+          err.response?.data?.msg ||
+          err.response?.data?.message ||
+          "Email check failed";
+        throw new Error(msg);
+      }
+      throw new Error("Unexpected error during Email check");
+    }
+  }
 };
+
