@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Animate, FadeDown, FadeLeft, FadeUp, opacity } from "@/animation";
+import { Animate, FadeDown, FadeLeft, opacity } from "@/animation";
 import { RegisterCredentials } from "@/types/Auth";
 import Link from "next/link";
 import Loading from "@/components/Loading";
@@ -98,7 +98,7 @@ export default function Page() {
       }
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [credentials.username]);
+  }, [credentials.username, fieldErrors.username, handleCheckUsername]);
 
   // --------------------------------
 
@@ -111,7 +111,7 @@ export default function Page() {
       }
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [credentials.email]);
+  }, [credentials.email, fieldErrors.email, handleCheckUsername]);
 
   // --------------------------------
   const handleSubmit = async (e: React.FormEvent) => {
@@ -152,14 +152,13 @@ export default function Page() {
     if (!currentField) return;
 
     const delayDebounceFn = setTimeout(() => {
-      const errors = validate(); // your existing function
+      const errors = validate();
       if (currentField in errors) {
         setFieldErrors((prev) => ({
           ...prev,
           [currentField]: errors[currentField],
         }));
       } else {
-        // Clear error if fixed
         setFieldErrors((prev) => {
           const updated = { ...prev };
           delete updated[currentField];

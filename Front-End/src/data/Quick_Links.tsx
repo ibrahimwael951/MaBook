@@ -2,17 +2,22 @@ import {
   Book,
   BookmarkCheck,
   Cog,
+  Contact,
+  Facebook,
   Headset,
+  HeartPlus,
   Home,
   Info,
+  Instagram,
   LucideIcon,
   NotebookTabs,
   Podcast,
   UserRoundPen,
   UsersRound,
+  Youtube,
 } from "lucide-react";
 
-interface NavLinks {
+interface DefaultLinks {
   title: string;
   href: string;
   icon: LucideIcon;
@@ -23,12 +28,24 @@ interface DashLinks {
   description: string;
   icon: LucideIcon;
 }
-export const Navbar: NavLinks[] = [
+export const Navbar: DefaultLinks[] = [
   { title: "Home", href: "/", icon: Home },
   { title: "About", href: "/about", icon: Info },
   { title: "Books", href: "/books", icon: Book },
   { title: "Community", href: "/community", icon: UsersRound },
   { title: "Posts", href: "/posts", icon: Podcast },
+];
+export const socialMedia: DefaultLinks[] = [
+  { title: "instagram", href: "/", icon: Instagram },
+  { title: "Facebook", href: "/about", icon: Facebook },
+  { title: "Youtube", href: "/books", icon:  Youtube },
+ 
+];
+export const Company: DefaultLinks[] = [
+  { title: "About", href: "/about", icon: Info },
+  { title: "Contact Us", href: "/contact", icon: Contact },
+  { title: "Sponsors", href: "/sponsors", icon: HeartPlus },
+ 
 ];
 export const DashboardLinks: DashLinks[] = [
   {

@@ -50,7 +50,6 @@ const Navbar = () => {
         className="flex items-center gap-1 text-2xl font-extrabold p-1.5 rounded-2xl"
       >
         <Image alt="logo" src="/open-book.png" width={50} height={50} />
-        {/* <BookOpenText size={40} /> */}
         Ma Book
       </Link>
       <div className="hidden lg:flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">

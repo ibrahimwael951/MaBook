@@ -1,5 +1,5 @@
 "use client";
-import { FadeUp, ViewPort } from "@/animation";
+import { FadeUp, Animate } from "@/animation";
 import { motion }from "framer-motion"
 import { useState } from 'react';
 
@@ -20,7 +20,7 @@ export default function SearchBar({ onSearch, loading ,delay }: SearchBarProps) 
   };
 
   return (
-    <motion.form {...FadeUp} {...ViewPort} transition={{delay:delay}} onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+    <motion.form {...FadeUp} {...Animate} transition={{delay:delay}} onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="relative">
         <input
           type="text"
