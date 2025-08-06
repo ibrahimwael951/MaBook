@@ -2,7 +2,7 @@
 import React from "react";
 import AnimatedImage from "../ui/AnimatedImage";
 import { motion } from "framer-motion";
-import { Animate, FadeLeft, FadeRight } from "@/animation";
+import { Animate, FadeLeft, FadeRight, FadeUp } from "@/animation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { MaskContainer } from "../ui/svg-mask-effect";
 
@@ -53,18 +53,22 @@ const Hero = () => {
         try hover on Text {":>"}
       </motion.h1>
 
-      <div className="flex h-[40rem] w-full items-center justify-center overflow-hidden">
+      <motion.div
+        {...FadeUp}
+        {...Animate}
+        className="flex h-[40rem] w-full items-center justify-center overflow-hidden"
+      >
         <MaskContainer
           revealText={
-            <p className="mx-auto max-w-4xl text-center text-7xl font-bold text-slate-800 dark:text-white">
+            <h1 className="mx-auto max-w-4xl text-center text-7xl font-bold text-third dark:text-primary">
               {Text.title}
-            </p>
+            </h1>
           }
-          className="h-[40rem] w-full rounded-md border text-white dark:text-black"
+          className="h-[40rem] w-full rounded-md text-white dark:text-black"
         >
           {Text.description}
         </MaskContainer>
-      </div>
+      </motion.div>
     </section>
   );
 };
