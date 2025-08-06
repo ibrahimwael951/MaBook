@@ -47,7 +47,7 @@ const Hero = () => {
       <motion.h1
         {...FadeLeft}
         {...Animate}
-        className="text-xl absolute top-20 left-5 animate-bounce"
+        className=" text-xl absolute top-20 left-5 animate-bounce"
       >
         {" "}
         try hover on Text {":>"}
@@ -56,15 +56,15 @@ const Hero = () => {
       <motion.div
         {...FadeUp}
         {...Animate}
-        className="flex h-[40rem] w-full items-center justify-center overflow-hidden"
+        className="min-h-screen flex w-full items-center justify-center overflow-hidden"
       >
         <MaskContainer
           revealText={
-            <h1 className="mx-auto max-w-4xl text-center text-7xl font-bold text-third dark:text-primary">
+            <h1 className="mx-auto max-w-4xl text-center text-7xl font-bold text-third dark:text-primary select-none">
               {Text.title}
             </h1>
           }
-          className="h-[40rem] w-full rounded-md text-white dark:text-black"
+          className="h-[40rem] w-full rounded-md text-white dark:text-black select-none"
         >
           {Text.description}
         </MaskContainer>

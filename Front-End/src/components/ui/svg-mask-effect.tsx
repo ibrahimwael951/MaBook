@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, MouseEvent as ReactMouseEvent } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
