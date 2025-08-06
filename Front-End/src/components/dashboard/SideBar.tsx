@@ -45,13 +45,16 @@ const SideBar: React.FC<Props> = ({ isSideBarOpened, setIsSideBarOpened }) => {
         transition={{ duration: 0.2 }}
         className={`space-y-5 ${
           !isSideBarOpened && " items-center"
-        } absolute top-0 left-0  h-screen flex flex-col items-start justify-between bg-secondary  px-5 py-20  select-none  z-40`}
+        } fixed top-0 left-0 text-white  h-screen flex flex-col items-start justify-between bg-secondary  px-5 py-20  select-none  z-40`}
       >
         <div className="relative w-full">
           <button
             onClick={() => setIsSideBarOpened((prev) => !prev)}
-            className={`absolute top-2/4 -translate-y-2/4 ${
+            className={`absolute  ${
               isSideBarOpened ? "translate-x-0" : " translate-x-5"
+            } 
+            ${
+              isMobile ? "-top-15" : "top-2/4 -translate-y-2/4"
             } left-[120%] cursor-pointer duration-100 z-10  `}
           >
             <div className="absolute top-2/4 -translate-y-2/4 -left-4 w-full h-full bg-secondary p-5 px-7 rounded-r-xl -z-10" />
@@ -99,12 +102,12 @@ const SideBar: React.FC<Props> = ({ isSideBarOpened, setIsSideBarOpened }) => {
             <motion.div
               {...opacity}
               animate={{ opacity: 0.6 }}
-              className=" absolute top-0 left-0 w-full h-screen bg-black opacity-60 z-50"
+              className=" fixed top-0 left-0 w-full h-screen bg-black opacity-60 z-50"
             />
             <motion.div
               {...FadeUp}
               {...Animate}
-              className="absolute top-2/4 left-2/4 -translate-2/4 bg-primary dark:bg-secondary max-w-xl  w-5/6 h-52 rounded-2xl overflow-hidden p-5 flex flex-col justify-between z-50"
+              className="fixed top-2/4 left-2/4 -translate-2/4 bg-primary dark:bg-secondary max-w-xl  w-5/6 h-52 rounded-2xl overflow-hidden p-5 flex flex-col justify-between z-50"
             >
               <div>
                 <h1 className="text-2xl lg:text-3xl font-semibold ">

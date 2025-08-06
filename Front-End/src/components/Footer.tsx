@@ -2,10 +2,20 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Company, Navbar, socialMedia } from "@/data/Quick_Links";
+import { usePathname } from "next/navigation";
+import {
+  Company,
+  Navbar,
+  socialMedia,
+} from "@/data/Quick_Links";
 import { motion } from "framer-motion";
+
 const MotionLink = motion(Link);
+
 const Footer = () => {
+  const pathName = usePathname();
+
+  if (pathName === "/dashboard") return null;
   return (
     <section className="max-w-5xl mx-auto border-t-2 border-secondaryHigh mt-10 p-10 space-y-10">
       <Link

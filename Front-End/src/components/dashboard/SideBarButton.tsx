@@ -87,7 +87,7 @@ export const SideBarButton: React.FC<Props> = ({
               },
             },
           }}
-          className="absolute top-2/4 -translate-y-2/4 left-16 w-32"
+          className="absolute top-2/4 -translate-y-2/4 left-16 w-32 text-black dark:text-white"
         >
           {title}
         </motion.div>
