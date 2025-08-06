@@ -16,7 +16,7 @@ export default function WelcomeMessage({
   useEffect(() => {
     const timer = setTimeout(() => setShow(false), TimeOut);
     return () => clearTimeout(timer);
-  }, []);
+  }, [TimeOut]);
 
   return (
     <AnimatePresence>

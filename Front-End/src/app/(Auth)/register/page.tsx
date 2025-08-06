@@ -90,28 +90,26 @@ export default function Page() {
   // --------------------------------
 
   useEffect(() => {
+    if (credentials.username.length < 2 || fieldErrors.username) return;
+
     const delayDebounceFn = setTimeout(() => {
-      if (credentials.username.length >= 2) {
-        if (!fieldErrors.username) {
-          handleCheckUsername();
-        }
-      }
+      handleCheckUsername();
     }, 500);
+
     return () => clearTimeout(delayDebounceFn);
   }, [credentials.username, fieldErrors.username, handleCheckUsername]);
 
   // --------------------------------
 
   useEffect(() => {
+    if (credentials.email.length < 2 || fieldErrors.email) return;
+
     const delayDebounceFn = setTimeout(() => {
-      if (credentials.email) {
-        if (!fieldErrors.email) {
-          handleCheckEmail();
-        }
-      }
+      handleCheckEmail();
     }, 500);
+
     return () => clearTimeout(delayDebounceFn);
-  }, [credentials.email, fieldErrors.email, handleCheckUsername]);
+  }, [credentials.email, fieldErrors.email, handleCheckEmail]);
 
   // --------------------------------
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,7 +151,8 @@ export default function Page() {
 
     const delayDebounceFn = setTimeout(() => {
       const errors = validate();
-      if (currentField in errors) {
+
+      if (errors[currentField]) {
         setFieldErrors((prev) => ({
           ...prev,
           [currentField]: errors[currentField],
@@ -168,7 +167,7 @@ export default function Page() {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [credentials, currentField]);
+  }, [currentField ? credentials[currentField] : null, currentField]);
 
   // --------------------------------
   const validate = () => {

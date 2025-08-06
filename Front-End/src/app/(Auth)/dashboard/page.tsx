@@ -7,14 +7,14 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 
 // components
 import SideBar from "@/components/dashboard/SideBar";
-import { ModeToggle } from "@/components/ui/ThemeToggle";
+// import { ModeToggle } from "@/components/ui/ThemeToggle";
 import Loading from "@/components/Loading";
 
 // animation
 import { Animate, FadeUp } from "@/animation";
 
 // Icons
-import { Camera, ExternalLink, Mail, User } from "lucide-react";
+import { Camera, Mail, User } from "lucide-react";
 import CopyLink from "@/components/ui/CopyLink";
 import { WobbleCard } from "@/components/ui/wobble-card";
 import Link from "next/link";
@@ -80,7 +80,7 @@ export default function Page() {
               Edit Now
             </Link>
           </div>
-          {/* <WobbleCard containerClassName="col-span-1 min-h-[300px] ">
+          <WobbleCard containerClassName="col-span-1 min-h-[300px] ">
             <h2 className="max-w-80  text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
               No shirt, no shoes, no weapons.
             </h2>
@@ -107,9 +107,9 @@ export default function Page() {
               alt="linear demo image"
               className="absolute -right-10 md:-right-[40%] lg:-right-[20%] -bottom-10 object-contain rounded-2xl"
             />
-          </WobbleCard> */}
+          </WobbleCard>
         </div>
-        {/* <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
           <motion.div
             {...FadeUp}
             {...Animate}
@@ -150,7 +150,7 @@ export default function Page() {
               <span>{user?.gender}</span>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </motion.main>
   );

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { AnimatePresence, hover, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { CheckCheck, ExternalLink } from "lucide-react";
 import { Animate, FadeUp, opacity } from "@/animation";
 
