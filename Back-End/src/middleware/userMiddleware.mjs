@@ -32,15 +32,40 @@ export const resolveUserLoggedIn = (req, res, next) => {
   req.findUserId = findUserId;
   next();
 };
+
 export const SaveUserData = async (req, res, next) => {
-  const UserLogged = req.user._id;
-  if (!UserLogged) res.status(404).send({ msg: "User Not Found" });
-  const findUser = await user.findById(UserLogged);
-  const SaveUserData = findUser.toObject();
-  delete SaveUserData.password;
-  req.SaveUserData = SaveUserData;
-  next();
+  try {
+    const UserLogged = req.user?._id;
+    if (!UserLogged) {
+      return res.status(401).json({
+        success: false,
+        message: "You should login",
+      });
+    }
+
+    const findUser = await user.findById(UserLogged);
+    if (!findUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not Found",
+      });
+    }
+
+    const UserData = findUser.toObject();
+    delete UserData.password;
+
+    req.UserData = UserData;
+
+    next();
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: err.message,
+    });
+  }
 };
+
 export const findUserName = async (req, res, next) => {
   const userUsername = req.user.username;
   if (!userUsername)
@@ -66,5 +91,32 @@ export const findPostIdAndAuthor = async (req, res, next) => {
     next();
   } catch (err) {
     return res.status(400).send(`Error : ${err}`);
+  }
+};
+
+export const CheckUser = async (req, res, next) => {
+  try {
+    const userUsername = req.user.username;
+    const userId = req.user.id;
+
+    const findUser = await user.findOne({ username: userUsername });
+    if (!findUser) {
+      return res.status(404).json({
+        message: "User not Found !!",
+      });
+    }
+
+    if (findUser._id.toString() !== userId) {
+      return res.status(403).json({
+        message: "Unauthorized: User mismatch",
+      });
+    }
+
+    next();
+  } catch (err) {
+    return res.status(500).json({
+      message: "Server error",
+      error: err.message,
+    });
   }
 };

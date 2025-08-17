@@ -8,7 +8,7 @@ const router = Router();
 
 router.post(
   "/api/post",
- 
+
   upload.single("image"),
   checkSchema(PostSchema),
   async (req, res) => {
@@ -32,7 +32,6 @@ router.post(
         });
 
         imageUrl = uploadResult.secure_url;
-        
       } catch (err) {
         return res
           .status(500)
@@ -41,7 +40,7 @@ router.post(
     }
 
     const fullPostData = new UsersPosts({
-      author: "apolo",
+      author: req.user.username,
       ...postData,
       image: imageUrl,
     });

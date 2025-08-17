@@ -10,12 +10,12 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const findUser = await user.findById(id);
-    if (!findUser) throw new Error("user not found");
+    if (!findUser) return done(null, false, { message: "User not found" });
 
-    const saveUserData = findUser.toObject();
-    delete saveUserData.password;
+    const userWithoutPassword = findUser.toObject();
+    delete userWithoutPassword.password;
 
-    done(null, saveUserData);
+    done(null, userWithoutPassword);
   } catch (err) {
     done(err, null);
   }
@@ -33,17 +33,22 @@ export default passport.use(
           $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
         });
 
-        if (!findUser) throw new Error("user not found");
+        if (!findUser) {
+          return done(null, false, { message: "User not found" });
+        }
 
-        const isMatched = ComparePassword(password, findUser.password);
-        if (!isMatched) throw new Error("Invalid Credentials");
+        const isMatched = await ComparePassword(password, findUser.password);
+        if (!isMatched) {
+          return done(null, false, { message: "Invalid credentials" });
+        }
 
-        const saveUserData = findUser.toObject();
-        delete saveUserData.password;
+        const SaveData = findUser.toObject();
+        delete SaveData.password;
+        delete SaveData.__v;
 
-        done(null, saveUserData);
+        return done(null, SaveData);
       } catch (err) {
-        done(err, null);
+        return done(err, null);
       }
     }
   )
