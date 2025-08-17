@@ -7,9 +7,25 @@ export interface User {
   lastName: string;
   firstName: string;
   avatar?: string;
+  followers: number;
+  following: number;
+  posts:number;
   gender: string;
+  createdAt: string;
 }
-
+export interface UserProfile {
+  username: string;
+  avatar?: string;
+  bio: string;
+  fullName: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  createdAt: string;
+  followers: number;
+  following: number;
+  posts:number;
+}
 export interface AuthState {
   user: User | null;
   loading: boolean;
@@ -37,5 +53,6 @@ export interface AuthContextType extends AuthState {
   clearError: () => void;
   refreshUser: () => Promise<void>;
   checkUsername: (username: string) => Promise<true>;
+  GetUser: (username: string) => Promise<UserProfile>;
   CheckEmail: (email: string) => Promise<true>;
 }

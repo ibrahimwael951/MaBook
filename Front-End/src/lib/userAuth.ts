@@ -1,5 +1,10 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
-import { LoginCredentials, RegisterCredentials, User } from "@/types/Auth";
+import {
+  LoginCredentials,
+  RegisterCredentials,
+  User,
+  UserProfile,
+} from "@/types/Auth";
 
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_API || "http://localhost:4000",
@@ -12,11 +17,17 @@ const api: AxiosInstance = axios.create({
 export const authAPI = {
   async login(credentials: LoginCredentials): Promise<User> {
     try {
-      const response = await api.post<{ user: User }>("/api/auth/login", credentials);
+      const response = await api.post<{ user: User }>(
+        "/api/auth/login",
+        credentials
+      );
       return response.data.user;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        const msg = error.response?.data?.message || error.response?.data?.msg || error.message;
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.msg ||
+          error.message;
         throw new Error(msg || "Login failed");
       }
       throw new Error("Login failed due to unexpected error");
@@ -25,11 +36,17 @@ export const authAPI = {
 
   async register(credentials: RegisterCredentials): Promise<User> {
     try {
-      const response = await api.post<{ user: User }>("/api/auth/register", credentials);
+      const response = await api.post<{ user: User }>(
+        "/api/auth/register",
+        credentials
+      );
       return response.data.user;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        const msg = error.response?.data?.msg || error.response?.data?.message || "Use another email or username";
+        const msg =
+          error.response?.data?.msg ||
+          error.response?.data?.message ||
+          "Use another email or username";
         throw new Error(msg);
       }
       throw new Error("Registration failed due to unexpected error");
@@ -42,7 +59,9 @@ export const authAPI = {
       return response.data.user;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        throw new Error(error.response?.data?.message || "Failed to fetch user");
+        throw new Error(
+          error.response?.data?.message || "Failed to fetch user"
+        );
       }
       throw new Error("Failed to fetch user due to unexpected error");
     }
@@ -62,16 +81,18 @@ export const authAPI = {
       return response.data.user;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        throw new Error(error.response?.data?.message || "Failed to refresh token");
+        throw new Error(
+          error.response?.data?.message || "Failed to refresh token"
+        );
       }
       throw new Error("Failed to refresh token due to unexpected error");
     }
   },
-  
+
   async checkUsername(username: string): Promise<true> {
     try {
       await api.post("/api/check/username", { username });
-      return true; 
+      return true;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         const msg =
@@ -84,12 +105,11 @@ export const authAPI = {
     }
   },
 
-  async CheckEmail(email :string) : Promise<true>{
-    try{
-      await api.post("/api/check/email",{email});
+  async CheckEmail(email: string): Promise<true> {
+    try {
+      await api.post("/api/check/email", { email });
       return true;
-    }
-    catch (err){
+    } catch (err) {
       if (err instanceof AxiosError) {
         const msg =
           err.response?.data?.msg ||
@@ -99,6 +119,21 @@ export const authAPI = {
       }
       throw new Error("Unexpected error during Email check");
     }
-  }
-};
+  },
 
+  async GetUser(Username: string): Promise<UserProfile> {
+    try {
+      const res = await api.get<UserProfile>(`/api/user/search/${Username}`);
+      return res.data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const msg =
+          err.response?.data?.msg ||
+          err.response?.data?.message ||
+          "User fetch failed";
+        throw new Error(msg);
+      }
+      throw new Error("Unexpected error during user fetch");
+    }
+  },
+};
