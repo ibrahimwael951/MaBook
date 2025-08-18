@@ -1,56 +1,44 @@
-import { Router } from "express";
+import express from "express";
 import { checkSchema, matchedData, validationResult } from "express-validator";
-import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
+import multer from "multer";
+
+import { SaveUserData } from "../middleware/userMiddleware.mjs";
 import { PostSchema } from "../util/ValidationSchema.mjs";
-import upload from "../middleware/multer.mjs";
-import cloudinary from "../util/Cloudinary.mjs";
-const router = Router();
+import * as postController from "../controllers/postController.mjs";
+
+const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
 router.post(
   "/api/post",
-
+  SaveUserData,
   upload.single("image"),
   checkSchema(PostSchema),
   async (req, res) => {
-    // const { findUserName } = req;
-    const result = validationResult(req);
-    if (!result.isEmpty()) return res.status(400).send(result.array());
-
-    const postData = matchedData(req);
-
-    let imageUrl = null;
-
-    if (req.file) {
-      try {
-        const uploadResult = await new Promise((resolve, reject) => {
-          cloudinary.uploader
-            .upload_stream({ resource_type: "image" }, (err, result) => {
-              if (err) reject(err);
-              else resolve(result);
-            })
-            .end(req.file.buffer);
-        });
-
-        imageUrl = uploadResult.secure_url;
-      } catch (err) {
-        return res
-          .status(500)
-          .send({ error: "Image upload failed", details: err });
-      }
-    }
-
-    const fullPostData = new UsersPosts({
-      author: req.user.username,
-      ...postData,
-      image: imageUrl,
-    });
     try {
-      const SavePost = await fullPostData.save();
-      return res.status(200).send(SavePost);
-    } catch (err) {
-      res.status(400).send(`Error : ${err}`);
+      
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ success: false, errors: errors.array() });
+      }
+
+   
+      const postData = matchedData(req);
+      const savedPost = await postController.createPost(
+        req.UserData,
+        postData,
+        req.file
+      );
+
+      res.status(201).json({ success: true, post: savedPost });
+    } catch (error) {
+      console.error("Error:", error.message);
+      const status = error.message.includes("requires text") ? 400 : 500;
+      res.status(status).json({ success: false, msg: error.message });
     }
   }
 );
+
+ 
 
 export default router;

@@ -134,22 +134,14 @@ export const UpDateUserData = {
 
 export const PostSchema = {
   description: {
-    notEmpty: {
-      errorMessage: "should not be empty",
-    },
-    isString: {
-      errorMessage: "must be string",
-    },
-    isLength: {
-      options: {
-        min: 2,
-      },
-      errorMessage: "should be at least 2 characters",
-    },
-  },
-  image: {
+    in: ["body"],
     optional: true,
-    isString: true,
+    isString: { errorMessage: "description must be a string" },
+    trim: true,
+    isLength: {
+      options: { max: 2000 },
+      errorMessage: "description too long (max 2000 chars)",
+    },
   },
 };
 

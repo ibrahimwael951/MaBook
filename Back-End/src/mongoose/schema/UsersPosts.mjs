@@ -9,7 +9,11 @@ const PostSchema = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: String,
+    url: String,
+    public_id: String,
+    width: Number,
+    height: Number,
+    resource_type: String,
   },
   createdAt: {
     type: Date,
