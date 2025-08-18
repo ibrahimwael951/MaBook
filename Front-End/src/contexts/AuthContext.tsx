@@ -13,6 +13,8 @@ import {
   LoginCredentials,
   RegisterCredentials,
   UserProfile,
+  image,
+  Post,
 } from "@/types/Auth";
 import { authAPI } from "@/lib/userAuth";
 
@@ -166,6 +168,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw new Error(message);
     }
   };
+  const GetUserPosts = async (Username: string): Promise<Post[]> => {
+    try {
+      const res = await authAPI.GetUserPosts(Username);
+      return res as Post[];
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Email check failed";
+      throw new Error(message);
+    }
+  };
 
   const value: AuthContextType = {
     ...state,
@@ -177,6 +189,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkUsername,
     GetUser,
     CheckEmail,
+    GetUserPosts,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

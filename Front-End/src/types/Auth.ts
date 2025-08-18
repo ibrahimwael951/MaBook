@@ -9,7 +9,7 @@ export interface User {
   avatar?: string;
   followers: number;
   following: number;
-  posts:number;
+  posts: number;
   gender: string;
   createdAt: string;
 }
@@ -24,8 +24,23 @@ export interface UserProfile {
   createdAt: string;
   followers: number;
   following: number;
-  posts:number;
+  posts: number;
 }
+export interface Post {
+  _id: string;
+  author: string;
+  description: string;
+  createdAt: string;
+  image: image;
+}
+export interface image {
+  url: string;
+  public_id: string;
+  width: number;
+  height: number;
+  resource_type: string;
+}
+
 export interface AuthState {
   user: User | null;
   loading: boolean;
@@ -55,4 +70,5 @@ export interface AuthContextType extends AuthState {
   checkUsername: (username: string) => Promise<true>;
   GetUser: (username: string) => Promise<UserProfile>;
   CheckEmail: (email: string) => Promise<true>;
+  GetUserPosts: (email: string) => Promise<Post[]>;
 }

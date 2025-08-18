@@ -3,8 +3,9 @@ import React, { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
- 
+
 import Info from "@/components/profile/Info";
+import UserPosts from "@/components/profile/UserPosts";
 
 export default function Page() {
   const { user, loading } = useAuth();
@@ -16,14 +17,13 @@ export default function Page() {
   }, [route, user, loading]);
 
   if (!user || loading) return <Loading />;
+
   return (
     <main className="min-h-screen mt-20">
       <Info {...user} />
       {/* ----------------Posts Section------------- */}
-
-      <section className="relative mt-5">
-        <hr className="w-10/12 mx-auto" />
-      </section>
+      <hr className="max-w-2xl mx-10  md:mx-auto my-10" />
+      <UserPosts username={user.username} />
     </main>
   );
 }

@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
 import {
+  image,
   LoginCredentials,
+  Post,
   RegisterCredentials,
   User,
   UserProfile,
@@ -134,6 +136,21 @@ export const authAPI = {
         throw new Error(msg);
       }
       throw new Error("Unexpected error during user fetch");
+    }
+  },
+  async GetUserPosts(Username: string): Promise<Post[]> {
+    try {
+      const res = await api.get<Post[]>(`/api/user/${Username}/posts`);
+      return res.data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const msg =
+          err.response?.data?.msg ||
+          err.response?.data?.message ||
+          "User Posts fetch failed";
+        throw new Error(msg);
+      }
+      throw new Error("Unexpected error during user posts fetch");
     }
   },
 };

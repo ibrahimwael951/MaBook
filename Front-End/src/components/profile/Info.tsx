@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "../Loading";
 import { UserProfile } from "@/types/Auth";
-import { Animate, FadeUp } from "@/animation";
+import { Animate, FadeLeft, FadeUp } from "@/animation";
 
 interface InfoProps extends UserProfile {}
 
@@ -18,16 +18,33 @@ const Info: React.FC<InfoProps> = (props) => {
   return (
     <section>
       <div className="relative flex flex-col sm:flex-row gap-5 justify-center items-center sm:items-start text-center sm:text-start">
-        <AnimatedImage
-          src={
-            props.gender === "male"
-              ? "/Avatars/Normal_men.jpg"
-              : "/Avatars/Blonde_Girl .jpg"
-          }
-          alt={`${props.fullName}Avatar`}
-          className="rounded-full max-w-40 "
-        />
-        <div className="mt-5">
+        <div className="flex flex-col justify-center items-center gap-5">
+          <AnimatedImage
+            src={
+              props.gender === "male"
+                ? "/Avatars/Normal_men.jpg"
+                : "/Avatars/Blonde_Girl .jpg"
+            }
+            alt={`${props.fullName}Avatar`}
+            className="rounded-full max-w-40 "
+          />
+          <motion.div
+            {...FadeLeft}
+            {...Animate}
+            className="bg-secondary p-2 rounded-xl text-white "
+          >
+            Reader since {props.createdAt && AccountAge(props.createdAt)}
+          </motion.div>
+        </div>
+        <div className="lg:mt-5 space-y-2">
+          <motion.p
+            {...FadeUp}
+            {...Animate}
+            className="text-2xl font-semibold "
+          >
+            #{props.username}
+          </motion.p>
+
           <motion.h1
             {...FadeUp}
             {...Animate}
@@ -35,6 +52,7 @@ const Info: React.FC<InfoProps> = (props) => {
           >
             {props.fullName}
           </motion.h1>
+
           <motion.p {...FadeUp} {...Animate}>
             {props.bio
               ? props.bio
@@ -42,6 +60,7 @@ const Info: React.FC<InfoProps> = (props) => {
                   props.gender === "male" ? "He" : "She"
                 } is too busy reading to write a bio.`}
           </motion.p>
+
           <motion.div
             {...FadeUp}
             {...Animate}
@@ -60,7 +79,7 @@ const Info: React.FC<InfoProps> = (props) => {
               <p>{props.posts ? props.posts : 0}</p>
             </div>
           </motion.div>
-          <div className="flex justify-center items-center gap-5 mt-5"></div>
+
           {user?.username != props.username && (
             <motion.div
               {...FadeUp}
@@ -77,9 +96,11 @@ const Info: React.FC<InfoProps> = (props) => {
             </motion.div>
           )}
         </div>
-        <p className="absolute top-2/4 -translate-y-2/4 right-6 rotate-90 ">
-          {props.createdAt && AccountAge(props.createdAt)}
-        </p>
+      </div>
+      <div className="flex justify-center items-center">
+        <div>
+          
+        </div>
       </div>
     </section>
   );
