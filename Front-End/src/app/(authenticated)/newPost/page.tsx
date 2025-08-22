@@ -1,8 +1,10 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
-
+import { withAuth } from "@/contexts/AuthContext";
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
@@ -13,7 +15,7 @@ type UploadState = {
   success?: boolean;
 };
 
-export default function CreatePostPage() {
+ function CreatePostPage() {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -21,6 +23,7 @@ export default function CreatePostPage() {
     uploading: false,
     progress: 0,
   });
+  const { user } = useAuth();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -112,6 +115,7 @@ export default function CreatePostPage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
+  if (!user) return <Loading />;
   return (
     <section className="mt-20 max-w-2xl mx-auto p-4">
       <h1 className="text-4xl font-semibold mb-4">
@@ -187,3 +191,4 @@ export default function CreatePostPage() {
     </section>
   );
 }
+export default withAuth(CreatePostPage);

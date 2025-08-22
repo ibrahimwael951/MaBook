@@ -10,6 +10,7 @@ import React, {
 import { useAuth } from "@/contexts/AuthContext";
 import { BANNED_USERNAMES } from "@/data/BannedUsernames";
 import { Update } from "@/types/Auth";
+import Loading from "@/components/Loading";
 
 export default function Page() {
   const { user, updateUser, checkUsername } = useAuth();
@@ -95,7 +96,6 @@ export default function Page() {
 
   useEffect(() => {
     if (!currentField) return;
-    // const value = formData[currentField];
     const timeout = setTimeout(() => {
       const errors = validate();
       if (errors[currentField]) {
@@ -193,14 +193,7 @@ export default function Page() {
   const handleFocus = (name: keyof Update) => () => setCurrentField(name);
   const handleBlur = () => setCurrentField(null);
 
-  if (isLoading) {
-    return (
-      <div className="max-w-md mx-auto p-6 rounded-lg shadow-md text-center">
-        <p>Loading user data...</p>
-      </div>
-    );
-  }
-
+  if (isLoading) return <Loading />;
   return (
     <div className="max-w-md mx-auto p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Update Profile</h2>

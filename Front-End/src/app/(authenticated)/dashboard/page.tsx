@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 // components
@@ -23,13 +22,8 @@ import AnimatedImage from "@/components/ui/AnimatedImage";
 export default function Page() {
   const { loading, user } = useAuth();
   const [isSideBarOpened, setIsSideBarOpened] = useState<boolean>(false);
-  const route = useRouter();
+
   const isMobile = useIsMobile();
-  useEffect(() => {
-    if (!loading && !user) {
-      route.push("login");
-    }
-  }, [route, user, loading]);
 
   if (loading || !user) return <Loading />;
   return (

@@ -77,18 +77,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center gap-20">
-        <p>© 2025 Ma Book. All rights reserved.</p>
-        <p>
-          Made By{" "}
-          <Link
-            href="https://ibrlolportfoli.vercel.app/"
-            className="text-lg font-semibold text-secondaryHigh mx-1"
-          >
-            Ibrahim Wael
-          </Link>
-        </p>
-      </div>
+      <p>© 2025 Ma Book. All rights reserved.</p>
     </section>
   );
 };

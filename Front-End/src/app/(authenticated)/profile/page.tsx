@@ -1,21 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/Loading";
-import { useRouter } from "next/navigation";
 
 import Info from "@/components/profile/Info";
 import UserPosts from "@/components/profile/UserPosts";
+import WithAuth from "@/middleware/WithAuth";
 
-export default function Page() {
+function PageContent() {
   const { user, loading } = useAuth();
-  const route = useRouter();
-  useEffect(() => {
-    if (!loading && !user) {
-      route.push("login");
-    }
-  }, [route, user, loading]);
-
   if (!user || loading) return <Loading />;
 
   return (
@@ -25,5 +18,12 @@ export default function Page() {
       <hr className="max-w-2xl mx-10  md:mx-auto my-10" />
       <UserPosts username={user.username} />
     </main>
+  );
+}
+export default function Page() {
+  return (
+    <WithAuth>
+      <PageContent />
+    </WithAuth>
   );
 }
