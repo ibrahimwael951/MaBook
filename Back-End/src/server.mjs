@@ -24,7 +24,7 @@ mongoose
 app.use(
   cors({
     origin: ["http://localhost:3000", "http://192.168.1.6:3000"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     credentials: true,
   })
 );

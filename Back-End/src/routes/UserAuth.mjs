@@ -101,7 +101,7 @@ router.patch(
         });
       }
       const { UserData } = req;
-      const updateUser = user.findByIdAndUpdate(
+      const updateUser = await user.findByIdAndUpdate(
         UserData._id,
         { $set: data },
         { new: true, runValidators: true }
@@ -112,7 +112,7 @@ router.patch(
           error: "User not Found",
         });
       }
-      const safeUser = updatedUser.toObject();
+      const safeUser = updateUser.toObject();
       delete safeUser.password;
       delete safeUser.__v;
 

@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
 import {
-  image,
   LoginCredentials,
   Post,
   RegisterCredentials,
   User,
   UserProfile,
+  Update,
 } from "@/types/Auth";
 
 const api: AxiosInstance = axios.create({
@@ -43,7 +43,7 @@ export const authAPI = {
         credentials
       );
       return response.data.user;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof AxiosError) {
         const msg =
           error.response?.data?.msg ||
@@ -59,7 +59,7 @@ export const authAPI = {
     try {
       const response = await api.get<{ user: User }>("/api/auth/status");
       return response.data.user;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.message || "Failed to fetch user"
@@ -81,7 +81,7 @@ export const authAPI = {
     try {
       const response = await api.post<{ user: User }>("/api/auth/refresh");
       return response.data.user;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.message || "Failed to refresh token"
@@ -151,6 +151,21 @@ export const authAPI = {
         throw new Error(msg);
       }
       throw new Error("Unexpected error during user posts fetch");
+    }
+  },
+  async UpdateUser(user: Update): Promise<User> {
+    try {
+      const res = await api.patch(`/api/auth/update`, { ...user });
+      return res.data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const msg =
+          err.response?.data?.msg ||
+          err.response?.data?.message ||
+          "Update user failed";
+        throw new Error(msg);
+      }
+      throw new Error("Unexpected error during Update user");
     }
   },
 };

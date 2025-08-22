@@ -9,7 +9,7 @@ import Loading from "../Loading";
 import { UserProfile } from "@/types/Auth";
 import { Animate, FadeLeft, FadeUp } from "@/animation";
 
-interface InfoProps extends UserProfile {}
+type InfoProps = UserProfile;
 
 const Info: React.FC<InfoProps> = (props) => {
   const { user, loading } = useAuth();
@@ -98,9 +98,7 @@ const Info: React.FC<InfoProps> = (props) => {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div>
-          
-        </div>
+        <div></div>
       </div>
     </section>
   );

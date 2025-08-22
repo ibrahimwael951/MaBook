@@ -117,7 +117,7 @@ export const UpDateUserData = {
       errorMessage: "should be at least 5 characters",
     },
   },
-  gender: {
+  firstName: {
     optional: true,
     notEmpty: {
       errorMessage: "should not be empty",
@@ -125,9 +125,30 @@ export const UpDateUserData = {
     isString: {
       errorMessage: "must be string",
     },
-    isIn: {
-      options: [["male", "female"]],
-      errorMessage: "must be one of 'male', 'female'",
+
+    isLength: {
+      options: {
+        min: 2,
+        max: 20,
+      },
+      errorMessage: "should be at least 2 characters",
+    },
+  },
+  lastName: {
+    optional: true,
+    notEmpty: {
+      errorMessage: "should not be empty",
+    },
+    isString: {
+      errorMessage: "must be string",
+    },
+
+    isLength: {
+      options: {
+        min: 2,
+        max: 20,
+      },
+      errorMessage: "should be at least 2 characters",
     },
   },
 };

@@ -97,7 +97,7 @@ export const findPostIdAndAuthor = async (req, res, next) => {
 export const CheckUser = async (req, res, next) => {
   try {
     const userUsername = req.user.username;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     const findUser = await user.findOne({ username: userUsername });
     if (!findUser) {
@@ -107,11 +107,12 @@ export const CheckUser = async (req, res, next) => {
     }
 
     if (findUser._id.toString() !== userId) {
+      console.log(userId)
+      console.log(findUser._id.toString())
       return res.status(403).json({
         message: "Unauthorized: User mismatch",
       });
     }
-
     next();
   } catch (err) {
     return res.status(500).json({

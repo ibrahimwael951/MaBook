@@ -18,6 +18,7 @@ import { Camera, Mail, User } from "lucide-react";
 import CopyLink from "@/components/ui/CopyLink";
 import { WobbleCard } from "@/components/ui/wobble-card";
 import Link from "next/link";
+import AnimatedImage from "@/components/ui/AnimatedImage";
 
 export default function Page() {
   const { loading, user } = useAuth();
@@ -57,7 +58,7 @@ export default function Page() {
           </div>
           <CopyLink
             title="Copy Your Profile Link"
-            Link={`/User/${user.username}`}
+            Link={`/profile/${user.username}`}
           />
         </motion.div>
 
@@ -100,13 +101,6 @@ export default function Page() {
                 most popular AI platform for developers.
               </p>
             </div>
-            <img
-              src="/linear.webp"
-              width={500}
-              height={500}
-              alt="linear demo image"
-              className="absolute -right-10 md:-right-[40%] lg:-right-[20%] -bottom-10 object-contain rounded-2xl"
-            />
           </WobbleCard>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
@@ -117,7 +111,7 @@ export default function Page() {
           >
             <div className="relative">
               {user?.avatar ? (
-                <img
+                <AnimatedImage
                   src={user.avatar}
                   alt="Avatar"
                   className="w-16 h-16 rounded-full object-cover"

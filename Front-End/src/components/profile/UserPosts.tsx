@@ -9,6 +9,7 @@ import Loading from "../Loading";
 import { FileX2 } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AccountAge } from "@/hooks/AccountAge";
+import Link from "next/link";
 
 const MotionButton = motion(Button);
 
@@ -100,7 +101,7 @@ interface PostPageProps {
   posts?: Post[] | null;
 }
 
-function PostPage({ page, posts }: PostPageProps) {
+function PostPage({ posts }: PostPageProps) {
   const isMobile = useIsMobile();
   if (!posts) return <Loading />;
   if (posts.length === 0)
@@ -110,22 +111,32 @@ function PostPage({ page, posts }: PostPageProps) {
         <h1 className="text-4xl">no posts yet</h1>
       </div>
     );
+  const MotionLink = motion(Link);
   return (
     <div className="p-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 ">
       {posts.map((item) => (
-        <motion.div
+        <MotionLink
+          key={item._id}
+          href={`/posts/${item._id}`}
           initial="rest"
           whileHover="hover"
           variants={{
             hover: { y: -5 },
             rest: { y: 0 },
           }}
-          key={item._id}
-          className="relative text-2xl p-3 rounded-2xl bg-secondary text-white min-h-52 overflow-hidden"
+          className={`relative text-2xl p-3 pb-8 rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
         >
-          {item.description}
-          {item.image?.url && <img src={item.image.url} alt="" />}
-          {item.description}
+         <h1 className="mb-3">
+         {item.description}
+         </h1>
+          {item.image?.url && (
+            <img
+              src={item.image.url}
+              alt={`image - ${item.description}`}
+              className="w-full h-72 object-cover rounded-2xl "
+            />
+          )}
+
           <p className="text-xs absolute bottom-2 right-2 ">
             {AccountAge(item.createdAt)}
           </p>
@@ -136,7 +147,7 @@ function PostPage({ page, posts }: PostPageProps) {
             }}
             className="absolute top-0 left-0 w-full h-full bg-white dark:bg-black"
           ></motion.div>
-        </motion.div>
+        </MotionLink>
       ))}
     </div>
   );

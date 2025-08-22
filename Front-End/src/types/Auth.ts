@@ -55,7 +55,13 @@ export interface RegisterCredentials {
   gender: string;
   password: string;
 }
-
+export interface Update {
+  username: string;
+  bio: string;
+  lastName: string;
+  firstName: string;
+  avatar?: string;
+}
 export interface LoginCredentials {
   usernameOrEmail: string;
   password: string;
@@ -66,6 +72,7 @@ export interface AuthContextType extends AuthState {
   register: (credentials: RegisterCredentials) => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
+  updateUser: (User: Update) => Promise<User>;
   refreshUser: () => Promise<void>;
   checkUsername: (username: string) => Promise<true>;
   GetUser: (username: string) => Promise<UserProfile>;

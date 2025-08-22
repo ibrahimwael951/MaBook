@@ -13,8 +13,8 @@ import {
   LoginCredentials,
   RegisterCredentials,
   UserProfile,
-  image,
   Post,
+  Update,
 } from "@/types/Auth";
 import { authAPI } from "@/lib/userAuth";
 
@@ -179,6 +179,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const updateUser = async (userData: Update): Promise<User> => {
+    try {
+      const res = await authAPI.UpdateUser({ ...userData });
+      return res;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Update user failed";
+      throw new Error(message);
+    }
+  };
+
   const value: AuthContextType = {
     ...state,
     login,
@@ -190,6 +201,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     GetUser,
     CheckEmail,
     GetUserPosts,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
