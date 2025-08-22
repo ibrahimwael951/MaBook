@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu } from "lucide-react";
-import { DashboardLinks, Navbar as NavLinks } from "@/data/Quick_Links";
+import {
+  DashboardLinks,
+  Navbar_Logged_In,
+  Navbar as NavLinks,
+} from "@/data/Quick_Links";
 import { ModeToggle } from "@/components/ui/ThemeToggle";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,6 +25,9 @@ const Navbar = () => {
   const Pathname = usePathname();
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
+
+  const linksToRender = !user ? NavLinks : Navbar_Logged_In;
+
   useEffect(() => {
     const handleScroll = () => {
       const offset = 0;
@@ -35,6 +42,8 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (loading) return null;
   return (
     <motion.nav
       initial={Pathname === "/dashboard" ? { y: 0 } : { y: "-100%" }}
@@ -53,7 +62,7 @@ const Navbar = () => {
         Ma Book
       </Link>
       <div className="hidden lg:flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
-        {NavLinks.map((item, i) => (
+        {linksToRender.map((item, i) => (
           <Link key={i} href={item.href}>
             <motion.div
               animate={

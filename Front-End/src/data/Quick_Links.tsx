@@ -35,6 +35,12 @@ export const Navbar: DefaultLinks[] = [
   { title: "Community", href: "/community", icon: UsersRound },
   { title: "Posts", href: "/posts", icon: Podcast },
 ];
+export const Navbar_Logged_In: DefaultLinks[] = [
+  { title: "Home", href: "/", icon: Home },
+  { title: "Blogs", href: "/blogs", icon: Info },
+  { title: "Books", href: "/books", icon: Book },
+  { title: "New Post", href: "/newPost", icon: Podcast },
+];
 export const socialMedia: DefaultLinks[] = [
   { title: "instagram", href: "/", icon: Instagram },
   { title: "Facebook", href: "/about", icon: Facebook },
@@ -50,13 +56,13 @@ export const Company: DefaultLinks[] = [
 export const DashboardLinks: DashLinks[] = [
   {
     title: "Profile",
-    href: "/dashboard/",
+    href: "/profile",
     icon: UserRoundPen,
     description: "View and edit your personal information",
   },
   {
     title: "Settings",
-    href: "/dashboard/",
+    href: "/dashboard",
     icon: Cog,
     description: "Manage your account preferences",
   },
@@ -74,7 +80,7 @@ export const DashboardLinks: DashLinks[] = [
   },
   {
     title: "Contact",
-    href: "/dashboard/",
+    href: "/contact",
     icon: Headset,
     description: "Get support or send us a message",
   },
