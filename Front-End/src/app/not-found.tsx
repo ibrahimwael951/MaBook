@@ -1,14 +1,11 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FadeUp } from "@/animation";
 
 export default function Not_found() {
-  const pathName = usePathname();
-
   const Animate = {
     animate: {
       y: 0,
@@ -38,8 +35,7 @@ export default function Not_found() {
         transition={{ duration: 0.24, delay: 0.2 }}
         className="text-3xl"
       >
-        there is no page with that name :{" "}
-        <span className="text-2xl font-semibold ">{pathName.slice(1)}</span>
+        there is no page with that name
       </motion.p>
       <motion.div
         {...FadeUp}

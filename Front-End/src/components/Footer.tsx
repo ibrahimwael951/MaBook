@@ -77,7 +77,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p>© 2025 Ma Book. All rights reserved.</p>
+      <p className="text-center">© 2025 Ma Book. All rights reserved.</p>
     </section>
   );
 };
