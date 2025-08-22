@@ -83,7 +83,7 @@ export default function CreatePostPage() {
               const json = JSON.parse(xhr.responseText);
               msg = json?.error || json?.msg || msg;
             } catch (e) {
-              // ignore parse
+              console.log(e);
             }
             setUpload({ uploading: false, progress: 0, error: msg });
             reject(new Error(msg));

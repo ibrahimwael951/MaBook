@@ -95,7 +95,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!currentField) return;
-    const value = formData[currentField];
+    // const value = formData[currentField];
     const timeout = setTimeout(() => {
       const errors = validate();
       if (errors[currentField]) {
