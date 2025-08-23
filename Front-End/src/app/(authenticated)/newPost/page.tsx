@@ -9,8 +9,7 @@ import AnimatedImage from "@/components/ui/AnimatedImage";
 import Link from "next/link";
 import { Animate, FadeLeft, opacity } from "@/animation";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+const API_BASE = process.env.NEXT_PUBLIC_BACKEND_API as string;
 const MotionLink = motion(Link);
 
 type UploadState = {

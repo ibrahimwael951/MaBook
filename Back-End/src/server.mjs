@@ -24,7 +24,7 @@ mongoose
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://mabook.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
 );
@@ -38,8 +38,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 7, // exp after one week
       httpOnly: true,
-      sameSite: "lax", // or "none" in production with HTTPS
-      secure: false, // must be false for localhost
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),

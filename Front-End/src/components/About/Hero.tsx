@@ -7,7 +7,7 @@ import AnimatedImage from "../ui/AnimatedImage";
 const Hero = () => {
   return (
     <section className="mt-20 lg:mt-40 mb-40 flex justify-center lg:justify-evenly items-center flex-col md:flex-row gap-10">
-      <div className="space-y-4 max-w-xl w-2/4 ">
+      <div className="space-y-4 max-w-xl w-full lg:w-2/4 ">
         <motion.h1 {...FadeLeft} {...Animate} className="text-5xl lg:text-7xl">
           What is <span> MaBook?</span>
         </motion.h1>
