@@ -23,7 +23,7 @@ mongoose
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://192.168.1.6:3000"],
+    origin: ["http://localhost:3000", "https://mabook.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     credentials: true,
   })
