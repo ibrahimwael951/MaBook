@@ -18,7 +18,6 @@ import {
 } from "@/types/Auth";
 import { authAPI } from "@/lib/userAuth";
 
-// Auth Reducer
 type AuthAction =
   | { type: "AUTH_START" }
   | { type: "AUTH_SUCCESS"; payload: User }
@@ -215,49 +214,4 @@ export const useAuth = (): AuthContextType => {
   }
 
   return context;
-};
-
-export const withAuth = <P extends object>(
-  Component: React.ComponentType<P>
-) => {
-  const AuthenticatedComponent = (props: P) => {
-    const { user, loading } = useAuth();
-
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-      );
-    }
-
-    if (!user) {
-      return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4">Authentication Required</h2>
-            <p className="text-gray-600">Please log in to access this page.</p>
-          </div>
-        </div>
-      );
-    }
-
-    return <Component {...props} />;
-  };
-
-  AuthenticatedComponent.displayName = `withAuth(${
-    Component.displayName || Component.name
-  })`;
-  return AuthenticatedComponent;
-};
-
-export const useRequireAuth = () => {
-  const { user, loading } = useAuth();
-
-  return {
-    user,
-    loading,
-    isAuthenticated: !!user,
-    requireAuth: !loading && !user,
-  };
 };
