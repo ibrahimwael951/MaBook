@@ -32,7 +32,7 @@ export const Navbar: DefaultLinks[] = [
   { title: "About", href: "/about", icon: Info },
   { title: "Books", href: "/books", icon: Book },
   { title: "Community", href: "/community", icon: UsersRound },
-  { title: "Posts", href: "/posts", icon: Podcast },
+  { title: "Contact", href: "/contact", icon: Contact },
 ];
 export const Navbar_Logged_In: DefaultLinks[] = [
   { title: "Home", href: "/", icon: Home },

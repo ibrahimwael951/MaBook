@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { BANNED_USERNAMES } from "@/data/BannedUsernames";
 import { Update } from "@/types/Auth";
 import Loading from "@/components/Loading";
 import { Animate, FadeLeft } from "@/animation";
