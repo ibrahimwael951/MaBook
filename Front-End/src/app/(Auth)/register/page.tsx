@@ -121,7 +121,7 @@ export default function Page() {
 
     try {
       await register(trimmedCredentials);
-      router.push("/profile");
+      router.push(`/profile/${user?.username}`);
       setSubmitted(true);
     } catch (error) {
       setSubmitted(true);
@@ -225,7 +225,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push("/profile ");
+      router.push(`/profile/${user?.username}`);
     }
   }, [loading, user, router]);
 
