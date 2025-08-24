@@ -6,18 +6,11 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 
 // components
 import SideBar from "@/components/dashboard/SideBar";
-// import { ModeToggle } from "@/components/ui/ThemeToggle";
+import CopyLink from "@/components/ui/CopyLink";
 import Loading from "@/components/Loading";
 
 // animation
 import { Animate, FadeUp } from "@/animation";
-
-// Icons
-import { Camera, Mail, User } from "lucide-react";
-import CopyLink from "@/components/ui/CopyLink";
-import { WobbleCard } from "@/components/ui/wobble-card";
-import Link from "next/link";
-import AnimatedImage from "@/components/ui/AnimatedImage";
 
 export default function Page() {
   const { loading, user } = useAuth();
