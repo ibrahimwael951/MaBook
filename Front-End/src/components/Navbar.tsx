@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu } from "lucide-react";
+import { Menu, UserRoundPen } from "lucide-react";
 import {
   DashboardLinks,
   Navbar_Logged_In,
@@ -42,6 +42,12 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const ProfileLink = {
+    title: "Profile",
+    href: `/profile/${user?.username}`,
+    icon: UserRoundPen,
+    description: "View and edit your personal information",
+  };
 
   if (loading) return null;
   return (
@@ -149,8 +155,10 @@ const Navbar = () => {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>
-                  <div className="py-2 px-5 text-xl flex justify-center items-center rounded-full dark:text-third text-primary  bg-third dark:bg-primary ">
-                    {user.fullName.charAt(0)}
+                  <div className="relative  w-12 h-12 text-2xl font-medium rounded-full dark:text-third text-primary  bg-third dark:bg-primary ">
+                    <h1 className="absolute top-2/4 left-2/4 -translate-2/4">
+                      {user.fullName.charAt(0)}
+                    </h1>
                   </div>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -164,6 +172,13 @@ const Navbar = () => {
                         {item.description}
                       </ListItem>
                     ))}
+                    <ListItem
+                      key={ProfileLink.title}
+                      title={ProfileLink.title}
+                      href={ProfileLink.href}
+                    >
+                      {ProfileLink.description}
+                    </ListItem>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>

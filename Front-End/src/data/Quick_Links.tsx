@@ -12,7 +12,6 @@ import {
   LucideIcon,
   NotebookTabs,
   Podcast,
-  UserRoundPen,
   UsersRound,
   Youtube,
 } from "lucide-react";
@@ -54,12 +53,7 @@ export const Company: DefaultLinks[] = [
  
 ];
 export const DashboardLinks: DashLinks[] = [
-  {
-    title: "Profile",
-    href: "/profile",
-    icon: UserRoundPen,
-    description: "View and edit your personal information",
-  },
+
   {
     title: "Settings",
     href: "/dashboard",

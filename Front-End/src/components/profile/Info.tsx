@@ -8,11 +8,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import Loading from "../Loading";
 import { UserProfile } from "@/types/Auth";
 import { Animate, FadeLeft, FadeUp } from "@/animation";
+import Link from "next/link";
 
 type InfoProps = UserProfile;
 
 const Info: React.FC<InfoProps> = (props) => {
   const { user, loading } = useAuth();
+  const isItMe = user?.username === props.username;
 
   if (loading) return <Loading />;
   return (
@@ -80,7 +82,20 @@ const Info: React.FC<InfoProps> = (props) => {
             </div>
           </motion.div>
 
-          {user?.username != props.username && (
+          {isItMe ? (
+            <motion.div
+              {...FadeUp}
+              {...Animate}
+              className="flex justify-center items-center gap-5 mt-5"
+            >
+              <Link href="/Update_User_profile">
+                <Button variant="outline">Edit Profile</Button>
+              </Link>
+              <Link href="/MyBookShelf">
+                <Button variant="outline">My Books</Button>
+              </Link>
+            </motion.div>
+          ) : (
             <motion.div
               {...FadeUp}
               {...Animate}

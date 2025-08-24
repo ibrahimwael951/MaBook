@@ -30,7 +30,7 @@ export default function Page() {
 
     try {
       await login(trimmedCredentials);
-      router.push("/dashboard");
+      router.push("/profile");
     } catch (error) {
       setCloseErrorPop(true);
       console.error("Login failed:", error);
@@ -53,7 +53,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push("/dashboard");
+      router.push("/profile");
     }
   }, [loading, user, router]);
 

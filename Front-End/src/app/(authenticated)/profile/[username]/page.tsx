@@ -62,30 +62,30 @@ export default function Page() {
       route.push("/login");
       return;
     }
-
-    if (UserProfile && UserProfile.username === user.username) {
-      route.push("/profile");
-    }
-  }, [loading, user, UserProfile, route]);
+  }, [loading, user, route]);
 
   if (profileLoading || loading) return <Loading />;
   if (error || !UserProfile)
     return (
-      <motion.section {...FadeUp} {...Animate} className="flex flex-col items-center justify-center min-h-screen text-5xl">
-        <SquareX size={50}/>
+      <motion.section
+        {...FadeUp}
+        {...Animate}
+        className="flex flex-col items-center justify-center min-h-screen text-5xl"
+      >
+        <SquareX size={50} />
         no user Found
       </motion.section>
     );
-    return (
-      <main className="min-h-screen mt-20">
-        <Info {...UserProfile} />
+  return (
+    <main className="min-h-screen mt-20">
+      <Info {...UserProfile} />
 
-        {/* ----------------Posts Section------------- */}
+      {/* ----------------Posts Section------------- */}
 
-        <section className="relative mt-5">
-          <hr className="w-10/12 mx-auto" />
-          <UserPosts username={username} />
-        </section>
-      </main>
-    );
+      <section className="relative mt-5">
+        <hr className="w-10/12 mx-auto" />
+        <UserPosts username={username} />
+      </section>
+    </main>
+  );
 }
