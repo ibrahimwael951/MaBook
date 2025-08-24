@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Animate, FadeDown, FadeUp } from "@/animation";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/Loading";
-export default function page() {
+export default function Page() {
   const { user, loading } = useAuth();
   const isUserFound = user ? true : false;
   const [form, setForm] = useState({
@@ -181,7 +181,7 @@ export default function page() {
             Send Message
           </motion.button>
         </motion.form>
-        {/* <BackgroundBeams className="" /> */}
+        <BackgroundBeams className="" />
       </div>
     </main>
   );
