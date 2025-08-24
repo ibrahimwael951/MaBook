@@ -103,7 +103,7 @@ router.patch(
       const { UserData } = req;
       const updateUser = await user.findByIdAndUpdate(
         UserData._id,
-        { $set: data },
+        { $set: data, fullName: `${data.firstName} ${data.lastName}` },
         { new: true, runValidators: true }
       );
 

@@ -56,7 +56,6 @@ export interface RegisterCredentials {
   password: string;
 }
 export interface Update {
-  username: string;
   bio: string;
   lastName: string;
   firstName: string;

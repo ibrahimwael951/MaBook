@@ -89,22 +89,6 @@ export const UserLoggingIn = {
 };
 
 export const UpDateUserData = {
-  username: {
-    optional: true,
-    notEmpty: {
-      errorMessage: "should not be empty",
-    },
-    isString: {
-      errorMessage: "must be string",
-    },
-    isLength: {
-      options: {
-        min: 2,
-        max: 8,
-      },
-      errorMessage: "should be at least 2-8 characters",
-    },
-  },
   bio: {
     optional: true,
     isString: {

@@ -5,17 +5,17 @@ import React, {
   FormEvent,
   useRef,
   useEffect,
-  useCallback,
 } from "react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { BANNED_USERNAMES } from "@/data/BannedUsernames";
 import { Update } from "@/types/Auth";
 import Loading from "@/components/Loading";
+import { Animate, FadeLeft } from "@/animation";
 
 export default function Page() {
-  const { user, updateUser, checkUsername } = useAuth();
+  const { user, updateUser } = useAuth();
   const [formData, setFormData] = useState<Update>({
-    username: "",
     bio: "",
     lastName: "",
     firstName: "",
@@ -33,26 +33,12 @@ export default function Page() {
   >({});
   const [currentField, setCurrentField] = useState<keyof Update | null>(null);
 
-  // username allows letters + numbers
-  const usernameRegex = /^[a-zA-Z0-9]+$/;
-  // name fields allow only english letters
   const nameRegex = /^[a-zA-Z]+$/;
-
-  const [statusUsername, setStatusUserName] = useState<null | boolean>(null);
-  const [statusMessageUsername, setStatusMessageUsername] = useState<
-    null | string
-  >(null);
-
-  // Normalize banned list once
-  const bannedLower = useRef(
-    BANNED_USERNAMES.map((n) => (typeof n === "string" ? n.toLowerCase() : n))
-  );
 
   // load user once
   useEffect(() => {
     if (user && !initialized.current) {
       setFormData({
-        username: user.username ?? "",
         bio: user.bio ?? "",
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
@@ -66,18 +52,9 @@ export default function Page() {
   // validate helper
   const validate = (): Partial<Record<keyof Update, string>> => {
     const errors: Partial<Record<keyof Update, string>> = {};
-    const uname = formData.username?.trim() ?? "";
+
     const fname = formData.firstName?.trim() ?? "";
     const lname = formData.lastName?.trim() ?? "";
-
-    if (uname.length < 2 || uname.length > 8) {
-      errors.username = "Username must be between 2 and 8 characters.";
-    } else if (!usernameRegex.test(uname)) {
-      errors.username =
-        "Username must contain only English letters and numbers.";
-    } else if (bannedLower.current.includes(uname.toLowerCase())) {
-      errors.username = "This username is not allowed.";
-    }
 
     if (fname.length < 2 || fname.length > 10) {
       errors.firstName = "First name must be between 2 and 10 characters.";
@@ -114,37 +91,6 @@ export default function Page() {
 
     return () => clearTimeout(timeout);
   }, [currentField ? formData[currentField] : null, currentField]);
-
-  const handleCheckUsername = useCallback(async () => {
-    const uname = formData.username?.trim() ?? "";
-    if (uname.length < 2 || fieldErrors.username) {
-      setStatusUserName(null);
-      setStatusMessageUsername(null);
-      return;
-    }
-
-    try {
-      await checkUsername(uname);
-      setStatusUserName(true);
-      setStatusMessageUsername("Username available");
-    } catch {
-      setStatusUserName(false);
-      setStatusMessageUsername("Use another username");
-    }
-  }, [formData.username, fieldErrors.username, checkUsername]);
-
-  useEffect(() => {
-    setStatusUserName(null);
-    setStatusMessageUsername(null);
-
-    if (!formData.username || (fieldErrors.username ?? null)) return;
-
-    const t = setTimeout(() => {
-      handleCheckUsername();
-    }, 500);
-
-    return () => clearTimeout(t);
-  }, [formData.username, fieldErrors.username, handleCheckUsername]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -195,8 +141,10 @@ export default function Page() {
 
   if (isLoading) return <Loading />;
   return (
-    <div className="max-w-md mx-auto p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Update Profile</h2>
+    <section className="mt-20  max-w-xl mx-auto p-6 rounded-lg shadow-md">
+      <h2 className="text-4xl font-bold mb-6 text-center">
+        Update Your <span> Profile </span>
+      </h2>
 
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
@@ -210,36 +158,7 @@ export default function Page() {
 
       <form onSubmit={handleSubmit} noValidate>
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="username">
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            onFocus={handleFocus("username")}
-            onBlur={handleBlur}
-            aria-invalid={!!fieldErrors.username || statusUsername === false}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {fieldErrors.username && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.username}</p>
-          )}
-          {!fieldErrors.username && statusMessageUsername && (
-            <p
-              className={`mt-1 text-sm ${
-                statusUsername ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {statusMessageUsername}
-            </p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-2" htmlFor="firstName">
+          <label className="defaultLabel" htmlFor="firstName">
             First Name
           </label>
           <input
@@ -251,7 +170,7 @@ export default function Page() {
             onFocus={handleFocus("firstName")}
             onBlur={handleBlur}
             aria-invalid={!!fieldErrors.firstName}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="defaultInput"
           />
           {fieldErrors.firstName && (
             <p className="mt-1 text-sm text-red-600">{fieldErrors.firstName}</p>
@@ -259,7 +178,7 @@ export default function Page() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="lastName">
+          <label className="defaultLabel" htmlFor="lastName">
             Last Name
           </label>
           <input
@@ -271,7 +190,7 @@ export default function Page() {
             onFocus={handleFocus("lastName")}
             onBlur={handleBlur}
             aria-invalid={!!fieldErrors.lastName}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="defaultInput"
           />
           {fieldErrors.lastName && (
             <p className="mt-1 text-sm text-red-600">{fieldErrors.lastName}</p>
@@ -279,7 +198,7 @@ export default function Page() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="bio">
+          <label className="defaultLabel" htmlFor="bio">
             Bio
           </label>
           <textarea
@@ -289,13 +208,13 @@ export default function Page() {
             onChange={handleChange}
             onFocus={handleFocus("bio")}
             onBlur={handleBlur}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={3}
+            className="defaultInput"
+            rows={5}
           />
         </div>
 
         <div className="mb-4">
-          <label className="block mb-2" htmlFor="avatar">
+          <label className="defaultLabel" htmlFor="avatar">
             Avatar
           </label>
           <input
@@ -304,7 +223,7 @@ export default function Page() {
             name="avatar"
             accept="image/*"
             onChange={handleAvatarChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="defaultInput"
           />
           {formData.avatar && (
             <div className="mt-2">
@@ -317,16 +236,18 @@ export default function Page() {
           )}
         </div>
 
-        <button
+        <motion.button
+          {...FadeLeft}
+          {...Animate}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.95 }}
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-2 px-4 rounded-lg text-white font-medium ${
-            isSubmitting ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-          } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary hover:bg-secondaryHigh focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondaryHigh disabled:opacity-50 disabled:cursor-not-allowed  "
         >
           {isSubmitting ? "Updating..." : "Update Profile"}
-        </button>
+        </motion.button>
       </form>
-    </div>
+    </section>
   );
 }
