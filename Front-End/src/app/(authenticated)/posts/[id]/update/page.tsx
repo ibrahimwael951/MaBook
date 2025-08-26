@@ -154,7 +154,7 @@ export default function UpdatePostPage() {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded p-2"
+            className="defaultInput"
             rows={4}
           />
         </label>
@@ -166,7 +166,7 @@ export default function UpdatePostPage() {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full border rounded p-2 cursor-pointer"
+            className="defaultInput cursor-pointer"
           />
         </label>
 
