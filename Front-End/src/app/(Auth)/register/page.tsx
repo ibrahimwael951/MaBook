@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Animate, FadeDown, FadeLeft, opacity } from "@/animation";
+import { Animate, FadeLeft, opacity } from "@/animation";
 import { RegisterCredentials } from "@/types/Auth";
 import Link from "next/link";
 import Loading from "@/components/Loading";
@@ -26,7 +26,6 @@ export default function Page() {
 
   const router = useRouter();
 
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [credentials, setCredentials] = useState<RegisterCredentials>({
     username: "",
     firstName: "",
@@ -128,7 +127,6 @@ export default function Page() {
         },
       });
       router.push(`/profile/${user?.username}`);
-      setSubmitted(true);
     } catch (error) {
       toast(`Register Failed`, {
         description: "Check Errors under all Inputs or contact Me ",
@@ -142,7 +140,6 @@ export default function Page() {
           onClick: () => console.log("Undo"),
         },
       });
-      setSubmitted(true);
       console.error("Register failed:", error);
     }
   };
