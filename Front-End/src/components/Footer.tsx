@@ -7,7 +7,7 @@ import { Company, Navbar, socialMedia } from "@/data/Quick_Links";
 import { motion } from "framer-motion";
 import { ModeSelector } from "@/components/ui/ThemeToggle";
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 const Footer = () => {
   const pathName = usePathname();

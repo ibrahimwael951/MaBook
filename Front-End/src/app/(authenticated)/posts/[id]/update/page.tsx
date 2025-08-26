@@ -1,27 +1,59 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { Post } from "@/types/Auth";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { motion } from "framer-motion";
+import Loading from "@/components/Loading";
+import { Animate, FadeUp } from "@/animation";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function UpdatePostPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { user, loading } = useAuth();
 
   const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  // preview for uploaded image
   const [preview, setPreview] = useState<string | null>(null);
+  const MyPost = user?.username === post?.author;
+  const didRun = useRef(false);
+  useEffect(() => {
+    if (loading || postLoading) return;
+    if (didRun.current) return;
 
-  // Fetch post data
+    const MyPost = user?.username === post?.author;
+    didRun.current = true;
+    console.log(MyPost);
+
+    if (!MyPost) {
+      router.push("/");
+
+      toast("Its not your Post", {
+        description: `Be good ${
+          user?.gender === "male" ? "boy" : "girl"
+        } and leave others posts`,
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
+    }
+  }, [router, user?.gender, loading, postLoading]);
+
   useEffect(() => {
     if (!id) return;
 
@@ -35,7 +67,7 @@ export default function UpdatePostPage() {
         }
       })
       .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .finally(() => setPostLoading(false));
   }, [id]);
 
   // Handle file input
@@ -47,7 +79,6 @@ export default function UpdatePostPage() {
     }
   };
 
-  // Handle update
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -62,7 +93,19 @@ export default function UpdatePostPage() {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+      toast("Updated post successfully <3", {
+        description:
+          "some time we making mistakes , but at least we can correct it :>",
+        classNames: {
+          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
       router.push(`/posts/${id}`);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -72,25 +115,42 @@ export default function UpdatePostPage() {
       } else {
         setError("An unexpected error occurred");
       }
+
+      toast(`Update Failed`, {
+        description: "Check Errors under all Inputs or contact Me ",
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (postLoading || loading || !MyPost) return <Loading />;
   if (!post) return <p>Post not found</p>;
 
   return (
-    <section className="min-h-screen flex justify-center items-center p-6">
+    <section className="mt-20  flex justify-center items-center p-6">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-full max-w-md border p-6 rounded-lg shadow"
+        className="flex flex-col gap-4 w-full max-w-md p-6 rounded-lg shadow"
       >
-        <h1 className="text-xl font-bold">Update Post</h1>
+        <motion.h1 {...FadeUp} {...Animate} className="text-3xl font-bold">
+          Update <span> Post</span>
+        </motion.h1>
 
         {error && <p className="text-red-500">{error}</p>}
 
         {/* Description */}
         <label>
-          <span className="block text-sm font-medium">Description</span>
+          <motion.span {...FadeUp} {...Animate} className="defaultLabel">
+            Description
+          </motion.span>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -101,12 +161,12 @@ export default function UpdatePostPage() {
 
         {/* Image Upload */}
         <label>
-          <span className="block text-sm font-medium">Upload Image</span>
+          <span className="defaultLabel">Upload Image</span>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full border rounded p-2"
+            className="w-full border rounded p-2 cursor-pointer"
           />
         </label>
 
@@ -119,7 +179,9 @@ export default function UpdatePostPage() {
           />
         )}
 
-        <Button type="submit">Update</Button>
+        <Button type="submit" variant="secondary" className="w-full">
+          Update
+        </Button>
       </form>
     </section>
   );
