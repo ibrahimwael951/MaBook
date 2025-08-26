@@ -11,20 +11,14 @@ import Loading from "@/components/Loading";
 import Features from "@/components/Auth/Features";
 import { Mars, Venus } from "lucide-react";
 import { BANNED_USERNAMES } from "@/data/BannedUsernames";
+import { toast } from "sonner";
 
 export default function Page() {
   const InputStyle =
     "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondaryHigh z-10 duration-150";
   const englishOnlyRegex = /^[a-zA-Z]+$/;
-  const {
-    register,
-    loading,
-    error,
-    clearError,
-    user,
-    checkUsername,
-    CheckEmail,
-  } = useAuth();
+  const { register, loading, clearError, user, checkUsername, CheckEmail } =
+    useAuth();
 
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof RegisterCredentials, string>>
@@ -121,9 +115,33 @@ export default function Page() {
 
     try {
       await register(trimmedCredentials);
+      toast("You have Successfully become a Reader <3", {
+        description: "Welcome to Ma Book Platform :>",
+        classNames: {
+          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
       router.push(`/profile/${user?.username}`);
       setSubmitted(true);
     } catch (error) {
+      toast(`Register Failed`, {
+        description: "Check Errors under all Inputs or contact Me ",
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
       setSubmitted(true);
       console.error("Register failed:", error);
     }
@@ -478,23 +496,6 @@ export default function Page() {
         >
           {loading ? "Signing in..." : "Sign in"}
         </motion.button>
-        {/* ------------Error Message --------*/}
-        <AnimatePresence>
-          {submitted && (
-            <motion.div
-              {...FadeDown}
-              {...Animate}
-              className={`p-5 rounded-xl text-white ${
-                error ? "bg-red-600" : "bg-green-600"
-              }`}
-            >
-              {error
-                ? `Login Failed: ${error}`
-                : "You have successfully logged in ✅"}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <div className="text-center">
           Already have account ? . go to{" "}
           <Link
