@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { Post } from "@/types/Auth";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 export default function UpdatePostPage() {
   const { id } = useParams<{ id: string }>();
@@ -63,8 +64,14 @@ export default function UpdatePostPage() {
       });
 
       router.push(`/posts/${id}`);
-    } catch (err: any) {
-      setError(err.response?.data?.message || err.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.message ?? error.message);
+      } else if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     }
   };
 
