@@ -2,16 +2,15 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { CopyX } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Animate, FadeLeft, FadeUp, opacity } from "@/animation";
+import { motion } from "framer-motion";
+import { Animate, FadeLeft } from "@/animation";
 import { LoginCredentials } from "@/types/Auth";
 import Link from "next/link";
 import Loading from "@/components/Loading";
 import Features from "@/components/Auth/Features";
+import { toast } from "sonner";
 export default function Page() {
-  const { login, loading, error, clearError, user } = useAuth();
-  const [closeErrorPop, setCloseErrorPop] = useState<boolean>(false);
+  const { login, loading, clearError, user } = useAuth();
   const router = useRouter();
   const [credentials, setCredentials] = useState<LoginCredentials>({
     usernameOrEmail: "",
@@ -30,9 +29,32 @@ export default function Page() {
 
     try {
       await login(trimmedCredentials);
+      toast("You have Successfully Logged In", {
+        description: "Welcome Back Ma Reader :>",
+        classNames: {
+          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
       router.push(`/profile/${user?.username}`);
     } catch (error) {
-      setCloseErrorPop(true);
+      toast(`Bad credential`, {
+        description: "Your password or email are invalid",
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
       console.error("Login failed:", error);
     }
   };
@@ -108,54 +130,6 @@ export default function Page() {
             form page
           </div>
         </form>
-
-        <AnimatePresence>
-          {closeErrorPop && (
-            <>
-              <motion.div
-                {...opacity}
-                animate={{ opacity: 0.6 }}
-                className=" fixed top-0 left-0 w-full h-screen bg-black opacity-60 z-50"
-              />
-              <motion.div
-                {...FadeUp}
-                {...Animate}
-                className=" fixed top-2/4 left-2/4 -translate-2/4 dark:bg-secondary bg-primary p-5 rounded-2xl w-5/6 max-w-96 h-60 z-50 "
-              >
-                <h1 className="text-2xl flex items-center gap-2 mb-5 text-red-500 font-bold">
-                  Login Failed :
-                </h1>
-
-                <ul className="text-lg list-decimal list-inside">
-                  {credentials.usernameOrEmail.replace(/\s+/g, "").length <
-                    2 && <li>Your must write at least 2 characters</li>}
-                  {credentials.usernameOrEmail.length > 2 && (
-                    <>
-                      <h1 className="text-2xl">
-                        {" "}
-                        {error} : userName or Email invalid or maybe the
-                        password
-                        {":)"}
-                      </h1>
-                      <p>check Your UserName , Email and password again </p>
-                    </>
-                  )}
-                  {credentials.password.trim().length <= 8 ||
-                    (credentials.password.trim().length >= 20 && (
-                      <li>Your password must be from 8 to 20 characters</li>
-                    ))}
-                </ul>
-
-                <button
-                  onClick={() => setCloseErrorPop(false)}
-                  className="absolute top-2 right-2 p-2 text-2xl cursor-pointer"
-                >
-                  <CopyX />
-                </button>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </>
       <Features />
     </section>
