@@ -17,18 +17,18 @@ const Community = () => {
           fuels your growth. Eventverse is more than just events – it’s where
           meaningful relationships begin.
         </motion.p>
-       <div className="space-x-5">
-       <Link href="/register">
-          <Button variant="outline" className="text-xl py-4">
-            Join Us
-          </Button>
-        </Link>
-        <Link href="/community">
-          <Button variant="outline" className="text-xl py-4">
-            Our Community
-          </Button>
-        </Link>
-       </div>
+        <div className=" flex justify-center items-center gap-5">
+          <Link href="/register">
+            <Button variant="third_2" className="text-xl py-4">
+              Join Us
+            </Button>
+          </Link>
+          <Link href="/community">
+            <Button variant="secondary_2" className="text-xl py-4">
+              Our Community
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <AnimatedImage

@@ -29,12 +29,12 @@ const Hero = () => {
       </motion.p>
       <motion.div {...FadeUp} {...Animate} transition={{ delay: 0.4 }} className="flex justify-center items-center gap-5">
         <Link href="/register">
-          <Button variant="outline" className="text-xl py-4">
+          <Button variant="third_2" className="text-xl py-4">
             Create Account
           </Button>
         </Link>
         <Link href="/about">
-          <Button variant="outline" className="text-xl py-4">
+          <Button variant="secondary_2" className="text-xl py-4">
             About Us
           </Button>
         </Link>
