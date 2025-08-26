@@ -6,20 +6,20 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
 import AnimatedImage from "@/components/ui/AnimatedImage";
-import Link from "next/link";
-import { Animate, FadeLeft, opacity } from "@/animation";
-
-const API_BASE = process.env.NEXT_PUBLIC_BACKEND_API as string;
-const MotionLink = motion(Link);
+import { Animate, FadeLeft } from "@/animation";
+import api from "@/lib/axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type UploadState = {
   uploading: boolean;
-  progress: number; // 0-100
+  progress: number;
   error?: string | null;
   success?: boolean;
 };
 
 export default function CreatePostPage() {
+  const router = useRouter();
   const [description, setDescription] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -72,7 +72,7 @@ export default function CreatePostPage() {
     try {
       setUpload((s) => ({ ...s, uploading: true, progress: 0, error: null }));
 
-      await axios.post(`${API_BASE}/api/post`, form, {
+      await api.post(`/api/post`, form, {
         withCredentials: true,
         onUploadProgress(progressEvent) {
           if (progressEvent.total) {
@@ -84,24 +84,34 @@ export default function CreatePostPage() {
         },
       });
 
-      // success
       setUpload({
         uploading: false,
         progress: 100,
         error: null,
         success: true,
       });
+      toast("You have successfully added new post <3", {
+        description: "We hope you get a lot of likes ",
+        classNames: {
+          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      router.push(`/profile/${user?.username}`);
       setDescription("");
       setFile(null);
       setPreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (err: unknown) {
-      // try to extract a message from the axios error
+    } catch (err) {
       let message = "Upload failed";
       if (axios.isAxiosError(err)) {
         const axiosErr = err;
         if (axiosErr.response && axiosErr.response.data) {
-          // attempt to read server message
           const data = axiosErr.response.data as
             | { error?: string; msg?: string }
             | string;
@@ -123,6 +133,18 @@ export default function CreatePostPage() {
         error: message,
         success: false,
       });
+      toast(`Failed to add new post`, {
+        description: "Check Errors under all Inputs or contact Me ",
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
     }
   }
 
@@ -133,7 +155,7 @@ export default function CreatePostPage() {
     setUpload((s) => ({ ...s, error: null }));
   }
 
-  if (!user || loading) return <Loading />;
+  if (!user || loading || upload.success) return <Loading />;
   return (
     <section className="mt-12 sm:mt-16 lg:mt-0 min-h-screen p-4 flex flex-col lg:flex-row justify-evenly gap-10 items-center">
       <div className="w-full lg:w-2/4 max-w-xl">
@@ -164,7 +186,6 @@ export default function CreatePostPage() {
 
             {preview && (
               <div className="mt-3 flex items-start gap-3">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={preview}
                   alt="preview"
@@ -230,35 +251,6 @@ export default function CreatePostPage() {
           Be kind. No hate, no offense — just positive vibes for fellow readers.
         </p>
       </div>
-
-      <AnimatePresence>
-        {upload.success && (
-          <div className="w-full h-full fixed left-2/4 top-2/4 -translate-2/4 flex flex-col justify-center items-center gap-10 z-50">
-            <motion.div
-              {...opacity}
-              animate={{ opacity: 0.5 }}
-              className="bg-black w-full h-full absolute top-0 left-0"
-            />
-            <motion.div
-              {...Animate}
-              {...opacity}
-              className="bg-green-500 p-5 rounded-2xl text-3xl"
-            >
-              Post created successfully.
-            </motion.div>
-            <MotionLink
-              {...FadeLeft}
-              {...Animate}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.95 }}
-              href="/profile"
-              className="w-fit flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary hover:bg-secondaryHigh focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondaryHigh disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Go to Profile
-            </MotionLink>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

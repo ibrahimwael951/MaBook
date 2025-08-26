@@ -37,8 +37,8 @@ export default function Page() {
           actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
         },
         action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
+          label: "OK",
+          onClick: () => console.log("OK"),
         },
       });
       router.push(`/profile/${user?.username}`);
@@ -51,8 +51,8 @@ export default function Page() {
           actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
         },
         action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
+          label: "OK",
+          onClick: () => console.log("OK"),
         },
       });
       console.error("Login failed:", error);
