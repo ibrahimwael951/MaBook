@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import React from "react";
 import { Animate, FadeUp } from "@/animation";
 
@@ -63,14 +63,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     { className, variant, size, asChild = false, NoAnimate = false, ...props },
     ref
   ) => {
-    const motionProps = NoAnimate
+    const motionProps: HTMLMotionProps<"button"> = NoAnimate
       ? {}
-      : ({
+      : {
           ...FadeUp,
           ...Animate,
           whileHover: { scale: 1.02 },
           whileTap: { scale: 0.95 },
-        } as const);
+        };
 
     const classNames = cn(buttonVariants({ variant, size, className }));
 
@@ -89,7 +89,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={classNames}
         {...motionProps}
-        {...(props as any)}
+        {...(props as Omit<React.ComponentProps<"button">, keyof HTMLMotionProps<"button">>)}
       />
     );
   }
