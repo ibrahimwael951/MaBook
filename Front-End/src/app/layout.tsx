@@ -5,6 +5,7 @@ import { EB_Garamond } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner"
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <Footer />
+             <Toaster />
           </AuthProvider>
         </ThemeProvider>
       </body>
