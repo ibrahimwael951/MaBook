@@ -10,10 +10,11 @@ import UserPosts from "@/components/profile/UserPosts";
 import { SquareX } from "lucide-react";
 import { motion } from "framer-motion";
 import { Animate, FadeUp } from "@/animation";
+import api from "@/lib/axios"; // axios instance
 
 export default function Page() {
-  const { GetUser, user, loading } = useAuth();
   const { username } = useParams<{ username: string }>();
+  const { user, loading } = useAuth();
   const [profileLoading, setProfileLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [UserProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -24,8 +25,10 @@ export default function Page() {
 
     const fetchUser = async () => {
       try {
-        const result = await GetUser(username);
-        setUserProfile(result);
+        const { data } = await api.get<UserProfile>(
+          `/api/user/search/${username}`
+        );
+        setUserProfile(data);
         setProfileLoading(false);
       } catch (err) {
         console.error(err);
@@ -35,25 +38,7 @@ export default function Page() {
     };
 
     fetchUser();
-  }, [username, GetUser]);
-
-  useEffect(() => {
-    if (!username) return;
-
-    const fetchUser = async () => {
-      try {
-        const result = await GetUser(username);
-        setUserProfile(result);
-        setProfileLoading(false);
-      } catch (err) {
-        console.error(err);
-        setProfileLoading(false);
-        setError(true);
-      }
-    };
-
-    fetchUser();
-  }, [username, GetUser]);
+  }, [username]);
 
   useEffect(() => {
     if (loading) return;
@@ -65,6 +50,7 @@ export default function Page() {
   }, [loading, user, route]);
 
   if (profileLoading || loading) return <Loading />;
+
   if (error || !UserProfile)
     return (
       <motion.section
@@ -76,12 +62,12 @@ export default function Page() {
         no user Found
       </motion.section>
     );
+
   return (
     <main className="min-h-screen mt-20">
       <Info {...UserProfile} />
 
       {/* ----------------Posts Section------------- */}
-
       <section className="relative mt-5">
         <hr className="w-10/12 mx-auto" />
         <UserPosts username={username} />

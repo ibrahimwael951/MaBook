@@ -10,10 +10,14 @@ import { PostComment } from "../util/ValidationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 
 const router = Router();
-router.get("/api/user/search/:username", getUserByUsername, async (req, res) => {
-  const { findUser } = req;
-  return res.status(200).send(findUser);
-});
+router.get(
+  "/api/user/search/:username",
+  getUserByUsername,
+  async (req, res) => {
+    const { findUser } = req;
+    return res.status(200).send(findUser);
+  }
+);
 
 router.get("/api/user/:username/posts", getUserByUsername, async (req, res) => {
   const { findUser } = req;
@@ -31,14 +35,12 @@ router.get("/api/post/:id", async (req, res) => {
   } = req;
   try {
     const post = await UsersPosts.findById(id);
+    if (!post) return res.status(404).json({ message: "Post Not Found" });
     const commentsCount = await PostComments.countDocuments({
       postId: post.toObject()._id,
     });
 
-    return res.status(200).json({
-      post,
-      commentsCount,
-    });
+    return res.status(200).json(post);
   } catch (err) {
     return res.status(400).send(`Error : ${err}`);
   }
