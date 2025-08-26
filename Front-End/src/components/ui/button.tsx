@@ -1,59 +1,98 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+"use client";
 
-import { cn } from "@/lib/utils"
- 
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import React from "react";
+import { Animate, FadeUp } from "@/animation";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline items-center justify-center gap-2 rounded-md text-sm font-medium transition-all disabled:opacity-50 shadow-sm outline-none disabled:opacity-50 disabled:cursor-not-allowed ",
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        primary:
+          "w-fit flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium  focus:outline-none focus:ring-2 ring focus:ring-offset-2",
         outline:
-          "border  border-secondary dark:border-primary  hover:bg-secondary dark:hover:bg-primary  dark:hover:text-third hover:text-primary px-2 py-1  rounded",
+          "w-fit flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary hover:bg-secondaryHigh focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondaryHigh ",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "w-fit flex justify-center py-2 px-4 ring-secondary rounded-md shadow-sm text-sm font-medium text-white hover:text-secondary dark:hover:text-secondaryHigh bg-secondary hover:bg-transparent focus:outline-none focus:ring-2 hover:ring focus:ring-offset-2  ",
+
+        secondary_2:
+          "w-fit flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium dark:bg-primary bg-third hover:bg-transparent dark:hover:bg-transparent text-primary dark:text-third hover:text-third dark:hover:text-primary   focus:outline-none focus:ring-2 hover:ring focus:ring-offset-2  ",
+
+        third:
+          "w-fit flex justify-center py-2 px-4 ring dark:ring-primary ring-secondary rounded-md shadow-sm text-sm font-medium hover:text-white dark:text-primary text-secondary hover:bg-secondary bg-transparent focus:outline-none focus:ring-2 dark:focus:ring-secondary dark:hover:ring-secondary focus:ring-offset-2  ",
+        third_2:
+          "w-fit flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium hover:bg-third dark:hover:bg-primary hover:text-primary dark:hover:text-third ring ring-third dark:ring-primary  focus:outline-none focus:ring-2 hover:ring focus:ring-offset-2  ",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
+        default: "h-9 px-4 py-2",
+        sm: "h-8 px-3 text-xs",
+        lg: "h-11 px-8 text-base",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "primary",
       size: "default",
     },
   }
-)
+);
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+type NativeButtonProps = Omit<
+  React.ComponentProps<"button">,
+  // Avoid conflicts with Framer Motion's onDrag handlers
+  | "onDrag"
+  | "onDragStart"
+  | "onDragEnd"
+  | "onDragEnter"
+  | "onDragLeave"
+  | "onDragOver"
+>;
+
+interface ButtonProps
+  extends NativeButtonProps,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  NoAnimate?: boolean;
 }
 
-export { Button, buttonVariants }
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    { className, variant, size, asChild = false, NoAnimate = false, ...props },
+    ref
+  ) => {
+    const motionProps = NoAnimate
+      ? {}
+      : ({
+          ...FadeUp,
+          ...Animate,
+          whileHover: { scale: 1.02 },
+          whileTap: { scale: 0.95 },
+        } as const);
+
+    const classNames = cn(buttonVariants({ variant, size, className }));
+
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref as unknown as React.Ref<HTMLButtonElement>}
+          className={classNames}
+          {...props}
+        />
+      );
+    }
+
+    return (
+      <motion.button
+        ref={ref}
+        className={classNames}
+        {...motionProps}
+        {...(props as any)}
+      />
+    );
+  }
+);
+
+Button.displayName = "Button";
