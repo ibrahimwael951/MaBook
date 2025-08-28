@@ -17,12 +17,12 @@ export default function Page() {
   });
   useEffect(() => {
     if (!loading && user) {
-      setForm({
-        ...form,
+      setForm((prevForm) => ({
+        ...prevForm,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-      });
+      }));
     }
   }, [loading, user, setForm]);
 

@@ -51,17 +51,6 @@ export default function Page() {
     null | string
   >(null);
 
-  const handleCheckUsername = async () => {
-    try {
-      await checkUsername(credentials.username);
-      setStatusUserName(true);
-      setStatusMessageUsername("Username Available");
-    } catch {
-      setStatusUserName(false);
-      setStatusMessageUsername("Use Another Username");
-    }
-  };
-
   // --------------------------------
 
   const [statusEmail, setStatusEmail] = useState<null | boolean>(null);
@@ -69,40 +58,47 @@ export default function Page() {
     null
   );
 
-  const handleCheckEmail = async () => {
-    try {
-      await CheckEmail(credentials.email);
-      setStatusEmail(true);
-      setStatusMessageEmail("email Available");
-    } catch {
-      setStatusEmail(false);
-      setStatusMessageEmail("Use Another email");
-    }
-  };
-
   // --------------------------------
 
   useEffect(() => {
     if (credentials.username.length < 2 || fieldErrors.username) return;
-
+    const handleCheckUsername = async () => {
+      try {
+        await checkUsername(credentials.username);
+        setStatusUserName(true);
+        setStatusMessageUsername("Username Available");
+      } catch {
+        setStatusUserName(false);
+        setStatusMessageUsername("Use Another Username");
+      }
+    };
     const delayDebounceFn = setTimeout(() => {
       handleCheckUsername();
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [credentials.username, fieldErrors.username, handleCheckUsername]);
+  }, [credentials.username, fieldErrors.username]);
 
   // --------------------------------
 
   useEffect(() => {
     if (credentials.email.length < 2 || fieldErrors.email) return;
-
+    const handleCheckEmail = async () => {
+      try {
+        await CheckEmail(credentials.email);
+        setStatusEmail(true);
+        setStatusMessageEmail("email Available");
+      } catch {
+        setStatusEmail(false);
+        setStatusMessageEmail("Use Another email");
+      }
+    };
     const delayDebounceFn = setTimeout(() => {
       handleCheckEmail();
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [credentials.email, fieldErrors.email, handleCheckEmail]);
+  }, [credentials.email, fieldErrors.email]);
 
   // --------------------------------
   const handleSubmit = async (e: React.FormEvent) => {
@@ -161,29 +157,6 @@ export default function Page() {
     setCurrentField(name as keyof RegisterCredentials);
   };
 
-  useEffect(() => {
-    if (!currentField) return;
-
-    const delayDebounceFn = setTimeout(() => {
-      const errors = validate();
-
-      if (errors[currentField]) {
-        setFieldErrors((prev) => ({
-          ...prev,
-          [currentField]: errors[currentField],
-        }));
-      } else {
-        setFieldErrors((prev) => {
-          const updated = { ...prev };
-          delete updated[currentField];
-          return updated;
-        });
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [currentField ? credentials[currentField] : null, currentField]);
-
   // --------------------------------
   const validate = () => {
     const errors: Partial<Record<keyof RegisterCredentials, string>> = {};
@@ -237,6 +210,30 @@ export default function Page() {
 
     return errors;
   };
+  // --------------------------------
+
+  useEffect(() => {
+    if (!currentField) return;
+
+    const delayDebounceFn = setTimeout(() => {
+      const errors = validate();
+
+      if (errors[currentField]) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          [currentField]: errors[currentField],
+        }));
+      } else {
+        setFieldErrors((prev) => {
+          const updated = { ...prev };
+          delete updated[currentField];
+          return updated;
+        });
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [currentField ? credentials[currentField] : null, currentField, validate]);
 
   useEffect(() => {
     if (!loading && user) {

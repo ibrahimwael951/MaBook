@@ -10,6 +10,7 @@ import { FileX2 } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AccountAge } from "@/hooks/AccountAge";
 import Link from "next/link";
+import Image from "next/image";
 
 const MotionButton = motion(Button);
 
@@ -41,7 +42,7 @@ const UserPosts: React.FC<Props> = ({ username }) => {
     };
 
     fetchUser();
-  }, [username]);
+  }, [username, GetUserPosts]);
   if (!user) return <Loading />;
   return (
     <section className="mt-5 !px-0 lg:!px-10 w-full">
@@ -128,9 +129,12 @@ function PostPage({ posts }: PostPageProps) {
         >
           <h1 className="mb-3">{item.description}</h1>
           {item.image?.url && (
-            <img
+            <Image
               src={item.image.url}
               alt={`image - ${item.description}`}
+              width={200}
+              height={200}
+              unoptimized
               className="w-full h-72 object-cover rounded-2xl "
             />
           )}

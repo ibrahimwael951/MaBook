@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Update } from "@/types/Auth";
 import Loading from "@/components/Loading";
 import { Animate, FadeLeft } from "@/animation";
+import Image from "next/image";
 
 export default function Page() {
   const { user, updateUser } = useAuth();
@@ -70,6 +71,8 @@ export default function Page() {
     return errors;
   };
 
+  const normalizedField = currentField ? formData[currentField] : null;
+
   useEffect(() => {
     if (!currentField) return;
     const timeout = setTimeout(() => {
@@ -89,7 +92,7 @@ export default function Page() {
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [currentField ? formData[currentField] : null, currentField]);
+  }, [normalizedField, currentField, validate]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -226,9 +229,12 @@ export default function Page() {
           />
           {formData.avatar && (
             <div className="mt-2">
-              <img
+              <Image
                 src={formData.avatar as string}
                 alt="Preview"
+                width={200}
+                height={200}
+                unoptimized
                 className="h-20 w-20 rounded-full object-cover"
               />
             </div>

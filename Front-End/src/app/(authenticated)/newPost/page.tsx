@@ -10,6 +10,7 @@ import { Animate, FadeLeft } from "@/animation";
 import { ImageApiSend } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type UploadState = {
   uploading: boolean;
@@ -177,7 +178,9 @@ export default function CreatePostPage() {
           </div>
 
           <div>
-            <label className="defaultLabel">Image (optional) (less than 10MB)</label>
+            <label className="defaultLabel">
+              Image (optional) (less than 10MB)
+            </label>
             <input
               ref={fileInputRef}
               type="file"
@@ -188,9 +191,12 @@ export default function CreatePostPage() {
 
             {preview && (
               <div className="mt-3 flex items-start gap-3">
-                <img
+                <Image
                   src={preview}
                   alt="preview"
+                  width={200}
+                  height={200}
+                  unoptimized
                   className="w-52 h-52 object-cover rounded"
                 />
                 <div>
