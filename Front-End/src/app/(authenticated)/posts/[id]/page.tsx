@@ -4,12 +4,11 @@ import Loading from "@/components/Loading";
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/lib/axios";
 import { Post } from "@/types/Auth";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Animate, FadeLeft, FadeRight, FadeUp, opacity } from "@/animation";
 import { Edit, Ellipsis, Trash, X } from "lucide-react";
 
-import Deleted from "@/components/post/Deleted";
 import NotFound from "@/components/post/NotFound";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,9 +17,16 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import Link from "next/link";
+import { toast } from "sonner";
+import { AccountAge } from "@/hooks/AccountAge";
+import Avatar from "@/components/ui/Avatar";
+
+
+const MotionLink = motion.create(Link)
 
 export default function Page() {
   const { user } = useAuth();
+  const router = useRouter();
   const params = useParams();
   const id = params?.id;
   const [post, setPost] = useState<Post | null>(null);
@@ -28,14 +34,17 @@ export default function Page() {
   const [warning, setWarning] = useState<boolean>(false);
 
   const [error, setError] = useState<string | null>(null);
-  const [deleted, setDeleted] = useState<boolean>(false);
+
   useEffect(() => {
     if (!id) return;
     setLoading(true);
     api
-      .get<Post>(`/api/post/${id}`)
-      .then((res) => setPost(res.data))
-      .catch((err: unknown) => {
+      .get(`/api/post/${id}`)
+      .then((res) => {
+        setPost(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
         if (err instanceof Error) {
           setError(err.message);
         } else {
@@ -45,23 +54,46 @@ export default function Page() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const isPostMine = post?.author === user?.username;
+  const isPostMine = post?.author.username === user?.username;
 
   const deletePost = async () => {
     try {
       await api.delete(`/api/post/${id}`);
-      setDeleted(true);
+      router.push(`/profile/${user?.username}`);
+      toast(`Deleted`, {
+        description: "You have been deleted your Post",
+        classNames: {
+          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
     } catch (err) {
       console.error(err);
+      toast(`Deleted Failed`, {
+        description: `Try again letter  : ${error} `,
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
       setError("Failed to delete post");
     }
   };
 
   if (loading) return <Loading />;
   if (!post) return <NotFound />;
-  if (deleted) return <Deleted />;
   return (
-    <section className="min-h-screen flex justify-center items-center  !px-0">
+    <section className=" mt-28 flex justify-center items-center ">
       <AnimatePresence>
         {warning && (
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
@@ -69,14 +101,14 @@ export default function Page() {
               {...opacity}
               animate={{ ...Animate, opacity: 0.5 }}
               className="absolute top-0 left-0 w-full h-full bg-black"
-            ></motion.div>
+            />
             <motion.div
               {...FadeUp}
               {...Animate}
-              className="relative flex flex-col justify-center items-center gap-5 p-16 rounded-2xl bg-secondaryHigh overflow-hidden z-20 mx-5"
+              className="relative flex flex-col justify-center items-center gap-5 p-16 rounded-2xl text-third dark:text-primary bg-primary dark:bg-third overflow-hidden z-20 mx-5 select-none"
             >
               <button
-                className="absolute top-0 left-0 bg-red-600 rounded-br-2xl "
+                className="absolute top-0 left-0 text-white bg-red-600 rounded-br-2xl "
                 onClick={() => setWarning(false)}
               >
                 <X size={40} />
@@ -87,41 +119,30 @@ export default function Page() {
               <div className="flex justify-center items-center gap-5 ">
                 <Button
                   onClick={() => setWarning(false)}
-                  variant="outline"
-                  className="text-xl text-black bg-white hover:!bg-transparent hover:!text-white"
+                  variant="third_2"
+                  className="h-fit text-xl  "
                 >
                   No, keep post alone
                 </Button>
                 <Button
                   onClick={deletePost}
-                  variant="outline"
-                  className="text-xl text-white bg-red-600 !border-red-600  hover:border-white"
+                  variant="secondary_2"
+                  className="h-fit text-xl !text-white !bg-red-600 !hover:bg-red-600 !border-red-600  hover:border-red-600"
                 >
-                  Yes, I hate this Post
+                  Yes, Delete this Post
                 </Button>
               </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
-      {error && (
-        <motion.div
-          {...FadeLeft}
-          {...Animate}
-          className="absolute top-20 left-5 p-3 rounded-2xl !text-white bg-red-600"
-        >
-          <h1 className="text-2xl font-semibold">Failed To Delete Post</h1>
-          <p className="!text-white">
-            try to refresh the page or logout then login again
-          </p>
-        </motion.div>
-      )}
-      <div className="relative flex flex-col lg:flex-row justify-center items-center gap-5 p-16 w-10/12 rounded-2xl border-2 border-dashed border-third dark:border-primary  ">
+
+      <div className="w-full min-h-[500px] sm:w-fit lg:min-w-xl max-w-full relative flex flex-col gap-5 ">
         {isPostMine && (
           <motion.div
             {...FadeRight}
             {...Animate}
-            className="absolute top-0 right-0 p-4 rounded-md font-semibold text-xl"
+            className="absolute top-0 right-0 p-4 rounded-md font-semibold text-xl z-20"
           >
             <Popover>
               <PopoverTrigger className=" ">
@@ -145,15 +166,57 @@ export default function Page() {
           </motion.div>
         )}
         <div>
-          <p className="font-semibold">{post.author}</p>
-          <h1 className="text-lg">{post.description}</h1>
+          <MotionLink
+          href={`/profile/${post.author.username}`}
+            {...FadeLeft}
+            {...Animate}
+            className="font-semibold flex justify-center items-center gap-2 w-fit mb-2"
+          >
+            <Avatar
+              gender={post.author.gender}
+              fullName={post.author.fullName}
+              avatar={post.author.avatar}
+            />
+            <div>
+              <p>{post.author.username}</p>
+              <h1>{post.author.fullName}</h1>
+            </div>
+          </MotionLink>
+          <motion.h1
+            {...FadeLeft}
+            animate={{
+              ...Animate.animate,
+              transition: { duration: 0.4, delay: 0.2 },
+            }}
+            className="text-lg"
+          >
+            {post.description}
+          </motion.h1>
+          <motion.p
+            {...FadeLeft}
+            animate={{
+              ...Animate.animate,
+              transition: { duration: 0.4, delay: 0.3 },
+            }}
+            className="text-xs"
+          >
+            {AccountAge(post.createdAt)}
+          </motion.p>
         </div>
         {post.image && (
-          <img
-            src={post.image.url}
-            alt="post image"
-            className="w-72 object-cover rounded-md"
-          />
+          <div className="relative select-none">
+            <div className="absolute top-0 left-0 w-full h-full z-10" />
+            <motion.img
+              {...FadeUp}
+              animate={{
+                ...Animate.animate,
+                transition: { duration: 0.4, delay: 0.4 },
+              }}
+              src={post.image.url}
+              alt="post image"
+              className=" w-full aspect-square max-w-xl object-cover rounded-2xl"
+            />
+          </div>
         )}
       </div>
     </section>

@@ -4,23 +4,46 @@ import { motion, useAnimation, useInView } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-interface props {
+interface Props {
   src: string;
   alt: string;
   icon?: boolean;
   className?: string;
+  noAnimate?: boolean;
 }
 
-const AnimatedImage: React.FC<props> = ({ src, alt, className = "", icon }) => {
+const AnimatedImage: React.FC<Props> = ({
+  src,
+  alt,
+  className = "",
+  icon,
+  noAnimate ,
+}) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "40px" });
   const controls = useAnimation();
 
   useEffect(() => {
-    if (inView) {
+    if (!noAnimate && inView) {
       controls.start("visible");
     }
-  }, [inView, controls]);
+  }, [inView, controls, noAnimate]);
+
+  if (noAnimate) {
+    return (
+      <div ref={ref} className={cn("relative overflow-hidden", className)}>
+        <Image
+          src={src}
+          alt={alt}
+          width={icon ? 100 : 1000}
+          height={icon ? 100 : 1000}
+          draggable={false}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-0 left-0 w-full h-full z-10" />
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -32,7 +55,7 @@ const AnimatedImage: React.FC<props> = ({ src, alt, className = "", icon }) => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
       }}
       transition={{ type: "spring", stiffness: 300 }}
-      className={cn("relative overflow-hidden ", className)}
+      className={cn("relative overflow-hidden", className)}
     >
       <Image
         src={src}
@@ -40,7 +63,7 @@ const AnimatedImage: React.FC<props> = ({ src, alt, className = "", icon }) => {
         width={icon ? 100 : 1000}
         height={icon ? 100 : 1000}
         draggable={false}
-        className=" w-full h-full object-cover  "
+        className="w-full h-full object-cover"
       />
       <div className="absolute top-0 left-0 w-full h-full z-10" />
     </motion.div>

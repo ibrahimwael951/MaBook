@@ -8,6 +8,7 @@ import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
 import { PostComments } from "../mongoose/schema/PostsComments.mjs";
 import { PostComment } from "../util/ValidationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
+import { user } from "../mongoose/schema/UserAuth.mjs";
 
 const router = Router();
 router.get(
@@ -35,14 +36,34 @@ router.get("/api/post/:id", async (req, res) => {
   } = req;
   try {
     const post = await UsersPosts.findById(id);
-    if (!post) return res.status(404).json({ message: "Post Not Found" });
-    const commentsCount = await PostComments.countDocuments({
-      postId: post.toObject()._id,
-    });
+    if (!post) {
+      return res.status(404).json({ message: "Post Not Found" });
+    }
 
-    return res.status(200).json(post);
+    const Author = await user.findOne({ username: post.author });
+    if (!Author) {
+      return res.status(401).json({ message: "No Author Found" });
+    }
+
+    const comments = await PostComments.find({ postId: id }).lean();
+    const commentsCount = comments.length;
+
+    const DataSend = {
+      ...post.toObject(),
+      author: {
+        username: Author.username,
+        fullName: Author.fullName,
+        gender: Author.gender,
+        avatar: Author.avatar,
+      },
+      commentsCount,
+    };
+
+    return res.status(200).json(DataSend);
   } catch (err) {
-    return res.status(400).send(`Error : ${err}`);
+    return res
+      .status(400)
+      .json({ message: `Error: ${err instanceof Error ? err.message : err}` });
   }
 });
 

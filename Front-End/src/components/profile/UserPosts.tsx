@@ -44,7 +44,7 @@ const UserPosts: React.FC<Props> = ({ username }) => {
   }, [username]);
   if (!user) return <Loading />;
   return (
-    <section className="mt-5">
+    <section className="mt-5 !px-0 lg:!px-10 w-full">
       <div className="flex justify-center gap-5 p-3">
         {(["Posts", "RePosts"] as const).map((item) => (
           <MotionButton
@@ -111,9 +111,9 @@ function PostPage({ posts }: PostPageProps) {
         <h1 className="text-4xl">no posts yet</h1>
       </div>
     );
-  const MotionLink = motion(Link);
+  const MotionLink = motion.create(Link);
   return (
-    <div className="p-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 ">
+    <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 ">
       {posts.map((item) => (
         <MotionLink
           key={item._id}
@@ -126,9 +126,7 @@ function PostPage({ posts }: PostPageProps) {
           }}
           className={`relative text-2xl p-3 pb-8 rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
         >
-         <h1 className="mb-3">
-         {item.description}
-         </h1>
+          <h1 className="mb-3">{item.description}</h1>
           {item.image?.url && (
             <img
               src={item.image.url}
@@ -146,7 +144,7 @@ function PostPage({ posts }: PostPageProps) {
               hover: { opacity: 0.4 },
             }}
             className="absolute top-0 left-0 w-full h-full bg-white dark:bg-black"
-          ></motion.div>
+          />
         </MotionLink>
       ))}
     </div>

@@ -27,10 +27,17 @@ export interface UserProfile {
   posts: number;
 }
 export interface Post {
+  post(post: any): unknown;
   _id: string;
-  author: string;
+  author: {
+    username: string;
+    fullName: string;
+    avatar: string;
+    gender: string;
+  };
   description: string;
   createdAt: string;
+  commentsCount:number;
   image: image;
 }
 export interface image {

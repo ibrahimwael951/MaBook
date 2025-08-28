@@ -8,4 +8,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export const ImageApiSend = axios.create({
+  baseURL: API,
+  withCredentials: true,
+}); 
 export default api;

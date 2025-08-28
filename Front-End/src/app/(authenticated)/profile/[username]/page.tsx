@@ -68,7 +68,7 @@ export default function Page() {
       <Info {...UserProfile} />
 
       {/* ----------------Posts Section------------- */}
-      <section className="relative mt-5">
+      <section className="relative mt-5 !px-3">
         <hr className="w-10/12 mx-auto" />
         <UserPosts username={username} />
       </section>

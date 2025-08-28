@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
 import AnimatedImage from "@/components/ui/AnimatedImage";
 import { Animate, FadeLeft } from "@/animation";
-import api from "@/lib/axios";
+import { ImageApiSend } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -72,7 +72,7 @@ export default function CreatePostPage() {
     try {
       setUpload((s) => ({ ...s, uploading: true, progress: 0, error: null }));
 
-      await api.post(`/api/post`, form, {
+      await ImageApiSend.post(`/api/post`, form, {
         withCredentials: true,
         onUploadProgress(progressEvent) {
           if (progressEvent.total) {
@@ -90,18 +90,20 @@ export default function CreatePostPage() {
         error: null,
         success: true,
       });
-      toast("You have successfully added new post <3", {
-        description: "We hope you get a lot of likes ",
+
+      toast("You have successfully added a new post!", {
+        description: "We hope you get a lot of likes 🎉",
         classNames: {
-          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          toast: "!bg-green-600 !text-white rounded-xl border border-green-700",
           description: "!text-white text-sm opacity-90",
-          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+          actionButton: "bg-white text-green-600 px-2 py-1 rounded-md",
         },
         action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
+          label: "OK",
+          onClick: () => console.log("OK"),
         },
       });
+
       router.push(`/profile/${user?.username}`);
       setDescription("");
       setFile(null);
@@ -175,7 +177,7 @@ export default function CreatePostPage() {
           </div>
 
           <div>
-            <label className="defaultLabel">Image (optional)</label>
+            <label className="defaultLabel">Image (optional) (less than 10MB)</label>
             <input
               ref={fileInputRef}
               type="file"
