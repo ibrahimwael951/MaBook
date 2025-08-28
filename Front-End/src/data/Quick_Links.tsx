@@ -43,17 +43,14 @@ export const Navbar_Logged_In: DefaultLinks[] = [
 export const socialMedia: DefaultLinks[] = [
   { title: "instagram", href: "/", icon: Instagram },
   { title: "Facebook", href: "/about", icon: Facebook },
-  { title: "Youtube", href: "/books", icon:  Youtube },
- 
+  { title: "Youtube", href: "/books", icon: Youtube },
 ];
 export const Company: DefaultLinks[] = [
   { title: "About", href: "/about", icon: Info },
   { title: "Contact Us", href: "/contact", icon: Contact },
   { title: "Sponsors", href: "/sponsors", icon: HeartPlus },
- 
 ];
 export const DashboardLinks: DashLinks[] = [
-
   {
     title: "Settings",
     href: "/dashboard",
@@ -67,8 +64,8 @@ export const DashboardLinks: DashLinks[] = [
     description: "See and manage your published blogs",
   },
   {
-    title: "Book Marks",
-    href: "/dashboard/",
+    title: "My Book",
+    href: "/MyBookShelf",
     icon: BookmarkCheck,
     description: "Access your saved bookmarks",
   },

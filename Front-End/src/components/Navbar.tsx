@@ -20,13 +20,23 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import Avatar from "./ui/Avatar";
+import { Button } from "./ui/button";
+import { useIsTablet } from "@/hooks/useIsMobile";
 const Navbar = () => {
   const { loading, user } = useAuth();
   const Pathname = usePathname();
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
-
   const linksToRender = !user ? NavLinks : Navbar_Logged_In;
+  const isMobile = useIsTablet();
+  const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
+  useEffect(() => {
+    if (!isMobile) return;
+    document.body.style.overflow = isMenuOpened ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpened, isMobile]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,7 +110,7 @@ const Navbar = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.15 }}
-            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-primary dark:bg-third py-5 px-10 space-y-10"
+            className="absolute top-0 left-0  lg:hidden h-screen w-full bg-primary dark:bg-third py-5 px-10 space-y-10 overflow-y-scroll"
           >
             <div className="flex w-full justify-between  ">
               <ModeToggle />
@@ -112,34 +122,150 @@ const Navbar = () => {
                 <Menu size={40} />
               </button>
             </div>
-            <div className="">
-              <h1 className="text-3xl font-extrabold">Quick Links</h1>
-              <div className="space-y-5 mt-5">
-                {NavLinks.map((item, i) => (
+            {/* _______________________________ */}
+            {user && (
+              <>
+                <div className="">
+                  <h1 className="text-3xl font-extrabold">Quick Links</h1>
+                  <div className="space-y-5 mt-5">
+                    {Navbar_Logged_In.map((item, i) => (
+                      <Link
+                        key={i}
+                        href={item.href}
+                        onClick={() => setIsMenuOpened((prev) => !prev)}
+                      >
+                        <motion.div
+                          animate={
+                            Pathname === item.href && {
+                              translateY: -3,
+                              transition: { duration: 0.2 },
+                            }
+                          }
+                          className={`${
+                            Pathname === item.href &&
+                            "bg-secondary my-2 text-white "
+                          } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
+                        >
+                          <item.icon size={30} />
+
+                          {item.title}
+                        </motion.div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className="">
+                  <h1 className="text-3xl font-extrabold">Profile</h1>
+                  <div className="space-y-5 mt-5">
+                    {DashboardLinks.map((item, i) => (
+                      <Link
+                        key={i}
+                        href={item.href}
+                        onClick={() => setIsMenuOpened((prev) => !prev)}
+                      >
+                        <motion.div
+                          animate={
+                            Pathname === item.href && {
+                              translateY: -3,
+                              transition: { duration: 0.2 },
+                            }
+                          }
+                          className={`${
+                            Pathname === item.href &&
+                            "bg-secondary my-2 text-white "
+                          } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
+                        >
+                          <item.icon size={30} />
+
+                          {item.title}
+                        </motion.div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+            {/* _______________________________ */}
+
+            {!user && (
+              <div className="">
+                <h1 className="text-3xl font-extrabold">Quick Links</h1>
+                <div className="space-y-5 mt-5">
+                  {NavLinks.map((item, i) => (
+                    <Link
+                      key={i}
+                      href={item.href}
+                      onClick={() => setIsMenuOpened((prev) => !prev)}
+                    >
+                      <motion.div
+                        animate={
+                          Pathname === item.href && {
+                            translateY: -3,
+                            transition: { duration: 0.2 },
+                          }
+                        }
+                        className={`${
+                          Pathname === item.href &&
+                          "bg-secondary my-2 text-white "
+                        } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
+                      >
+                        <item.icon size={30} />
+
+                        {item.title}
+                      </motion.div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* _______________________________ */}
+
+            <div className="w-full h-20">
+              {user ? (
+                <Link
+                  href={`/profile/${user.username}`}
+                  onClick={() => setIsMenuOpened((prev) => !prev)}
+                  className="flex items-center gap-3  text-2xl"
+                >
+                  <Avatar
+                    fullName={user.username}
+                    gender={user.gender}
+                    avatar={user.avatar}
+                    className="w-16 h-16 "
+                  />
+                  <div>
+                    <p>{user.username}</p>
+                    <h1>{user.fullName}</h1>
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex justify-center items-center gap-5">
                   <Link
-                    key={i}
-                    href={item.href}
+                    href="/login"
                     onClick={() => setIsMenuOpened((prev) => !prev)}
                   >
-                    <motion.div
-                      animate={
-                        Pathname === item.href && {
-                          translateY: -3,
-                          transition: { duration: 0.2 },
-                        }
-                      }
-                      className={`${
-                        Pathname === item.href &&
-                        "bg-secondary my-2 text-white "
-                      } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
+                    <Button
+                      variant="secondary_2"
+                      NoAnimate
+                      className="text-2xl !p-7"
                     >
-                      <item.icon size={30} />
-
-                      {item.title}
-                    </motion.div>
+                      Login
+                    </Button>
                   </Link>
-                ))}
-              </div>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsMenuOpened((prev) => !prev)}
+                  >
+                    <Button
+                      variant="secondary_2"
+                      NoAnimate
+                      className="text-2xl !p-7"
+                    >
+                      Register
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -155,11 +281,12 @@ const Navbar = () => {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>
-                  <div className="relative  w-12 h-12 text-2xl font-medium rounded-full dark:text-third text-primary  bg-third dark:bg-primary ">
-                    <h1 className="absolute top-2/4 left-2/4 -translate-2/4">
-                      {user.fullName.charAt(0)}
-                    </h1>
-                  </div>
+                  <Avatar
+                    fullName={user.username}
+                    gender={user.gender}
+                    avatar={user.avatar}
+                    className="w-12 h-12"
+                  />
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">

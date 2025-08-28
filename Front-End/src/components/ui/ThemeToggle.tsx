@@ -48,6 +48,7 @@ export function ModeToggle() {
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className=""
       variant="outline"
+      NoAnimate
     >
       <AnimatePresence>
         {resolvedTheme === "dark" ? (

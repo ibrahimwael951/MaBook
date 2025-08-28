@@ -5,7 +5,7 @@ import api, { ImageApiSend } from "@/lib/axios";
 import { Post } from "@/types/Auth";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Loading from "@/components/Loading";
 import { Animate, FadeUp } from "@/animation";
 import { toast } from "sonner";
@@ -26,17 +26,17 @@ export default function UpdatePostPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [preview, setPreview] = useState<string | null>(null);
-  // track whether preview URL was created via createObjectURL (so we only revoke those)
+
   const previewUrlRef = useRef<string | null>(null);
 
-  const MyPost = user?.username === post?.author;
+  const MyPost = user?.username === post?.author.username;
   const didRun = useRef(false);
 
   useEffect(() => {
     if (loading || postLoading) return;
     if (didRun.current) return;
 
-    const isMyPost = user?.username === post?.author;
+    const isMyPost = user?.username === post?.author.username;
     didRun.current = true;
 
     if (!isMyPost) {
@@ -92,21 +92,17 @@ export default function UpdatePostPage() {
       if (previewUrlRef.current) {
         try {
           URL.revokeObjectURL(previewUrlRef.current);
-        } catch {
-          /* ignore */
-        }
+        } catch {}
         previewUrlRef.current = null;
       }
     };
   }, []);
 
-  // Handle file input
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
 
     const file = e.target.files?.[0] ?? null;
     if (!file) {
-      // user cleared file input
       if (previewUrlRef.current) {
         URL.revokeObjectURL(previewUrlRef.current);
         previewUrlRef.current = null;
@@ -117,9 +113,8 @@ export default function UpdatePostPage() {
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      // file too big -> show error and don't set preview/file
       setImageFile(null);
-      // revoke previous created preview (if any)
+
       if (previewUrlRef.current) {
         URL.revokeObjectURL(previewUrlRef.current);
         previewUrlRef.current = null;
@@ -180,7 +175,6 @@ export default function UpdatePostPage() {
         },
       });
 
-      // revoke preview created by createObjectURL
       if (previewUrlRef.current) {
         URL.revokeObjectURL(previewUrlRef.current);
         previewUrlRef.current = null;
@@ -228,10 +222,22 @@ export default function UpdatePostPage() {
 
         {/* Description */}
         <label>
-          <motion.span {...FadeUp} {...Animate} className="defaultLabel">
+          <motion.span
+            {...FadeUp}
+            animate={{
+              ...Animate.animatenly,
+              transition: { ...Animate.transition, delay: 0.2 },
+            }}
+            className="defaultLabel"
+          >
             Description
           </motion.span>
-          <motion.textarea 
+          <motion.textarea
+            {...FadeUp}
+            animate={{
+              ...Animate.animatenly,
+              transition: { ...Animate.transition, delay: 0.2 },
+            }}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="defaultInput"
@@ -241,8 +247,22 @@ export default function UpdatePostPage() {
 
         {/* Image Upload */}
         <label>
-          <motion.span {...FadeUp} {...Animate} className="defaultLabel">Upload Image (less than 10MB)</motion.span>
-          <input
+          <motion.span
+            {...FadeUp}
+            animate={{
+              ...Animate.animatenly,
+              transition: { ...Animate.transition, delay: 0.2 },
+            }}
+            className="defaultLabel"
+          >
+            Upload Image (less than 10MB)
+          </motion.span>
+          <motion.input
+            {...FadeUp}
+            animate={{
+              ...Animate.animatenly,
+              transition: { ...Animate.transition, delay: 0.2 },
+            }}
             type="file"
             accept="image/*"
             onChange={handleFileChange}
@@ -251,14 +271,20 @@ export default function UpdatePostPage() {
         </label>
 
         {/* Preview */}
-        {preview && (
-          <motion.img 
-          {...FadeUp}{...Animate}
-            src={preview}
-            alt="Preview"
-            className="w-full h-48 object-cover rounded-md border"
-          />
-        )}
+        <AnimatePresence>
+          {preview && (
+            <motion.img
+              {...FadeUp}
+              animate={{
+                ...Animate.animatenly,
+                transition: { ...Animate.transition, delay: 0.2 },
+              }}
+              src={preview}
+              alt="Preview"
+              className="w-full h-48 object-cover rounded-md border"
+            />
+          )}
+        </AnimatePresence>
 
         <Button type="submit" variant="secondary" className="w-full">
           Update

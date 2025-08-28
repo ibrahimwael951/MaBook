@@ -42,7 +42,6 @@ export default function Page() {
       .get(`/api/post/${id}`)
       .then((res) => {
         setPost(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         if (err instanceof Error) {

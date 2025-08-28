@@ -1,19 +1,24 @@
 import React from "react";
 import AnimatedImage from "./AnimatedImage";
-interface props {
+import { cn } from "@/lib/utils";
+
+interface Props {
   fullName: string;
   gender: string;
   avatar?: string;
+  className?: string;
 }
-const Avatar: React.FC<props> = ({ fullName, avatar, gender }) => {
-  const classname = "rounded-full w-16 h-16 ";
+
+const Avatar: React.FC<Props> = ({ fullName, avatar, gender, className }) => {
+  const baseClass = "rounded-full w-16 h-16";
+
   return avatar ? (
     <AnimatedImage
       alt={`${fullName} Avatar`}
       src={avatar}
       icon
       noAnimate
-      className={classname}
+      className={cn(baseClass, className)}
     />
   ) : (
     <AnimatedImage
@@ -25,7 +30,7 @@ const Avatar: React.FC<props> = ({ fullName, avatar, gender }) => {
       }
       icon
       noAnimate
-      className={classname}
+      className={cn(baseClass, className)}
     />
   );
 };
