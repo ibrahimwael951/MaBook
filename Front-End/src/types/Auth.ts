@@ -27,7 +27,6 @@ export interface UserProfile {
   posts: number;
 }
 export interface Post {
-  post(post: any): unknown;
   _id: string;
   author: {
     username: string;
@@ -37,7 +36,7 @@ export interface Post {
   };
   description: string;
   createdAt: string;
-  commentsCount:number;
+  commentsCount: number;
   image: image;
 }
 export interface image {
