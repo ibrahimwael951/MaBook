@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Book, GoogleBooksResponse } from "@/types/Books";
 import { motion, AnimatePresence } from "framer-motion";
 import { searchBooks } from "@/lib/googleBooks";
@@ -7,29 +7,57 @@ import SearchBar from "@/components/Books/SearchBar";
 import BookCard from "@/components/Books/BookCard";
 
 import { FadeDown, FadeLeft, FadeUp, Animate } from "@/animation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Home() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [totalResults, setTotalResults] = useState(0);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const searchString = searchParams ? searchParams.toString() : "";
 
   const handleSearch = async (query: string) => {
+    const params = query.includes("=")
+      ? query
+      : `q=${encodeURIComponent(query)}`;
+
+    router.push(`/books?${params}`);
+  };
+
+  useEffect(() => {
+    if (!searchString) {
+      setBooks([]);
+      setError(null);
+      return;
+    }
+
+    let mounted = true;
     setLoading(true);
     setError(null);
 
-    try {
-      const result: GoogleBooksResponse = await searchBooks(query, 20);
-      setBooks(result.items || []);
-      setTotalResults(result.totalItems || 0);
-    } catch (err) {
-      setError("Failed to search books. Please try again.");
-      console.error("Search error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    (async () => {
+      try {
+        const result: GoogleBooksResponse = await searchBooks(searchString, 20);
+
+        if (!mounted) return;
+        setBooks(result.items || []);
+      } catch (err) {
+        if (!mounted) return;
+        setError("Failed to search books. Please try again.");
+        console.error("Search error:", err);
+      } finally {
+        if (!mounted) return;
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [searchString]);
 
   return (
     <div className="min-h-screen bg -gray-50">
@@ -63,14 +91,6 @@ export default function Home() {
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6"
             >
               {error}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {totalResults > 0 && (
-            <motion.div {...FadeLeft} {...Animate} className="mb-4 ">
-              Found {totalResults.toLocaleString()} results
             </motion.div>
           )}
         </AnimatePresence>

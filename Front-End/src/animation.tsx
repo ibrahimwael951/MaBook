@@ -2,7 +2,14 @@ export const hover_bg = {};
 
 export const ViewPort = {
   viewport: { once: true, amount: 0.5 },
-  whileInView: { y: 0, x: 0, scale: 1, opacity: 1, filter: "blur(0px)" },
+  whileInView: {
+    y: 0,
+    x: 0,
+    scale: 1,
+    opacity: 1,
+    filter: "blur(0px)",
+    transition: { duration: 0.35 },
+  },
 };
 export const Animate = {
   animate: {
