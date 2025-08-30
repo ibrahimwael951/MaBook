@@ -39,7 +39,7 @@ const PostPage = () => {
   }, []);
   return (
     <div>
-      <div className="mt-20 max-w-2xl mx-auto space-y-4 p-4">
+      <div className="mt-20 max-w-2xl mx-auto space-y-20 p-4">
         {posts.map((post) => (
           <PostCard key={post._id} post={post} />
         ))}

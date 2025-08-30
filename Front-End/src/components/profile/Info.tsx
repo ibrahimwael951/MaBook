@@ -10,6 +10,9 @@ import { UserProfile } from "@/types/Auth";
 import { Animate, FadeLeft, FadeUp } from "@/animation";
 import Link from "next/link";
 
+//message
+import { coming_soon_message } from "../Coming_soon_message";
+
 type InfoProps = UserProfile;
 
 const Info: React.FC<InfoProps> = (props) => {
@@ -33,12 +36,12 @@ const Info: React.FC<InfoProps> = (props) => {
           <motion.div
             {...FadeLeft}
             {...Animate}
-            className="bg-secondary p-2 rounded-xl text-white "
+            className="bg-secondary p-2 rounded-xl text-white text-center"
           >
             Reader since {props.createdAt && AccountAge(props.createdAt)}
           </motion.div>
         </div>
-        <div className="lg:mt-5 space-y-2">
+        <div className="my-5 space-y-2">
           <motion.p
             {...FadeUp}
             {...Animate}
@@ -91,9 +94,11 @@ const Info: React.FC<InfoProps> = (props) => {
               <Link href="/Update_User_profile">
                 <Button variant="outline">Edit Profile</Button>
               </Link>
-              <Link href="/MyBookShelf">
-                <Button variant="outline">My Books</Button>
-              </Link>
+              {/* <Link href="/MyBookShelf"> */}
+              <Button variant="outline" onClick={() => coming_soon_message()}>
+                My Books
+              </Button>
+              {/* </Link> */}
             </motion.div>
           ) : (
             <motion.div
@@ -101,12 +106,16 @@ const Info: React.FC<InfoProps> = (props) => {
               {...Animate}
               className="flex justify-center items-center gap-5 mt-5"
             >
-              <Button variant="outline">Follow</Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => coming_soon_message()}>
+                Follow
+              </Button>
+              <Button variant="outline" onClick={() => coming_soon_message()}>
                 {props.gender === "male" ? "His" : "Her"} Books
               </Button>
               {props.gender === user?.gender && (
-                <Button variant="outline">Send Good message</Button>
+                <Button variant="outline" onClick={() => coming_soon_message()}>
+                  Send Good message
+                </Button>
               )}
             </motion.div>
           )}

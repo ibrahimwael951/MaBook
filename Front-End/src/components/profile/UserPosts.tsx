@@ -6,7 +6,7 @@ import { Animate, opacity } from "@/animation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Post } from "@/types/Auth";
 import Loading from "../Loading";
-import { FileX2 } from "lucide-react";
+import { FileX2, Hourglass } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AccountAge } from "@/hooks/AccountAge";
 import Link from "next/link";
@@ -81,15 +81,26 @@ const UserPosts: React.FC<Props> = ({ username }) => {
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div
+        {page === "Posts" && (
+          <motion.div
+            key={page}
+            {...Animate}
+            {...opacity}
+            transition={{ duration: 0.2 }}
+            className="w-full min-h-96"
+          >
+            <PostPage posts={posts} page={page} />
+          </motion.div>
+        )}
+        {page != "Posts" && (
+          <motion.div
           key={page}
           {...Animate}
-          {...opacity}
-          transition={{ duration: 0.2 }}
-          className="w-full min-h-96"
-        >
-          <PostPage posts={posts} page={page} />
-        </motion.div>
+          {...opacity} className="w-full h-96 flex flex-col justify-center items-center gap-2">
+            <Hourglass size={100} />
+            <h1 className="text-2xl font-semibold"> <span> {page} </span> coming Soon</h1>
+          </motion.div>
+        )}
       </AnimatePresence>
     </section>
   );

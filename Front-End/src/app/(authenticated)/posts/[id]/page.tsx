@@ -136,7 +136,7 @@ export default function Page() {
         )}
       </AnimatePresence>
 
-      <div className="w-full min-h-[500px] sm:w-fit lg:min-w-xl max-w-full relative flex flex-col gap-5 ">
+      <div className="w-full max-w-2xl min-h-[500px] sm:w-fit lg:min-w-xl relative flex flex-col gap-5 ">
         {isPostMine && (
           <motion.div
             {...FadeRight}
