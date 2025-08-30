@@ -65,18 +65,19 @@ export default async function BookDetailsPage({
   const bookImage = imageLinks?.thumbnail;
 
   return (
-    <main className="min-h-screen   flex justify-center items-center">
+    <main className="mt-12 flex justify-center items-center">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className=" rounded-lg shadow-lg overflow-hidden">
           <div className="md:flex">
             {/* Book Cover */}
-            <div className="md:w-1/3 lg:w-1/4 p-6 ">
+            <div className=" md:w-1/3 lg:w-1/4 p-6 ">
               {bookImage ? (
                 <Image
                   src={bookImage}
                   alt={`Cover of ${title}`}
                   width={300}
                   height={400}
+                  draggable={false}
                   className=" rounded-lg shadow-md max-w-full h-auto"
                   priority
                 />
