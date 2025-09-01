@@ -26,7 +26,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+
   const initialized = useRef(false);
 
   const [fieldErrors, setFieldErrors] = useState<
@@ -102,7 +102,6 @@ export default function Page() {
     const key = name as keyof Update;
     setFormData((prev) => ({ ...prev, [key]: value }));
     setError(null);
-    setSuccess(false);
   };
 
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +119,6 @@ export default function Page() {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-    setSuccess(false);
 
     const errors = validate();
     if (Object.keys(errors).length) {
@@ -131,7 +129,7 @@ export default function Page() {
 
     try {
       await updateUser(formData);
-      setSuccess(true);
+
       toast(`Profile updated successfully!`, {
         classNames: {
           toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
