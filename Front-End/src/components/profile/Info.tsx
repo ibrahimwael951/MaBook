@@ -11,7 +11,7 @@ import { Animate, FadeLeft, FadeUp } from "@/animation";
 import Link from "next/link";
 
 //message
-import { coming_soon_message } from "../Coming_soon_message";
+import { coming_soon_message } from "../messages/Coming_soon_message";
 
 type InfoProps = UserProfile;
 

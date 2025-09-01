@@ -1,10 +1,9 @@
 import React from "react";
-
+import  Coming_soon  from "@/components/messages/Coming_soon_page";
 export default function Page() {
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center">
-      <h1 className="text-2xl">here u will see blogs</h1>
-      <p>coming soon</p>
+    <section className="!px-0">
+      <Coming_soon/>
     </section>
   );
 }

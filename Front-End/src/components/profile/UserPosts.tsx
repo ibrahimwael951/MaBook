@@ -49,7 +49,7 @@ const UserPosts: React.FC<Props> = ({ username }) => {
       <div className="flex justify-center gap-5 p-3">
         {(["Posts", "RePosts"] as const).map((item) => (
           <MotionButton
-            variant={"outline"}
+            variant={page === item ? "secondary_2" : "third_2"}
             key={item}
             onClick={() => setPage(item)}
             animate={{
@@ -65,7 +65,7 @@ const UserPosts: React.FC<Props> = ({ username }) => {
         ))}
         {user.username === username && (
           <MotionButton
-            variant={"outline"}
+            variant={page === "Saved" ? "secondary_2" : "third_2"}
             onClick={() => setPage("Saved")}
             animate={{
               opacity: page === "Saved" ? 1 : 0.7,
@@ -94,11 +94,16 @@ const UserPosts: React.FC<Props> = ({ username }) => {
         )}
         {page != "Posts" && (
           <motion.div
-          key={page}
-          {...Animate}
-          {...opacity} className="w-full h-96 flex flex-col justify-center items-center gap-2">
+            key={page}
+            {...Animate}
+            {...opacity}
+            className="w-full h-96 flex flex-col justify-center items-center gap-2"
+          >
             <Hourglass size={100} />
-            <h1 className="text-2xl font-semibold"> <span> {page} </span> coming Soon</h1>
+            <h1 className="text-2xl font-semibold">
+              {" "}
+              <span> {page} </span> coming Soon
+            </h1>
           </motion.div>
         )}
       </AnimatePresence>
@@ -120,7 +125,9 @@ function PostPage({ posts }: PostPageProps) {
     return (
       <div className="flex flex-col justify-center items-center gap-2 min-h-96 ">
         <FileX2 size={isMobile ? 20 : 75} />{" "}
-        <h1 className="text-4xl">no posts yet</h1>
+        <h1 className="text-4xl">
+          no <span> posts </span> yet
+        </h1>
       </div>
     );
   const MotionLink = motion.create(Link);

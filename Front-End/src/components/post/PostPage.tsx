@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Post } from "@/types/Auth";
 import api from "@/lib/axios";
 import PostCard from "./PostCard";
+import Loading from "../Loading";
 
 const PostPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -37,8 +38,9 @@ const PostPage = () => {
   useEffect(() => {
     fetchPosts(null);
   }, []);
+  if(loading)return <Loading/>
   return (
-    <div>
+    <section className="min-h-screen">
       <div className="mt-20 max-w-2xl mx-auto space-y-20 p-4">
         {posts.map((post) => (
           <PostCard key={post._id} post={post} />
@@ -51,14 +53,14 @@ const PostPage = () => {
               disabled={loading}
               className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-60"
             >
-              {loading ? "Loading..." : "Load more"}
+              Load more
             </button>
           </div>
         ) : (
           <p className="text-center text-gray-500">No more posts</p>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

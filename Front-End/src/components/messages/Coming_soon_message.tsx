@@ -5,7 +5,7 @@ export function coming_soon_message() {
     description: "stay tuned for something awesome!",
     classNames: {
       toast: "  rounded-xl border border-red-700",
-      description: "!text-white text-sm opacity-90",
+      description: "  text-sm opacity-90",
       actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
     },
     action: {

@@ -43,8 +43,8 @@ export const Rotate_Scale_Tap = {
   whileTap: { rotateZ: -6, scale: 0.94, transition: { duration: 0.04 } },
 };
 export const opacity = {
-  initial: { opacity: 0 },
-  exit: { opacity: 0 },
+  initial: { opacity: 0, filter: "blur(20px)" },
+  exit: { opacity: 0, filter: "blur(20px)" },
 };
 export const opacityWithBlur = {
   initial: { filter: "blur(20px)", opacity: 0 },

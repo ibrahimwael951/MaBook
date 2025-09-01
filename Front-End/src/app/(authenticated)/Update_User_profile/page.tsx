@@ -10,8 +10,9 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Update } from "@/types/Auth";
 import Loading from "@/components/Loading";
-import { Animate, FadeLeft } from "@/animation";
+import { Animate, FadeUp } from "@/animation";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export default function Page() {
   const { user, updateUser } = useAuth();
@@ -131,8 +132,30 @@ export default function Page() {
     try {
       await updateUser(formData);
       setSuccess(true);
+      toast(`Profile updated successfully!`, {
+        classNames: {
+          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update user");
+      toast(`Failed to update Profile ${error}`, {
+        description: "Check Types under inputs or refresh page ",
+        classNames: {
+          toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+          description: "!text-white text-sm opacity-90",
+          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+        },
+        action: {
+          label: "OK",
+          onClick: () => console.log("OK"),
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -144,22 +167,23 @@ export default function Page() {
   if (isLoading) return <Loading />;
   return (
     <section className="mt-20  max-w-xl mx-auto p-6 rounded-lg shadow-md">
-      <h2 className="text-4xl font-bold mb-6 text-center">
+      <motion.h2
+        {...Animate}
+        {...FadeUp}
+        className="text-4xl font-bold mb-6 text-center"
+      >
         Update Your <span> Profile </span>
-      </h2>
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
-      )}
-
-      {success && (
-        <div className="mb-4 p-3 text-white bg-green-600 rounded">
-          Profile updated successfully!
-        </div>
-      )}
+      </motion.h2>
 
       <form onSubmit={handleSubmit} noValidate>
-        <div className="mb-4">
+        <motion.div
+          {...FadeUp}
+          animate={{
+            ...Animate.animatenly,
+            transition: { ...Animate.transition, delay: 0.1 },
+          }}
+          className="mb-4"
+        >
           <label className="defaultLabel" htmlFor="firstName">
             First Name
           </label>
@@ -175,11 +199,20 @@ export default function Page() {
             className="defaultInput"
           />
           {fieldErrors.firstName && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.firstName}</p>
+            <p className="mt-1 text-sm !text-red-600">
+              {fieldErrors.firstName}
+            </p>
           )}
-        </div>
+        </motion.div>
 
-        <div className="mb-4">
+        <motion.div
+          {...FadeUp}
+          animate={{
+            ...Animate.animatenly,
+            transition: { ...Animate.transition, delay: 0.2 },
+          }}
+          className="mb-4"
+        >
           <label className="defaultLabel" htmlFor="lastName">
             Last Name
           </label>
@@ -195,11 +228,18 @@ export default function Page() {
             className="defaultInput"
           />
           {fieldErrors.lastName && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.lastName}</p>
+            <p className="mt-1 text-sm !text-red-600">{fieldErrors.lastName}</p>
           )}
-        </div>
+        </motion.div>
 
-        <div className="mb-4">
+        <motion.div
+          {...FadeUp}
+          animate={{
+            ...Animate.animatenly,
+            transition: { ...Animate.transition, delay: 0.3 },
+          }}
+          className="mb-4"
+        >
           <label className="defaultLabel" htmlFor="bio">
             Bio
           </label>
@@ -213,9 +253,16 @@ export default function Page() {
             className="defaultInput"
             rows={5}
           />
-        </div>
+        </motion.div>
 
-        <div className="mb-4">
+        <motion.div
+          {...FadeUp}
+          animate={{
+            ...Animate.animatenly,
+            transition: { ...Animate.transition, delay: 0.4 },
+          }}
+          className="mb-4"
+        >
           <label className="defaultLabel" htmlFor="avatar">
             Avatar
           </label>
@@ -239,11 +286,14 @@ export default function Page() {
               />
             </div>
           )}
-        </div>
+        </motion.div>
 
         <motion.button
-          {...FadeLeft}
-          {...Animate}
+          {...FadeUp}
+          animate={{
+            ...Animate.animatenly,
+            transition: { ...Animate.transition, delay: 0.5 },
+          }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.95 }}
           type="submit"

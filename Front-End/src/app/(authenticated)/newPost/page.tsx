@@ -4,9 +4,14 @@ import axios from "axios";
 import Loading from "@/components/Loading";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
-import AnimatedImage from "@/components/ui/AnimatedImage";
-import { Animate, FadeLeft } from "@/animation";
+import React, {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useRef,
+  useEffect,
+} from "react";
+import { Animate, FadeLeft, opacity } from "@/animation";
 import { ImageApiSend } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -158,16 +163,60 @@ export default function CreatePostPage() {
     setUpload((s) => ({ ...s, error: null }));
   }
 
+  const [TookLonger, setTookLonger] = useState<string>("");
+  useEffect(() => {
+    if (!upload.uploading) return;
+    setTookLonger("Uploading your post.....");
+    const timer5s = setTimeout(() => {
+      setTookLonger("Almost done...");
+    }, 5000);
+
+    const timer15s = setTimeout(() => {
+      setTookLonger("Your internet is so slow, please wait...");
+    }, 15000);
+    return () => {
+      clearTimeout(timer5s);
+      clearTimeout(timer15s);
+    };
+  }, [upload.uploading]);
+
   if (!user || loading || upload.success) return <Loading />;
+  if (upload.uploading)
+    return (
+      <section className="min-h-screen flex flex-col justify-center items-center gap-5">
+        <motion.div
+          {...Animate}
+          {...opacity}
+          className="inline-block animate-spin rounded-full h-40 w-40 border-b-2  border-third dark:border-primary"
+        />
+        <AnimatePresence mode="wait">
+          {TookLonger && (
+            <motion.div key={TookLonger} {...Animate} {...opacity}>
+              {TookLonger}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
+    );
   return (
     <section className="mt-12 sm:mt-16 lg:mt-0 min-h-screen p-4 flex flex-col lg:flex-row justify-evenly gap-10 items-center">
       <div className="w-full lg:w-2/4 max-w-xl">
-        <h1 className="text-4xl font-semibold mb-4">
+        <motion.h1
+          {...Animate}
+          {...FadeLeft}
+          className="text-4xl font-semibold mb-4"
+        >
           Create New <span> Post </span>
-        </h1>
+        </motion.h1>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <div>
+          <motion.div
+            {...FadeLeft}
+            animate={{
+              ...Animate.animatenly,
+              transition: { duration: Animate.transition.duration, delay: 0.2 },
+            }}
+          >
             <label className="defaultLabel">Description</label>
             <textarea
               value={description}
@@ -175,9 +224,15 @@ export default function CreatePostPage() {
               placeholder="Write something about this post..."
               className="defaultInput"
             />
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div
+            {...FadeLeft}
+            animate={{
+              ...Animate.animatenly,
+              transition: { duration: Animate.transition.duration, delay: 0.4 },
+            }}
+          >
             <label className="defaultLabel">
               Image (optional) (less than 10MB)
             </label>
@@ -188,35 +243,46 @@ export default function CreatePostPage() {
               onChange={onFileChange}
               className="defaultInput cursor-pointer"
             />
-
-            {preview && (
-              <div className="mt-3 flex items-start gap-3">
-                <Image
-                  src={preview}
-                  alt="preview"
-                  width={200}
-                  height={200}
-                  unoptimized
-                  className="w-52 h-52 object-cover rounded"
-                />
-                <div>
-                  <p className="text-lg">Selected image</p>
-                  <button
-                    type="button"
-                    onClick={clearPreview}
-                    className="mt-2 underline text-lg cursor-pointer"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+            <AnimatePresence>
+              {preview && (
+                <motion.div
+                  {...opacity}
+                  {...Animate}
+                  className="mt-3 flex items-start gap-3"
+                >
+                  <Image
+                    src={preview}
+                    alt="preview"
+                    width={200}
+                    height={200}
+                    unoptimized
+                    className="w-52 h-52 object-cover rounded"
+                  />
+                  <div>
+                    <p className="text-lg">Selected image</p>
+                    <button
+                      type="button"
+                      onClick={clearPreview}
+                      className="mt-2 underline text-lg cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
 
           <div>
             <motion.button
               {...FadeLeft}
-              {...Animate}
+              animate={{
+                ...Animate.animatenly,
+                transition: {
+                  duration: Animate.transition.duration,
+                  delay: 0.6,
+                },
+              }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
@@ -247,17 +313,6 @@ export default function CreatePostPage() {
             )}
           </AnimatePresence>
         </form>
-      </div>
-
-      <div className="w-full lg:w-2/4 max-w-xl text-center">
-        <AnimatedImage
-          src="/Men_like.jpg"
-          alt="Good image"
-          className="rounded-2xl"
-        />
-        <p>
-          Be kind. No hate, no offense — just positive vibes for fellow readers.
-        </p>
       </div>
     </section>
   );

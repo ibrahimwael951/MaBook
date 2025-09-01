@@ -21,8 +21,7 @@ import { toast } from "sonner";
 import { AccountAge } from "@/hooks/AccountAge";
 import Avatar from "@/components/ui/Avatar";
 
-
-const MotionLink = motion.create(Link)
+const MotionLink = motion.create(Link);
 
 export default function Page() {
   const { user } = useAuth();
@@ -32,6 +31,7 @@ export default function Page() {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [warning, setWarning] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -57,6 +57,7 @@ export default function Page() {
 
   const deletePost = async () => {
     try {
+      setDeleting(true);
       await api.delete(`/api/post/${id}`);
       router.push(`/profile/${user?.username}`);
       toast(`Deleted`, {
@@ -72,6 +73,7 @@ export default function Page() {
         },
       });
     } catch (err) {
+      setDeleting(true);
       console.error(err);
       toast(`Deleted Failed`, {
         description: `Try again letter  : ${error} `,
@@ -103,34 +105,63 @@ export default function Page() {
             />
             <motion.div
               {...FadeUp}
-              {...Animate}
-              className="relative flex flex-col justify-center items-center gap-5 p-16 rounded-2xl text-third dark:text-primary bg-primary dark:bg-third overflow-hidden z-20 mx-5 select-none"
+              animate={{
+                ...Animate.animate,
+                height: deleting ? "400px" : "260px",
+              }}
+              className={`
+                relative w-[560px] p-16 flex flex-col  justify-center items-center rounded-2xl text-third dark:text-primary bg-primary dark:bg-third overflow-hidden z-20 mx-5 select-none 
+                `}
             >
-              <button
+              <motion.button
+                disabled={deleting}
+                animate={{ opacity: deleting ? 0.1 : 1 }}
                 className="absolute top-0 left-0 text-white bg-red-600 rounded-br-2xl "
                 onClick={() => setWarning(false)}
               >
                 <X size={40} />
-              </button>
-              <h1 className="text-2xl text-center ">
-                Are you sure you want to delete this post?{" "}
-              </h1>
-              <div className="flex justify-center items-center gap-5 ">
-                <Button
-                  onClick={() => setWarning(false)}
-                  variant="third_2"
-                  className="h-fit text-xl  "
-                >
-                  No, keep post alone
-                </Button>
-                <Button
-                  onClick={deletePost}
-                  variant="secondary_2"
-                  className="h-fit text-xl !text-white !bg-red-600 !hover:bg-red-600 !border-red-600  hover:border-red-600"
-                >
-                  Yes, Delete this Post
-                </Button>
-              </div>
+              </motion.button>
+
+              <AnimatePresence>
+                {deleting ? (
+                  <motion.div
+                    {...FadeUp}
+                    {...Animate}
+                    className="w-full h-full text-2xl flex flex-col gap-5 justify-center items-center"
+                  >
+                    <div className="inline-block animate-spin rounded-full h-40 w-40 border-b-2  border-third dark:border-primary"></div>
+                    Deleting ...
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    {...FadeUp}
+                    {...Animate}
+                    className="flex flex-col justify-center items-center gap-5"
+                  >
+                    <h1 className="text-2xl text-center ">
+                      Are you sure you want to delete this post?{" "}
+                    </h1>
+                    <div className="flex justify-center items-center gap-5 ">
+                      <Button
+                        NoAnimate
+                        onClick={() => setWarning(false)}
+                        variant="third_2"
+                        className="h-fit text-xl  "
+                      >
+                        No, keep post alone
+                      </Button>
+                      <Button
+                        NoAnimate
+                        onClick={deletePost}
+                        variant="secondary_2"
+                        className="h-fit text-xl !text-white !bg-red-600 !hover:bg-red-600 !border-red-600  hover:border-red-600"
+                      >
+                        Yes, Delete this Post
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         )}
@@ -166,7 +197,7 @@ export default function Page() {
         )}
         <div>
           <MotionLink
-          href={`/profile/${post.author.username}`}
+            href={`/profile/${post.author.username}`}
             {...FadeLeft}
             {...Animate}
             className="font-semibold flex justify-center items-center gap-2 w-fit mb-2"
