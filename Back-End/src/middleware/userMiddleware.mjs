@@ -1,5 +1,5 @@
 import { user } from "../mongoose/schema/UserAuth.mjs";
-import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
+import { Posts } from "../mongoose/schema/UsersPosts.mjs";
 
 export const resolveUsersById = async (req, res, next) => {
   const {
@@ -82,7 +82,7 @@ export const findPostIdAndAuthor = async (req, res, next) => {
     params: { id },
   } = req;
   try {
-    const findPostById = await UsersPosts.findById(id);
+    const findPostById = await Posts.findById(id);
 
     const SaveData = findPostById.toObject();
     delete SaveData.__v;

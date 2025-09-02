@@ -4,11 +4,12 @@ import {
   findUserName,
   getUserByUsername,
 } from "../middleware/userMiddleware.mjs";
-import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
+import { Posts } from "../mongoose/schema/UsersPosts.mjs";
 import { PostComments } from "../mongoose/schema/PostsComments.mjs";
 import { PostComment } from "../util/ValidationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { user } from "../mongoose/schema/UserAuth.mjs";
+import { Likes } from "../mongoose/schema/Likes.mjs";
 
 const router = Router();
 router.get(
@@ -23,7 +24,7 @@ router.get(
 router.get("/api/user/:username/posts", getUserByUsername, async (req, res) => {
   const { findUser } = req;
   try {
-    const getPosts = await UsersPosts.find({ author: findUser.username });
+    const getPosts = await Posts.find({ author: findUser.username });
     return res.status(200).send(getPosts);
   } catch (err) {
     return res.status(400).send(`error : ${err}`);
@@ -35,7 +36,7 @@ router.get("/api/post/:id", async (req, res) => {
     params: { id },
   } = req;
   try {
-    const post = await UsersPosts.findById(id);
+    const post = await Posts.findById(id);
     if (!post) {
       return res.status(404).json({ message: "Post Not Found" });
     }
@@ -47,7 +48,15 @@ router.get("/api/post/:id", async (req, res) => {
 
     const comments = await PostComments.find({ postId: id }).lean();
     const commentsCount = comments.length;
-
+    const userId = req.user._id;
+    const Liked = await Likes.findOne({
+      postId: post._id,
+      userId,
+    });
+    const LikesCount = await Likes.countDocuments({
+      postId: post._id,
+    });
+    const IsLiked = Liked ? true : false;
     const DataSend = {
       ...post.toObject(),
       author: {
@@ -56,6 +65,8 @@ router.get("/api/post/:id", async (req, res) => {
         gender: Author.gender,
         avatar: Author.avatar,
       },
+      Liked: IsLiked,
+      LikesCount,
       commentsCount,
     };
 
@@ -103,8 +114,5 @@ router.get("/api/post/:id/comments", findPostIdAndAuthor, async (req, res) => {
     return res.status(400).send(`error : ${err}`);
   }
 });
-
-
-
 
 export default router;

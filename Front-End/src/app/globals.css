@@ -16,6 +16,13 @@
 
 body {
   @apply bg-primary  text-third dark:bg-third dark:text-primary   cursor-default;
+
+  -ms-overflow-style: none;
+  scrollbar-width: 0px;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 section {
   @apply px-5 lg:px-10 w-full overflow-hidden;

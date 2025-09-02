@@ -34,9 +34,11 @@ export interface Post {
     avatar: string;
     gender: string;
   };
+  Liked:boolean;
   description: string;
   createdAt: string;
   commentsCount: number;
+  LikesCount:number;
   image: image;
 }
 export interface image {

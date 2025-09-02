@@ -1,4 +1,4 @@
-import { UsersPosts } from "../mongoose/schema/UsersPosts.mjs";
+import { Posts } from "../mongoose/schema/UsersPosts.mjs";
 import {
   handleImageRemove,
   handleImageReplace,
@@ -13,7 +13,7 @@ export const createPost = async (userData, postData, file) => {
 
   const image = file ? await handleImageUpload(file) : null;
 
-  const newPost = new UsersPosts({
+  const newPost = new Posts({
     author: userData.username,
     ...postData,
     image,
@@ -28,7 +28,7 @@ export const updatePost = async (
   postData = {},
   file = null
 ) => {
-  const post = await UsersPosts.findById(postId);
+  const post = await Posts.findById(postId);
   if (!post) throw new Error("Post not found");
 
   if (post.author !== userData.username) {
@@ -86,7 +86,7 @@ export const updatePost = async (
 };
 
 export const deletePost = async (postId, userData) => {
-  const post = await UsersPosts.findById(postId);
+  const post = await Posts.findById(postId);
   if (!post) throw new Error("Post not found");
   if (post.author !== userData.username)
     throw new Error("Not authorized to delete this post");
@@ -103,7 +103,7 @@ export const deletePost = async (postId, userData) => {
       }
     }
 
-    const res = await UsersPosts.findByIdAndDelete(postId);
+    const res = await Posts.findByIdAndDelete(postId);
     return res;
   } catch (err) {
     console.error("Failed to delete post:", err);
