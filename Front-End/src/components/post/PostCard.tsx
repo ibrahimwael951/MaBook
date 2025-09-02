@@ -46,10 +46,10 @@ const PostCard: React.FC<props> = ({ post }) => {
     try {
       setLiked(!Liked);
       await api.post(`/api/${post._id}/like`).then((data: data) => {
-        setLiked(data.data.liked),
-          setPostLikes((prev) =>
-            data.data.liked === true ? prev + 1 : prev - 1
-          );
+        setLiked(data.data.liked);
+        setPostLikes((prev) =>
+          data.data.liked === true ? prev + 1 : prev - 1
+        );
       });
     } catch (err) {
       setLiked((prev) => !prev);
