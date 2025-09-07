@@ -11,6 +11,7 @@ import NotFound from "@/components/post/NotFound";
 
 import PostCard from "@/components/post/PostCard";
 import { toast } from "sonner";
+import Comment from "@/components/post/Comments/Comment";
 
 export default function Page() {
   const params = useParams();
@@ -61,8 +62,9 @@ export default function Page() {
   if (loading) return <Loading />;
   if (!post) return <NotFound />;
   return (
-    <section className="min-h-screen mt-28 py-5 flex justify-center items-start ">
+    <section className="min-h-screen mt-28 py-5 flex flex-col items-center justify-center  ">
       <PostCard post={post} />
+      <Comment   PostId={post._id} />
     </section>
   );
 }

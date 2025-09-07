@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const PostSchema = new mongoose.Schema(
+const Post = new mongoose.Schema(
   {
     author: {
       type: String,
@@ -23,5 +23,5 @@ const PostSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-PostSchema.index({ createdAt: -1, _id: -1 });
-export const Posts = mongoose.model("Posts", PostSchema);
+Post.index({ createdAt: -1, _id: -1 });
+export const Posts = mongoose.model("Posts", Post);

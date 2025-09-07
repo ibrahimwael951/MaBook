@@ -4,7 +4,6 @@ import { checkSchema, matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../util/Hashing.mjs";
 import passport from "passport";
 import { user } from "../mongoose/schema/UserAuth.mjs";
-import { SaveUserData } from "../middleware/userMiddleware.mjs";
 
 const router = Router();
 
@@ -84,7 +83,7 @@ router.post("/api/auth/login", (req, res, next) => {
 
 router.patch(
   "/api/auth/update",
-  SaveUserData,
+  passport.authenticate("session"),
   checkSchema(UpDateUserData),
   async (req, res) => {
     try {
@@ -127,9 +126,9 @@ router.patch(
   }
 );
 
-router.get("/api/auth/status", SaveUserData, (req, res) => {
-  return req.UserData
-    ? res.status(200).json({ user: req.UserData })
+router.get("/api/auth/status", passport.authenticate("session"), (req, res) => {
+  return req.user
+    ? res.status(200).json({ user: req.user })
     : res.status(401).json({ message: "Not Authenticated" });
 });
 
@@ -154,37 +153,43 @@ router.post("/api/auth/logout", (req, res, next) => {
   });
 });
 
-router.delete("/api/auth/delete", SaveUserData, async (req, res, next) => {
-  try {
-    const { UserData } = req;
+router.delete(
+  "/api/auth/delete",
+  passport.authenticate("session"),
+  async (req, res, next) => {
+    try {
+      const { UserData } = req;
 
-    const deletedUser = await user.findByIdAndDelete(UserData._id);
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    req.logout((err) => {
-      if (err) {
-        return next(err);
+      const deletedUser = await user.findByIdAndDelete(UserData._id);
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found" });
       }
 
-      req.session.destroy((sessionErr) => {
-        if (sessionErr) {
-          return res.status(500).json({ message: "Failed to destroy session" });
+      req.logout((err) => {
+        if (err) {
+          return next(err);
         }
 
-        res.clearCookie("connect.sid");
-        return res
-          .status(200)
-          .json({ message: "Account deleted successfully" });
+        req.session.destroy((sessionErr) => {
+          if (sessionErr) {
+            return res
+              .status(500)
+              .json({ message: "Failed to destroy session" });
+          }
+
+          res.clearCookie("connect.sid");
+          return res
+            .status(200)
+            .json({ message: "Account deleted successfully" });
+        });
       });
-    });
-  } catch (err) {
-    return res.status(500).json({
-      message: "Delete Error",
-      error: err.message,
-    });
+    } catch (err) {
+      return res.status(500).json({
+        message: "Delete Error",
+        error: err.message,
+      });
+    }
   }
-});
+);
 
 export default router;

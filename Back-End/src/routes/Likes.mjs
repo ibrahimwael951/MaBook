@@ -2,7 +2,7 @@ import Router from "express";
 import { Likes } from "../mongoose/schema/Likes.mjs";
 
 import passport from "passport";
-import { Posts } from "../mongoose/schema/UsersPosts.mjs";
+import { Posts } from "../mongoose/schema/Posts.mjs";
 
 const router = Router();
 

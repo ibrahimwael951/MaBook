@@ -1,4 +1,4 @@
-import { Posts } from "../mongoose/schema/UsersPosts.mjs";
+import { Posts } from "../mongoose/schema/Posts.mjs";
 import {
   handleImageRemove,
   handleImageReplace,
