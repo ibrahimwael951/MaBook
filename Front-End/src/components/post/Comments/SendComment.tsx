@@ -40,7 +40,8 @@ const SendComment: React.FC<Props> = ({ PostId }) => {
     api
       .post(`/api/post/${PostId}/comment`, { text: Text })
       .then(() => {
-        setSuccess(true), setText("");
+        setSuccess(true);
+        setText("");
       })
       .catch((err) =>
         toast(`Error :${err.message}`, {
