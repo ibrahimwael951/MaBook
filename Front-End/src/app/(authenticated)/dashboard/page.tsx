@@ -6,13 +6,11 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 
 // components
 import SideBar from "@/components/dashboard/SideBar";
-import CopyLink from "@/components/ui/CopyLink";
 import Loading from "@/components/Loading";
 
 // animation
 import { Animate, FadeUp } from "@/animation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/ThemeToggle";
 
 export default function Page() {

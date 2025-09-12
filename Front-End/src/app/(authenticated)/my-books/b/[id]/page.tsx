@@ -21,7 +21,7 @@ const moodOptions = [
   { value: "hated", label: "😡 Hated it", color: "bg-red-700" },
 ];
 
-export default function page() {
+export default function Page() {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(true);
   const [book, setBook] = useState<Book | null>(null);
