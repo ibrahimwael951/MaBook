@@ -26,6 +26,26 @@ export interface UserProfile {
   following: number;
   posts: number;
 }
+export interface MyBooks {
+  _id: string;
+  userId: string;
+  book: {
+    BookLink: string;
+    url: string;
+    title: string;
+    totalPages: string;
+  };
+  progress: {
+    percentage: number;
+    currentPage: number;
+    lastUpdated: number;
+  };
+  rate: {
+    comment?: string;
+    mood?: string;
+  };
+  createdAt: string;
+}
 export interface Post {
   _id: string;
   author: {

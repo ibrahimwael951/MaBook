@@ -224,7 +224,7 @@ router.delete(
   async (req, res) => {
     try {
       const postId = req.params.id;
-      const deleted = await postController.deletePost(postId, req.UserData);
+      const deleted = await postController.deletePost(postId, req.user);
       if (!deleted)
         return res.status(404).json({ success: false, msg: "Post not found" });
       res.status(200).json({ success: true, post: deleted });

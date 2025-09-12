@@ -17,6 +17,7 @@ import LikeButton from "./LikeButton";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
+import { useDetectLanguage } from "@/hooks/Language";
 
 const MotionLink = motion.create(Link);
 
@@ -34,6 +35,8 @@ const PostCard: React.FC<props> = ({ post }) => {
   const { user } = useAuth();
   const pathName = usePathname();
   const router = useRouter();
+
+  const lang = useDetectLanguage(post.description);
 
   const [showImage, setShowImage] = useState<boolean>(false);
   const [warning, setWarning] = useState<boolean>(false);
@@ -227,33 +230,40 @@ const PostCard: React.FC<props> = ({ post }) => {
         )}
       </AnimatePresence>
       <div className="w-full min-h-52 lg:min-w-xl max-w-2xl relative flex flex-col gap-5 ">
-        {isPostMine && (
-          <motion.div
-            {...FadeRight}
-            {...Animate}
-            className="absolute top-0 right-0 p-4 rounded-md font-semibold text-xl z-20"
-          >
-            <Popover>
-              <PopoverTrigger className=" ">
-                <Ellipsis size={50} />
-              </PopoverTrigger>
-              <PopoverContent className="bg-black flex flex-col">
-                <button
-                  onClick={() => setWarning(true)}
-                  className="  p-4 text-white rounded-md font-semibold text-xl"
-                >
-                  <Trash />
+        <motion.div
+          {...FadeRight}
+          {...Animate}
+          className="absolute top-0 right-0 p-4 rounded-md font-semibold text-xl z-20"
+        >
+          <Popover>
+            <PopoverTrigger className=" ">
+              <Ellipsis size={50} />
+            </PopoverTrigger>
+            <PopoverContent className="bg-black flex flex-col">
+              {isPostMine ? (
+                <>
+                  <button
+                    onClick={() => setWarning(true)}
+                    className="  p-4 text-white rounded-md font-semibold text-xl"
+                  >
+                    <Trash />
+                  </button>
+                  <Link
+                    href={`/posts/${post._id}/update`}
+                    className="  p-4 text-white rounded-md font-semibold text-xl"
+                  >
+                    <Edit />
+                  </Link>
+                </>
+              ) : (
+                <button className="  p-4 text-white rounded-md font-semibold text-xl">
+                  Report
                 </button>
-                <Link
-                  href={`/posts/${post._id}/update`}
-                  className="  p-4 text-white rounded-md font-semibold text-xl"
-                >
-                  <Edit />
-                </Link>
-              </PopoverContent>
-            </Popover>
-          </motion.div>
-        )}
+              )}
+            </PopoverContent>
+          </Popover>
+        </motion.div>
+
         <div>
           <MotionLink
             href={`/profile/${post.author.username}`}
@@ -277,9 +287,10 @@ const PostCard: React.FC<props> = ({ post }) => {
               ...Animate.animate,
               transition: { duration: 0.4, delay: 0.2 },
             }}
-            className="text-lg"
+            dir={lang === "ar" ? "rtl" : "ltr"}
+            className={`text-lg  `}
           >
-            {post.description}
+            {post.description}{" "}
           </motion.h1>
           <motion.p
             {...FadeLeft}
@@ -310,10 +321,10 @@ const PostCard: React.FC<props> = ({ post }) => {
             />
           </div>
         )}
-        <div className="grid grid-cols-3 gap-x-5 ">
+        <div className="grid grid-cols-2 gap-x-5 ">
           <div>{postLikes} Likes</div>
           <div>{post.commentsCount} Comments</div>
-          <div>{0} Reposts</div>
+          {/* <div>{0} Reposts</div> */}
 
           <div onClick={handleLike}>
             <LikeButton liked={Liked} />
@@ -325,9 +336,9 @@ const PostCard: React.FC<props> = ({ post }) => {
             </Button>
           </Link>
 
-          <Button variant="third_2" className="w-full">
+          {/* <Button variant="third_2" className="w-full">
             Repost
-          </Button>
+          </Button> */}
         </div>
       </div>
 

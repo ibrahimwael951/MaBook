@@ -99,9 +99,8 @@ router.patch(
           error: "password cannot be updated here",
         });
       }
-      const { UserData } = req;
       const updateUser = await user.findByIdAndUpdate(
-        UserData._id,
+        req.user._id,
         { $set: data, fullName: `${data.firstName} ${data.lastName}` },
         { new: true, runValidators: true }
       );
@@ -158,9 +157,9 @@ router.delete(
   passport.authenticate("session"),
   async (req, res, next) => {
     try {
-      const { UserData } = req;
+      const { user } = req;
 
-      const deletedUser = await user.findByIdAndDelete(UserData._id);
+      const deletedUser = await user.findByIdAndDelete(user._id);
       if (!deletedUser) {
         return res.status(404).json({ message: "User not found" });
       }

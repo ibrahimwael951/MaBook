@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { Animate, opacity } from "@/animation";
+import { Animate, opacity, ViewPort } from "@/animation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Post } from "@/types/Auth";
 import Loading from "../Loading";
@@ -79,34 +79,36 @@ const UserPosts: React.FC<Props> = ({ username }) => {
           </MotionButton>
         )}
       </div>
-
-      <AnimatePresence mode="wait">
-        {page === "Posts" && (
-          <motion.div
-            key={page}
-            {...Animate}
-            {...opacity}
-            transition={{ duration: 0.2 }}
-            className="w-full min-h-96"
-          >
-            <PostPage posts={posts} page={page} />
-          </motion.div>
-        )}
-        {page != "Posts" && (
-          <motion.div
-            key={page}
-            {...Animate}
-            {...opacity}
-            className="w-full h-96 flex flex-col justify-center items-center gap-2"
-          >
-            <Hourglass size={100} />
-            <h1 className="text-2xl font-semibold">
-              {" "}
-              <span> {page} </span> coming Soon
-            </h1>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="mt-10">
+        <AnimatePresence mode="wait">
+          {page === "Posts" && (
+            <motion.div
+              key={page}
+              {...Animate}
+              {...opacity}
+              transition={{ duration: 0.2 }}
+              className="w-full min-h-96"
+            >
+              <PostPage posts={posts} page={page} />
+            </motion.div>
+          )}
+         
+          {page != "Posts" && (
+            <motion.div
+              key={page}
+              {...Animate}
+              {...opacity}
+              className="w-full h-96 flex flex-col justify-center items-center gap-2"
+            >
+              <Hourglass size={100} />
+              <h1 className="text-2xl font-semibold">
+                {" "}
+                <span> {page} </span> coming Soon
+              </h1>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 };
@@ -136,16 +138,15 @@ function PostPage({ posts }: PostPageProps) {
       {posts.map((item) => (
         <MotionLink
           key={item._id}
+          {...opacity}
+          viewport={{ margin: "150px" }}
+          whileInView={{ ...ViewPort.whileInView }}
           href={`/posts/${item._id}`}
-          initial="rest"
-          whileHover="hover"
-          variants={{
-            hover: { y: -5 },
-            rest: { y: 0 },
-          }}
-          className={`relative text-2xl p-3 pb-8 rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
+          className={`relative text-2xl p-5 pb-8 rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
         >
-          <h1 className="mb-3">{item.description}</h1>
+          <h1 className={`mb-3 ${item.image ? "truncate" : " "}`}>
+            {item.description}
+          </h1>
           {item.image?.url && (
             <Image
               src={item.image.url}
@@ -160,13 +161,6 @@ function PostPage({ posts }: PostPageProps) {
           <p className="text-xs absolute bottom-2 right-2 ">
             {AccountAge(item.createdAt)}
           </p>
-          <motion.div
-            variants={{
-              rest: { opacity: 0 },
-              hover: { opacity: 0.4 },
-            }}
-            className="absolute top-0 left-0 w-full h-full bg-white dark:bg-black"
-          />
         </MotionLink>
       ))}
     </div>

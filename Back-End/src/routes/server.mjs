@@ -6,6 +6,7 @@ import Check from "./Check.mjs";
 
 import Likes from "./Likes.mjs";
 import Comments from "./Comments.mjs";
+import MyBooks from "./MyBooks.mjs";
 const router = Router();
 
 router.use(UserAuth);
@@ -14,5 +15,6 @@ router.use(posts);
 router.use(Check);
 router.use(Likes);
 router.use(Comments);
+router.use(MyBooks);
 
 export default router;
