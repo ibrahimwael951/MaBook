@@ -264,7 +264,7 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
                     )}
                     <Link href={`/my-books/b/${id}`}>
                       <Button NoAnimate variant="secondary">
-                        Add to My Books
+                        Add To My Books
                       </Button>
                     </Link>
                   </div>

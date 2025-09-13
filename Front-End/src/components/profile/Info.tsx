@@ -95,9 +95,9 @@ const Info: React.FC<InfoProps> = (props) => {
                 <Button variant="outline">Edit Profile</Button>
               </Link>
               {/* <Link href="/MyBookShelf"> */}
-              <Button variant="outline" onClick={() => coming_soon_message()}>
-                My Books
-              </Button>
+              <Link href="/my-books">
+                <Button variant="outline">My Books</Button>
+              </Link>
               {/* </Link> */}
             </motion.div>
           ) : (

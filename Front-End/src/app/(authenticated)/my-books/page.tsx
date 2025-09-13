@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/lib/axios";
 import { MyBooks } from "@/types/Auth";
@@ -9,7 +10,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import AnimatedImage from "@/components/ui/AnimatedImage";
 import { Plus } from "lucide-react";
+import { Animate, FadeLeft, opacity } from "@/animation";
 
+const MotionLink = motion.create(Link);
 export default function Page() {
   const { user } = useAuth();
   const [books, setBooks] = useState<null | MyBooks[]>(null);
@@ -47,21 +50,27 @@ export default function Page() {
   return (
     <section className="min-h-screen mt-20">
       <div className="mb-10">
-        <h1 className="text-4xl lg:text-5xl">
+        <motion.h1 {...Animate} {...FadeLeft} className="text-4xl lg:text-5xl">
           Hello <span>{user?.firstName}</span>
-        </h1>
-        <p className="text-xl lg:text-2xl">here is your Books </p>
+        </motion.h1>
+        <motion.p {...Animate} {...FadeLeft} className="text-xl lg:text-2xl">
+          here is your Books{" "}
+        </motion.p>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 h-fit    ">
-        <Link
+        <MotionLink
+          {...Animate}
+          {...opacity}
           href={`/books`}
           className="h-72 p-5 border border-secondaryHigh dark:border-primary rounded-2xl flex flex-col justify-center items-center w-full"
         >
           <Plus size={50} />
           New Book ?
-        </Link>
+        </MotionLink>
         {books.map((item) => (
-          <Link
+          <MotionLink
+            {...Animate}
+            {...opacity}
             href={`/my-books/b/${item.book.BookLink}`}
             key={item._id}
             className="h-72 p-5 border border-secondaryHigh dark:border-primary rounded-2xl flex justify-between items-center gap-2 w-full overflow-hidden"
@@ -92,7 +101,7 @@ export default function Page() {
                 </h1>
               </div>
             </div>
-          </Link>
+          </MotionLink>
         ))}
       </div>
     </section>

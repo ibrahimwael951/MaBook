@@ -67,7 +67,10 @@ router.patch(
     try {
       const { id } = req.params;
 
-      const book = await myBooks.findById(id);
+      const book = await myBooks.findOne({
+        userId: req.user._id,
+        "book.BookLink": id,
+      });
       if (!book) {
         return res.status(404).json({ message: "Book not found" });
       }
@@ -147,6 +150,24 @@ router.get(
         return res
           .status(200)
           .json({ message: "you are already saved this book " });
+      res.status(400).json({ message: "not found book in your shelf" });
+    } catch (err) {
+      res.status(500).json({ message: "server error", details: err.message });
+    }
+  }
+);
+router.get(
+  "/api/myBooks/:id",
+  passport.authenticate("session"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const book = await myBooks.findOne({
+        userId: req.user._id,
+        "book.BookLink": id,
+      });
+      if (book) return res.status(200).json(book);
       res.status(400).json({ message: "not found book in your shelf" });
     } catch (err) {
       res.status(500).json({ message: "server error", details: err.message });
