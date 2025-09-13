@@ -4,6 +4,7 @@ import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/axios";
 import { googleBooksApi } from "@/lib/googleBooks";
+import { MyBooks } from "@/types/Auth";
 import { Book } from "@/types/Books";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
@@ -61,7 +62,7 @@ export default function Page() {
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
   // User's existing book data
-  const [userBookData, setUserBookData] = useState<any>(null);
+  const [userBookData, setUserBookData] = useState<MyBooks | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -617,7 +618,7 @@ export default function Page() {
                 <div className="flex items-center gap-3 !text-white bg-green-600 p-3 rounded-lg">
                   <span className="text-2xl">🎉</span>
                   <p className="font-bold">
-                    Congratulations! You've finished this book!
+                    Congratulations! You’ve finished this book!
                   </p>
                 </div>
               )}
