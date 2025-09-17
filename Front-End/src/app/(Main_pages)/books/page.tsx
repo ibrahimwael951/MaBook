@@ -43,6 +43,7 @@ function Home() {
 
     setBooks([]);
     setError(null);
+    fetchBooks()
     router.push(`/books?${params}`);
   };
 
