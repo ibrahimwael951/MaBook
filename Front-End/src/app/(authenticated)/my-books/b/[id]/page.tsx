@@ -203,7 +203,14 @@ export default function Page() {
   }
 
   const { title, description, pageCount, imageLinks } = book.volumeInfo;
-  const bookImage = imageLinks?.thumbnail;
+  const bookImage =
+    book.volumeInfo.imageLinks?.extraLarge ||
+    book.volumeInfo.imageLinks?.large ||
+    book.volumeInfo.imageLinks?.medium ||
+    book.volumeInfo.imageLinks?.thumbnail ||
+    book.volumeInfo.imageLinks?.smallThumbnail ||
+    "/placeholder-book.webp";
+
   const progressPercentage = getProgressPercentage();
 
   return (
@@ -218,6 +225,9 @@ export default function Page() {
             draggable={false}
             className="rounded-lg shadow-md max-w-full h-auto mx-auto"
             priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizes
+            placeholder="blur"
+            blurDataURL="/placeholder-book.webp"
           />
         ) : (
           <div className="w-64 h-96 bg-gray-200 rounded-lg flex items-center justify-center mx-auto">

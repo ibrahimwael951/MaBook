@@ -29,8 +29,8 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               <Image
                 src={volumeInfo.imageLinks.thumbnail}
                 alt={volumeInfo.title || "image without title"}
-                width={400}
-                height={400}
+                width={1000}
+                height={1000}
                 draggable={false}
                 className="rounded object-cover h-full w-32"
               />

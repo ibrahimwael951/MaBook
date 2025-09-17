@@ -130,8 +130,13 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
     infoLink,
   } = book.volumeInfo;
 
-  const bookImage = imageLinks?.thumbnail || imageLinks?.smallThumbnail;
-
+  const bookImage =
+    book.volumeInfo.imageLinks?.extraLarge ||
+    book.volumeInfo.imageLinks?.large ||
+    book.volumeInfo.imageLinks?.medium ||
+    book.volumeInfo.imageLinks?.thumbnail ||
+    book.volumeInfo.imageLinks?.smallThumbnail ||
+    "/placeholder-book.jpg";
   return (
     <main className="min-h-screen mt-20">
       {/* Hero Section with Background */}
@@ -153,11 +158,15 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
                     <Image
                       src={bookImage}
                       alt={`Cover of ${title}`}
-                      width={320}
-                      height={480}
+                      width={1000}
+                      height={1000}
                       draggable={false}
-                      className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
+                      quality={85}
                       priority
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      placeholder="blur"
+                      blurDataURL="/placeholder-book.webp"
+                      className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 ) : (
@@ -209,7 +218,7 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
                             delay: index * 0.1,
                           },
                         }}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 !text-third border border-blue-200"
                       >
                         {category}
                       </motion.span>

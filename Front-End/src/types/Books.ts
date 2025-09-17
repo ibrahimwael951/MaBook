@@ -6,6 +6,9 @@ export interface Book {
     description?: string;
     publishedDate?: string;
     imageLinks?: {
+      extraLarge?: string;
+      large?: string;
+      medium?: string;
       thumbnail?: string;
       smallThumbnail?: string;
     };
