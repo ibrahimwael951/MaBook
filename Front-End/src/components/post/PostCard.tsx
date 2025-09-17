@@ -321,24 +321,24 @@ const PostCard: React.FC<props> = ({ post }) => {
             />
           </div>
         )}
-        <div className="grid grid-cols-2 gap-x-5 ">
-          <div>{postLikes} Likes</div>
-          <div>{post.commentsCount} Comments</div>
-          {/* <div>{0} Reposts</div> */}
+        <div className="grid grid-cols-5 gap-x-5 ">
+          <div className="col-span-1">{postLikes} Likes</div>
+          <div className="col-span-2">{post.commentsCount} Comments</div>
+          <div className="col-span-2">{0} Reposts</div>
 
           <div onClick={handleLike}>
             <LikeButton liked={Liked} />
           </div>
 
-          <Link href={`/posts/${post._id}`}>
-            <Button variant="third_2" className="w-full">
+          <Link href={`/posts/${post._id}`} className="col-span-2">
+            <Button variant="third_2" className="w-full ">
               Comment
             </Button>
           </Link>
 
-          {/* <Button variant="third_2" className="w-full">
+          <Button variant="third_2" className="w-full col-span-2">
             Repost
-          </Button> */}
+          </Button>
         </div>
       </div>
 

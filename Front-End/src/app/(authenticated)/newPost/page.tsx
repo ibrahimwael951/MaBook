@@ -61,11 +61,17 @@ export default function CreatePostPage() {
 
     setUpload({ uploading: false, progress: 0, error: null, success: false });
 
-    if (!description && !file) {
+    if (!description || !file) {
       setUpload({
         uploading: false,
         progress: 0,
-        error: "Please add a description or an image.",
+        error: `Please add a ${
+          !description && !file
+            ? "description or an image"
+            : !description
+            ? "description"
+            : "Image"
+        } `,
         success: false,
       });
       return;

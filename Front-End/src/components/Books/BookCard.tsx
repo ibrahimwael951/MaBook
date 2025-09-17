@@ -5,6 +5,7 @@ import Image from "next/image";
 import { opacity, ViewPort } from "@/animation";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface BookCardProps {
   book: Book;
@@ -12,7 +13,8 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { volumeInfo } = book;
-
+  const img = book.volumeInfo.imageLinks?.smallThumbnail;
+  const [imgSrc, setImgSrc] = useState(img || "/No image found.png");
   return (
     <Link href={`/books/${book.id}`}>
       <motion.div
@@ -20,27 +22,27 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
         viewport={{
           amount: ViewPort.viewport.amount,
         }}
-        whileInView={{ ...ViewPort.whileInView , transition:{duration:0.172} }}
+        whileInView={{
+          ...ViewPort.whileInView,
+          transition: { duration: 0.172 },
+        }}
         className=" h-60 flex gap-4 rounded-2xl p-4 border dark:border-primary border-third cursor-pointer  "
       >
         <div className="flex-shrink-0">
-          {volumeInfo.imageLinks?.thumbnail ? (
-            <div className="relative  h-full w-fit">
-              <Image
-                src={volumeInfo.imageLinks.thumbnail}
-                alt={volumeInfo.title || "image without title"}
-                width={1000}
-                height={1000}
-                draggable={false}
-                className="rounded object-cover h-full w-32"
-              />
-              <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-b from-25% to-70% to-primary dark:to-third" />
-            </div>
-          ) : (
-            <div className="w-20 h-30  rounded flex items-center justify-center">
-              <span className=" text-xs">No Image</span>
-            </div>
-          )}
+          <div className="relative  h-full w-fit">
+            <Image
+              src={imgSrc}
+              alt={volumeInfo.title || "image without title"}
+              width={1000}
+              height={1000}
+              draggable={false}
+              placeholder="blur"
+              blurDataURL="/placeholder-book.webp"
+              className="rounded object-cover h-full w-32"
+              priority={false}
+              onError={() => setImgSrc("/No image found.png")}
+            />
+          </div>
         </div>
 
         <div className="flex-1 min-w-0  max-w-96 space-y-4">
@@ -62,7 +64,8 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           <div className="flex items-center gap-4 mt-3 text-xs ">
             {volumeInfo.averageRating && (
               <h4 className="flex items-center gap-1 text-xl">
-                <Star size={20} className="text-yellow-600" /> {volumeInfo.averageRating}
+                <Star size={20} className="text-yellow-600" />{" "}
+                {volumeInfo.averageRating}
               </h4>
             )}
             {volumeInfo.pageCount && (

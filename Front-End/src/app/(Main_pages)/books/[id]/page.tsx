@@ -126,7 +126,6 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
     averageRating,
     ratingsCount,
     language,
-    imageLinks,
     infoLink,
   } = book.volumeInfo;
 
@@ -136,7 +135,7 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
     book.volumeInfo.imageLinks?.medium ||
     book.volumeInfo.imageLinks?.thumbnail ||
     book.volumeInfo.imageLinks?.smallThumbnail ||
-    "/placeholder-book.jpg";
+    "/No image found.png";
   return (
     <main className="min-h-screen mt-20">
       {/* Hero Section with Background */}
@@ -152,33 +151,22 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
               className="lg:col-span-1 flex justify-center"
             >
               <div className="relative group">
-                {bookImage ? (
-                  <div className="relative">
-                    <div className="absolute rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
-                    <Image
-                      src={bookImage}
-                      alt={`Cover of ${title}`}
-                      width={1000}
-                      height={1000}
-                      draggable={false}
-                      quality={85}
-                      priority
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      placeholder="blur"
-                      blurDataURL="/placeholder-book.webp"
-                      className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-80 h-96 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-xl">
-                    <div className="text-center">
-                      <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-2" />
-                      <span className=" text-sm font-medium">
-                        No Cover Available
-                      </span>
-                    </div>
-                  </div>
-                )}
+                <div className="relative">
+                  <div className="absolute rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
+                  <Image
+                    src={bookImage}
+                    alt={`Cover of ${title}`}
+                    width={1000}
+                    height={1000}
+                    draggable={false}
+                    quality={85}
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    placeholder="blur"
+                    blurDataURL="/placeholder-book.webp"
+                    className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
               </div>
             </motion.div>
 

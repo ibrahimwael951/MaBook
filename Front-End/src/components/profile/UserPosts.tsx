@@ -92,7 +92,7 @@ const UserPosts: React.FC<Props> = ({ username }) => {
               <PostPage posts={posts} page={page} />
             </motion.div>
           )}
-         
+
           {page != "Posts" && (
             <motion.div
               key={page}
@@ -133,8 +133,9 @@ function PostPage({ posts }: PostPageProps) {
       </div>
     );
   const MotionLink = motion.create(Link);
+  const MotionImage = motion.create(Image);
   return (
-    <div className="w-full grid gap-5 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 ">
+    <div className="w-full grid gap-2 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 ">
       {posts.map((item) => (
         <MotionLink
           key={item._id}
@@ -142,13 +143,12 @@ function PostPage({ posts }: PostPageProps) {
           viewport={{ margin: "150px" }}
           whileInView={{ ...ViewPort.whileInView }}
           href={`/posts/${item._id}`}
-          className={`relative text-2xl p-5 pb-8 rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
+          className={`relative text-2xl  border border-secondaryHigh rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
         >
-          <h1 className={`mb-3 ${item.image ? "truncate" : " "}`}>
-            {item.description}
-          </h1>
           {item.image?.url && (
-            <Image
+            <MotionImage
+              transition={{ duration: 0.2 }}
+              whileHover={{ scale: 1.2 }}
               src={item.image.url}
               alt={`image - ${item.description}`}
               width={200}
@@ -158,7 +158,7 @@ function PostPage({ posts }: PostPageProps) {
             />
           )}
 
-          <p className="text-xs absolute bottom-2 right-2 ">
+          <p className="text-xs absolute bottom-0 right-0 bg-secondary !text-white p-2 rounded-tl-2xl ">
             {AccountAge(item.createdAt)}
           </p>
         </MotionLink>

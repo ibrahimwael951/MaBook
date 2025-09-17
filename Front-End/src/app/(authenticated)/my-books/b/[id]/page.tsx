@@ -202,14 +202,14 @@ export default function Page() {
     );
   }
 
-  const { title, description, pageCount, imageLinks } = book.volumeInfo;
+  const { title, description, pageCount } = book.volumeInfo;
   const bookImage =
     book.volumeInfo.imageLinks?.extraLarge ||
     book.volumeInfo.imageLinks?.large ||
     book.volumeInfo.imageLinks?.medium ||
     book.volumeInfo.imageLinks?.thumbnail ||
     book.volumeInfo.imageLinks?.smallThumbnail ||
-    "/placeholder-book.webp";
+    "/No image found.png";
 
   const progressPercentage = getProgressPercentage();
 
