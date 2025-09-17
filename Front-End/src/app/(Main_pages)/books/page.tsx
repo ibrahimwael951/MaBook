@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, Suspense, useRef, useCallback } from "react";
+import { useEffect, useState, Suspense, useCallback } from "react";
 import { Book, GoogleBooksResponse } from "@/types/Books";
 import { motion, AnimatePresence } from "framer-motion";
 import { searchBooks } from "@/lib/googleBooks";
@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import ScrollToTopButton from "@/components/ui/Scroll_Top_Button";
 
 const PAGE_SIZE = 20;
-const EMPTY_PAGE_THRESHOLD = 2;
 
 const CATEGORIES = [
   "Fiction",
@@ -28,152 +27,91 @@ const CATEGORIES = [
 
 function Home() {
   const [books, setBooks] = useState<Book[]>([]);
+  const [totalItems, setTotalItems] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
 
   const searchParams = useSearchParams();
   const router = useRouter();
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-  const isFetchingRef = useRef(false);
-  const fetchedStartIndicesRef = useRef(new Set<number>());
-  const consecutiveEmptyPagesRef = useRef(0);
 
   const q = searchParams
     ? new URLSearchParams(searchParams.toString()).get("q") || ""
     : "";
 
   const handleSearch = (query: string) => {
-    const params = query.includes("=")
-      ? query
-      : `q=${encodeURIComponent(query)}`;
+    const params = `q=${encodeURIComponent(query)}`;
 
     setBooks([]);
-    setPage(0);
-    setHasMore(true);
-    fetchedStartIndicesRef.current.clear();
-    consecutiveEmptyPagesRef.current = 0;
     setError(null);
     router.push(`/books?${params}`);
   };
 
-  const fetchBooks = useCallback(
-    async (pageIndex: number) => {
-      if (!q) return;
-      const startIndex = pageIndex * PAGE_SIZE;
+  const fetchBooks = useCallback(async () => {
+    if (!q) return;
 
-      if (fetchedStartIndicesRef.current.has(startIndex)) {
-        return;
-      }
+    setLoading(true);
+    setError(null);
 
-      if (isFetchingRef.current) return;
+    try {
+      const result: GoogleBooksResponse = await searchBooks(q, PAGE_SIZE, 0);
+      const items = result.items || [];
 
-      isFetchingRef.current = true;
-      fetchedStartIndicesRef.current.add(startIndex);
-      setLoading(true);
-      setError(null);
+      setBooks(items);
+      setTotalItems(result.totalItems || 0);
+    } catch (err) {
+      console.error("Search error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch books. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [q]);
 
-      try {
-        const result: GoogleBooksResponse = await searchBooks(
-          q,
-          PAGE_SIZE,
-          startIndex
-        );
-        const items = result.items || [];
+  const loadMore = useCallback(async () => {
+    if (loading || books.length >= totalItems) return;
 
-        let uniqueNewCount = 0;
-        setBooks((prev) => {
-          const existingIds = new Set(prev.map((b) => b.id));
-          const uniqueNew = items.filter(
-            (it) => !!it.id && !existingIds.has(it.id)
-          );
-          uniqueNewCount = uniqueNew.length;
+    setLoading(true);
+    setError(null);
 
-          return pageIndex === 0 ? uniqueNew : [...prev, ...uniqueNew];
-        });
+    try {
+      const nextIndex = 0;
+      const result: GoogleBooksResponse = await searchBooks(
+        q,
+        PAGE_SIZE,
+        nextIndex
+      );
+      const items = result.items || [];
 
-        const totalItems =
-          typeof result.totalItems === "number" ? result.totalItems : null;
-        const newTotalFetched = startIndex + items.length;
-
-        if (totalItems !== null) {
-          setHasMore(newTotalFetched < totalItems);
-        } else {
-          if (uniqueNewCount === 0) {
-            consecutiveEmptyPagesRef.current += 1;
-          } else {
-            consecutiveEmptyPagesRef.current = 0;
-          }
-
-          if (consecutiveEmptyPagesRef.current >= EMPTY_PAGE_THRESHOLD) {
-            setHasMore(false);
-          } else {
-            setHasMore(items.length === PAGE_SIZE || uniqueNewCount > 0);
-          }
-        }
-      } catch (err) {
-        console.error("Search error:", err);
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Failed to fetch books. Please try again."
-        );
-        fetchedStartIndicesRef.current.delete(startIndex);
-      } finally {
-        isFetchingRef.current = false;
-        setLoading(false);
-      }
-    },
-    [q]
-  );
+      setBooks((prev) => [...prev, ...items]);
+      setTotalItems(result.totalItems || 0);
+    } catch (err) {
+      console.error("Load more error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to load more books. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [q, loading, books, totalItems]);
 
   const handleRetry = () => {
     setError(null);
-    setPage(0);
-    fetchedStartIndicesRef.current.clear();
-    consecutiveEmptyPagesRef.current = 0;
-    fetchBooks(0);
+    fetchBooks();
   };
 
   useEffect(() => {
     setBooks([]);
-    setPage(0);
-    setHasMore(true);
-    fetchedStartIndicesRef.current.clear();
-    consecutiveEmptyPagesRef.current = 0;
     setError(null);
 
     if (q) {
-      fetchBooks(0);
+      fetchBooks();
     }
   }, [q, fetchBooks]);
-
-  useEffect(() => {
-    if (page === 0) return;
-    fetchBooks(page);
-  }, [page, fetchBooks]);
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const e = entries[0];
-        if (e.isIntersecting && !loading && !isFetchingRef.current && hasMore) {
-          setPage((p) => p + 1);
-        }
-      },
-      { root: null, rootMargin: "300px", threshold: 0.1 }
-    );
-
-    observer.observe(sentinel);
-    return () => {
-      observer.disconnect();
-    };
-  }, [loading, hasMore, q]);
 
   const showNoResults = q && books.length === 0 && !loading && !error;
   const showGrid = books.length > 0;
@@ -219,7 +157,9 @@ function Home() {
                 {CATEGORIES.map((cat) => (
                   <Link
                     key={cat}
-                    href={`/books?q=${encodeURIComponent(cat)}`}
+                    href={`/books?q=${encodeURIComponent(
+                      `subject:${cat.toLowerCase()}`
+                    )}`}
                     aria-label={`Search category ${cat}`}
                   >
                     <Button NoAnimate variant="secondary_2">
@@ -268,14 +208,20 @@ function Home() {
           </div>
         )}
 
+        {showGrid && books.length < totalItems && !error && (
+          <div className="text-center mt-8">
+            <Button onClick={loadMore} disabled={loading}>
+              {loading ? "Loading..." : "Load More"}
+            </Button>
+          </div>
+        )}
+
         {loading && (
           <motion.div {...FadeUp} {...Animate} className="text-center py-8">
             <div className="inline-block animate-spin rounded-full h-20 w-20 border-b-2 border-third dark:border-primary"></div>
-            <p className="mt-2 text-xl">Loading more...</p>
+            <p className="mt-2 text-xl">Loading...</p>
           </motion.div>
         )}
-
-        <div ref={sentinelRef} className="h-10" />
       </div>
     </div>
   );

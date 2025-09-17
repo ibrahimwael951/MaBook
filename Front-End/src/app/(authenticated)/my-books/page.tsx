@@ -69,10 +69,10 @@ export default function Page() {
         </MotionLink>
         {books.map((item) => (
           <MotionLink
+            key={item._id}
             {...Animate}
             {...opacity}
             href={`/my-books/b/${item.book.BookLink}`}
-            key={item._id}
             className="h-72 p-5 border border-secondaryHigh dark:border-primary rounded-2xl flex justify-between items-center gap-2 w-full overflow-hidden"
           >
             <div>
