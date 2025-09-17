@@ -3,22 +3,46 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Book } from "@/types/Books";
+import {
+  Star,
+  Calendar,
+  BookOpen,
+  Globe,
+  ShoppingCart,
+  ExternalLink,
+  Heart,
+  Share2,
+  Download,
+  BookText,
+  UserPen,
+} from "lucide-react";
 
 import Loading from "@/components/Loading";
 import { googleBooksApi } from "@/lib/googleBooks";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Animate, FadeLeft, FadeRight } from "@/animation";
+import { useDetectLanguage } from "@/hooks/Language";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface BookDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
 export default function BookDetailsPage({ params }: BookDetailsPageProps) {
+  const { user } = useAuth();
   const [id, setId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [book, setBook] = useState<Book | null>(null);
   const [error, setError] = useState<string>("");
+
+  // resolve the dir
+  const text = book?.volumeInfo.description || "";
+  const descriptionLang = useDetectLanguage(text);
+
+  function ProtectLinks(item: String) {
+    return user ? item : "/login";
+  }
 
   // Resolve params and set id
   useEffect(() => {
@@ -51,23 +75,42 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
 
   if (!book) {
     return (
-      <section className="min-h-screen flex justify-center items-center">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold text-gray-600">No Book Found</h1>
-          <p className="text-gray-500 mt-4">
+      <section className="min-h-screen flex justify-center items-center bg-gradient-to-br from-gray-50 to-gray-100">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center p-8"
+        >
+          <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <BookOpen className="w-12 h-12 text-gray-400" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            No Book Found
+          </h1>
+          <p className="text-gray-600">
             The requested book could not be found.
           </p>
-        </div>
+        </motion.div>
       </section>
     );
   }
+
   if (error) {
     return (
-      <section className="min-h-screen flex justify-center items-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Error</h1>
-          <p className="text-gray-600">{error}</p>
-        </div>
+      <section className="min-h-screen flex justify-center items-center bg-gradient-to-br from-red-50 to-red-100">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center p-8"
+        >
+          <div className="w-24 h-24 bg-red-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <BookOpen className="w-12 h-12 text-red-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-red-700 mb-4">
+            Oops! Something went wrong
+          </h1>
+          <p className="text-red-600">{error}</p>
+        </motion.div>
       </section>
     );
   }
@@ -84,45 +127,60 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
     ratingsCount,
     language,
     imageLinks,
+    infoLink,
   } = book.volumeInfo;
 
-  const bookImage = imageLinks?.thumbnail;
+  const bookImage = imageLinks?.thumbnail || imageLinks?.smallThumbnail;
 
   return (
-    <main className="mt-12 flex justify-center items-center">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className=" rounded-lg shadow-lg overflow-hidden">
-          <div className="md:flex">
-            {/* Book Cover */}
+    <main className="min-h-screen mt-20">
+      {/* Hero Section with Background */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0  " />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+            {/* Book Cover Section */}
             <motion.div
               {...FadeLeft}
               {...Animate}
-              className="md:w-1/3 lg:w-1/4 p-6 "
+              className="lg:col-span-1 flex justify-center"
             >
-              {bookImage ? (
-                <Image
-                  src={bookImage}
-                  alt={`Cover of ${title}`}
-                  width={300}
-                  height={400}
-                  draggable={false}
-                  className="rounded-lg shadow-md max-w-full h-auto mx-auto"
-                  priority
-                />
-              ) : (
-                <div className="w-64 h-96  rounded-lg flex items-center justify-center mx-auto">
-                  <span className=" text-sm">No Cover Available</span>
-                </div>
-              )}
+              <div className="relative group">
+                {bookImage ? (
+                  <div className="relative">
+                    <div className="absolute rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
+                    <Image
+                      src={bookImage}
+                      alt={`Cover of ${title}`}
+                      width={320}
+                      height={480}
+                      draggable={false}
+                      className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <div className="w-80 h-96 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-xl">
+                    <div className="text-center">
+                      <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-2" />
+                      <span className=" text-sm font-medium">
+                        No Cover Available
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </motion.div>
 
-            {/* Book Details */}
-            <div className="md:w-2/3 lg:w-3/4 p-6">
-              <div className="mb-6">
+            {/* Book Information Section */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Title and Author */}
+              <div className="space-y-4">
                 <motion.h1
                   {...FadeRight}
                   {...Animate}
-                  className="text-3xl font-bold  mb-2"
+                  className="text-4xl sm:text-5xl font-bold leading-tight"
                 >
                   {title}
                 </motion.h1>
@@ -131,20 +189,27 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
                   <motion.p
                     {...FadeRight}
                     {...Animate}
-                    className="text-xl  mb-2"
+                    className="text-xl text-gray-600 font-medium"
                   >
                     by {authors.join(", ")}
                   </motion.p>
                 )}
 
+                {/* Categories */}
                 {categories.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {categories.map((category, index) => (
+                  <div className="flex flex-wrap gap-2">
+                    {categories.slice(0, 3).map((category, index) => (
                       <motion.span
                         key={index}
                         {...FadeRight}
-                        {...Animate}
-                        className="inline-block bg-blue-100 !text-blue-950 text-sm px-3 py-1 rounded-full"
+                        animate={{
+                          ...Animate.animatenly,
+                          transition: {
+                            duration: Animate.transition.duration,
+                            delay: index * 0.1,
+                          },
+                        }}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200"
                       >
                         {category}
                       </motion.span>
@@ -154,146 +219,201 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
 
                 {/* Rating */}
                 {averageRating && (
-                  <div className="flex items-center mb-4">
+                  <motion.div
+                    className="flex items-center space-x-2"
+                    {...FadeRight}
+                    {...Animate}
+                  >
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <motion.svg
+                        <motion.div
                           key={i}
-                          {...FadeLeft}
-                          animate={{
-                            ...Animate.animatenly,
-                            transition: {
-                              duration: Animate.transition.duration,
-                              delay: 0.1,
-                            },
-                          }}
-                          className={`w-5 h-5 ${
-                            i < Math.floor(averageRating)
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.1, duration: 0.3 }}
                         >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </motion.svg>
+                          <Star
+                            className={`w-5 h-5 ${
+                              i < Math.floor(averageRating)
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        </motion.div>
                       ))}
                     </div>
-                    <motion.span
-                      {...FadeLeft}
-                      animate={{
-                        ...Animate.animatenly,
-                        transition: {
-                          duration: Animate.transition.duration,
-                          delay: 0.2,
-                        },
-                      }}
-                      className="ml-2 text-sm  "
-                    >
-                      {averageRating} ({ratingsCount} reviews)
-                    </motion.span>
-                  </div>
+                    <span className="text-sm text-gray-600 font-medium">
+                      {averageRating} ({ratingsCount?.toLocaleString()} reviews)
+                    </span>
+                  </motion.div>
                 )}
               </div>
 
-              {/* Book Information Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <motion.h3
-                    {...FadeLeft}
-                    animate={{
-                      ...Animate.animatenly,
-                      transition: {
-                        duration: Animate.transition.duration,
-                        delay: 0.3,
-                      },
-                    }}
-                    className="text-lg font-semibold   mb-3"
-                  >
-                    Book Information
-                  </motion.h3>
-                  <motion.div
-                    {...FadeLeft}
-                    animate={{
-                      ...Animate.animatenly,
-                      transition: {
-                        duration: Animate.transition.duration,
-                        delay: 0.4,
-                      },
-                    }}
-                    className="space-y-2  "
-                  >
-                    {publisher && (
-                      <p>
-                        <span className="font-medium">Publisher:</span>{" "}
-                        {publisher}
-                      </p>
-                    )}
-                    {publishedDate && (
-                      <p>
-                        <span className="font-medium">Published:</span>{" "}
-                        {publishedDate}
-                      </p>
-                    )}
-                    {pageCount && (
-                      <p>
-                        <span className="font-medium">Pages:</span> {pageCount}
-                      </p>
-                    )}
-                    {language && (
-                      <p>
-                        <span className="font-medium">Language:</span>{" "}
-                        {language.toUpperCase()}
-                      </p>
-                    )}
-                  </motion.div>
-                </div>
-
-                {/* Actions */}
-                <motion.div {...FadeLeft} {...Animate}>
-                  <h3 className="text-lg font-semibold  mb-3">Actions</h3>
-                  <div className="flex  items-center gap-5">
-                    {book.saleInfo?.buyLink && (
-                      <a
-                        href={book.saleInfo.buyLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button variant="third">Buy Book</Button>
-                      </a>
-                    )}
-                    <Link href={`/my-books/b/${id}`}>
-                      <Button NoAnimate variant="secondary">
-                        Add To My Books
-                      </Button>
-                    </Link>
+              {/* Book Details Grid */}
+              <motion.div
+                {...FadeLeft}
+                animate={{
+                  ...Animate.animatenly,
+                  transition: {
+                    duration: Animate.transition.duration,
+                    delay: 0.3,
+                  },
+                }}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-6"
+              >
+                {publisher && (
+                  <div className="border border-secondary backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                    <div className=" text-sm font-medium mb-1 flex items-center">
+                      <UserPen className="w-4 h-4 mr-1" />
+                      Publisher
+                    </div>
+                    <div className="font-semibold text-sm">{publisher}</div>
                   </div>
-                </motion.div>
-              </div>
+                )}
+                {publishedDate && (
+                  <div className="border border-secondary backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                    <div className=" text-sm font-medium mb-1 flex items-center">
+                      <Calendar className="w-4 h-4 mr-1" />
+                      Published
+                    </div>
+                    <div className="font-semibold text-sm">{publishedDate}</div>
+                  </div>
+                )}
+                {pageCount && (
+                  <div className="border border-secondary backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                    <div className=" text-sm font-medium mb-1 flex items-center">
+                      <BookOpen className="w-4 h-4 mr-1" />
+                      Pages
+                    </div>
+                    <div className="font-semibold text-sm">
+                      {pageCount.toLocaleString()}
+                    </div>
+                  </div>
+                )}
+                {language && (
+                  <div className="border border-secondary backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                    <div className=" text-sm font-medium mb-1 flex items-center">
+                      <Globe className="w-4 h-4 mr-1" />
+                      Language
+                    </div>
+                    <div className="font-semibold text-sm">
+                      {language.toUpperCase()}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
 
-              {/* Description */}
-              {description && (
-                <motion.div
-                  {...FadeLeft}
-                  animate={{
-                    ...Animate.animatenly,
-                    transition: {
-                      duration: Animate.transition.duration,
-                      delay: 0.4,
-                    },
-                  }}
+              {/* Action Buttons */}
+              <motion.div
+                {...FadeLeft}
+                animate={{
+                  ...Animate.animatenly,
+                  transition: {
+                    duration: Animate.transition.duration,
+                    delay: 0.4,
+                  },
+                }}
+                className="flex flex-wrap gap-3"
+              >
+                {book.saleInfo?.buyLink && (
+                  <a
+                    href={`${ProtectLinks(book.saleInfo.buyLink)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 min-w-fit"
+                  >
+                    <Button className="w-full bg-green-600 text-white">
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Buy Book
+                    </Button>
+                  </a>
+                )}
+
+                <Link
+                  href={`${ProtectLinks(`/my-books/b/${id}`)}`}
+                  className="flex-1 min-w-fit"
                 >
-                  <h3 className="text-lg font-semibold   mb-3">Description</h3>
-                  <p
-                    className="  leading-relaxed prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: description }}
-                  />
-                </motion.div>
-              )}
+                  <Button variant="third" className="w-full" NoAnimate>
+                    <Heart className="w-4 h-4 mr-2" />
+                    Add to Library
+                  </Button>
+                </Link>
+
+                {infoLink && (
+                  <Link
+                    href={`${ProtectLinks(infoLink)}`}
+                    className="flex-1 min-w-fit"
+                  >
+                    <Button NoAnimate variant="third" className="w-full">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      More Info
+                    </Button>
+                  </Link>
+                )}
+
+                {book.accessInfo?.webReaderLink && (
+                  <Link
+                    href={`${ProtectLinks(book.accessInfo?.webReaderLink)}`}
+                    className="flex-1 min-w-fit"
+                  >
+                    <Button NoAnimate variant="third" className="w-full">
+                      <BookText className="w-4 h-4 mr-2" />
+                      Read Online
+                    </Button>
+                  </Link>
+                )}
+
+                {book.accessInfo?.pdf.acsTokenLink && (
+                  <Link
+                    href={`${ProtectLinks(book.accessInfo?.pdf.acsTokenLink)}`}
+                    className="flex-1 min-w-fit"
+                  >
+                    <Button variant="third" NoAnimate className="w-full">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download
+                    </Button>
+                  </Link>
+                )}
+
+                <Button className="bg-white/80 text-gray-700 border border-gray-200 hover:bg-white hover:shadow-lg transition-all duration-300 px-4">
+                  <Share2 className="w-4 h-4" />
+                </Button>
+              </motion.div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Description Section */}
+      {description && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <motion.div
+            {...FadeLeft}
+            animate={{
+              ...Animate.animatenly,
+              transition: {
+                duration: Animate.transition.duration,
+                delay: 0.5,
+              },
+            }}
+            className="border border-secondary rounded-2xl p-8"
+          >
+            <h3 className="text-2xl font-bold mb-6 flex items-center">
+              <BookOpen className="w-6 h-6 mr-2 " />
+              About This Book
+            </h3>
+            <div className="leading-relaxed">
+              <div
+                className="!text-white text-xl"
+                dir={descriptionLang === "ar" ? "rtl" : "ltr"}
+                dangerouslySetInnerHTML={{
+                  __html: description,
+                }}
+              />
+            </div>
+          </motion.div>
+        </div>
+      )}
     </main>
   );
 }
