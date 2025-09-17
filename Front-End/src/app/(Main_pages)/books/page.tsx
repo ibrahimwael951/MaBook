@@ -76,7 +76,11 @@ function Home() {
       setError(null);
 
       try {
-        const result: GoogleBooksResponse = await searchBooks(q, PAGE_SIZE, startIndex);
+        const result: GoogleBooksResponse = await searchBooks(
+          q,
+          PAGE_SIZE,
+          startIndex
+        );
         const items = result.items || [];
 
         let uniqueNewCount = 0;
@@ -209,7 +213,7 @@ function Home() {
               </h3>
               <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
                 Search for your favorite books, authors, or explore new genres.
-                We'll help you find exactly what you're looking for.
+                We’ll help you find exactly what you’re looking for.
               </p>
               <div className="flex flex-wrap justify-center gap-2">
                 {CATEGORIES.map((cat) => (
@@ -250,7 +254,8 @@ function Home() {
               No results found
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
-              Try a different search term, check your spelling, or use related keywords.
+              Try a different search term, check your spelling, or use related
+              keywords.
             </p>
           </motion.div>
         )}

@@ -40,7 +40,7 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
   const text = book?.volumeInfo.description || "";
   const descriptionLang = useDetectLanguage(text);
 
-  function ProtectLinks(item: String) {
+  function ProtectLinks(item: string) {
     return user ? item : "/login";
   }
 
