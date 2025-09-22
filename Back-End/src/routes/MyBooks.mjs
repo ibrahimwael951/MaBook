@@ -81,7 +81,7 @@ router.patch(
           .json({ message: "You are not allowed to update this book" });
       }
 
-      const { progress } = req.body;
+      const { progress, rate } = req.body;
 
       if (progress) {
         if (typeof progress.percentage !== "undefined") {
@@ -89,6 +89,12 @@ router.patch(
         }
         if (typeof progress.currentPage !== "undefined") {
           book.progress.currentPage = progress.currentPage;
+        }
+        if (typeof rate.mood !== "undefined") {
+          book.rate.mood = rate.mood;
+        }
+        if (typeof rate.comment !== "undefined") {
+          book.rate.comment = rate.comment;
         }
         book.progress.lastUpdated = new Date();
       }

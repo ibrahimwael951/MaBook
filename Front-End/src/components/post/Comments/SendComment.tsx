@@ -5,9 +5,10 @@ import { toast } from "sonner";
 
 interface Props {
   PostId: string;
+  onSuccess: () => void;
 }
 
-const SendComment: React.FC<Props> = ({ PostId }) => {
+const SendComment: React.FC<Props> = ({ PostId , onSuccess }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [Text, setText] = useState<string>("");
@@ -42,6 +43,7 @@ const SendComment: React.FC<Props> = ({ PostId }) => {
       .then(() => {
         setSuccess(true);
         setText("");
+        onSuccess();
       })
       .catch((err) =>
         toast(`Error :${err.message}`, {
@@ -68,7 +70,7 @@ const SendComment: React.FC<Props> = ({ PostId }) => {
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault(); // Reload disabled
+        e.preventDefault();
         SendMessage();
       }}
       className="mb-5 space-y-3"

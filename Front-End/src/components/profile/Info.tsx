@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import AnimatedImage from "../ui/AnimatedImage";
+import { SimpleAnimatedImage } from "../ui/AnimatedImage";
 import { AccountAge } from "@/hooks/AccountAge";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,20 +19,38 @@ const Info: React.FC<InfoProps> = (props) => {
   const { user, loading } = useAuth();
   const isItMe = user?.username === props.username;
 
+  const [Avatar, setAvatar] = useState<string>("");
+  useEffect(() => {
+    if (loading) return;
+    const IsItHalal = props.gender === user?.gender ? true : false;
+
+    const HalalMode =
+      props.gender === "male"
+        ? "/Avatars/Normal_men.jpg"
+        : "/Avatars/Blonde_Girl .jpg";
+
+    const Halal = props.avatar ? props.avatar : HalalMode;
+
+    if (IsItHalal) {
+      setAvatar(Halal);
+    } else {
+      setAvatar(HalalMode);
+    }
+  }, [loading, user, props]);
+
   if (loading) return <Loading />;
   return (
     <section>
       <div className="relative flex flex-col sm:flex-row gap-5 justify-center items-center sm:items-start text-center sm:text-start">
         <div className="flex flex-col justify-center items-center gap-5">
-          <AnimatedImage
-            src={
-              props.gender === "male"
-                ? "/Avatars/Normal_men.jpg"
-                : "/Avatars/Blonde_Girl .jpg"
-            }
+          <div title={props.gender === user?.gender ?"": `You cant See ${props.gender} Picture `}>
+          <SimpleAnimatedImage
+            src={Avatar}
             alt={`${props.fullName}Avatar`}
-            className="rounded-full max-w-40 "
+            className="rounded-full w-40 h-40 "
+            
           />
+          </div>
           <motion.div
             {...FadeLeft}
             {...Animate}

@@ -10,7 +10,7 @@ import UserPosts from "@/components/profile/UserPosts";
 import { SquareX } from "lucide-react";
 import { motion } from "framer-motion";
 import { Animate, FadeUp } from "@/animation";
-import api from "@/lib/axios"; // axios instance
+import api from "@/lib/axios"; 
 
 export default function Page() {
   const { username } = useParams<{ username: string }>();

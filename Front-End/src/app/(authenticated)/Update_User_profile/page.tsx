@@ -1,4 +1,5 @@
 "use client";
+
 import React, {
   useState,
   ChangeEvent,
@@ -11,8 +12,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Update } from "@/types/Auth";
 import Loading from "@/components/Loading";
 import { Animate, FadeUp } from "@/animation";
-import Image from "next/image";
+
 import { toast } from "sonner";
+import Update_Avatar from "@/components/profile/Update_Avatar";
 
 export default function Page() {
   const { user, updateUser } = useAuth();
@@ -20,14 +22,11 @@ export default function Page() {
     bio: "",
     lastName: "",
     firstName: "",
-    avatar: "",
   });
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const initialized = useRef(false);
 
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof Update, string>>
@@ -36,26 +35,24 @@ export default function Page() {
 
   const nameRegex = /^[a-zA-Z]+$/;
 
-  // load user once
   useEffect(() => {
-    if (user && !initialized.current) {
+    if (user) {
       setFormData({
         bio: user.bio ?? "",
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
-        avatar: user.avatar ?? "",
       });
+
       setIsLoading(false);
-      initialized.current = true;
     }
   }, [user]);
 
-  // validate helper
   const validate = (): Partial<Record<keyof Update, string>> => {
     const errors: Partial<Record<keyof Update, string>> = {};
 
     const fname = formData.firstName?.trim() ?? "";
     const lname = formData.lastName?.trim() ?? "";
+    const Bio = formData.bio?.trim() ?? "";
 
     if (fname.length < 2 || fname.length > 10) {
       errors.firstName = "First name must be between 2 and 10 characters.";
@@ -67,6 +64,10 @@ export default function Page() {
       errors.lastName = "Last name must be between 2 and 10 characters.";
     } else if (!nameRegex.test(lname)) {
       errors.lastName = "Last Name must contain only English letters.";
+    }
+
+    if (Bio.length < 10) {
+      errors.bio = "Bio must be at least 10 characters.";
     }
 
     return errors;
@@ -93,7 +94,7 @@ export default function Page() {
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [normalizedField, currentField, validate]);
+  }, [normalizedField, currentField]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -104,17 +105,6 @@ export default function Page() {
     setError(null);
   };
 
-  const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, avatar: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -123,17 +113,42 @@ export default function Page() {
     const errors = validate();
     if (Object.keys(errors).length) {
       setFieldErrors(errors);
+      toast(`${errors.firstName || errors.lastName || errors.bio}`, {
+        classNames: {
+          toast:
+            "!bg-yellow-600 !text-white rounded-xl border border-yellow-700",
+        },
+        closeButton: true,
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const payload: Partial<Update> = {};
+    (Object.keys(formData) as (keyof Update)[]).forEach((key) => {
+      if (formData[key] !== user?.[key]) {
+        payload[key] = formData[key];
+      }
+    });
+
+    if (Object.keys(payload).length === 0) {
+      toast("No changes detected, nothing to update.", {
+        classNames: {
+          toast:
+            "!bg-yellow-600 !text-white rounded-xl border border-yellow-700",
+        },
+      });
       setIsSubmitting(false);
       return;
     }
 
     try {
-      await updateUser(formData);
+      await updateUser(payload);
 
       toast(`Profile updated successfully!`, {
         classNames: {
-          toast: "!bg-green-600 !text-white rounded-xl border border-red-700",
-          actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+          toast: "!bg-green-600 !text-white rounded-xl border border-green-700",
+          actionButton: "bg-white text-green-600 px-2 py-1 rounded-md",
         },
         action: {
           label: "OK",
@@ -141,9 +156,13 @@ export default function Page() {
         },
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update user");
-      toast(`Failed to update Profile ${error}`, {
-        description: "Check Types under inputs or refresh page ",
+      const message =
+        err instanceof Error ? err.message : "Failed to update user";
+
+      setError(message);
+
+      toast(`Failed to update Profile`, {
+        description: "Check Types under inputs or refresh page",
         classNames: {
           toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
           description: "!text-white text-sm opacity-90",
@@ -163,6 +182,25 @@ export default function Page() {
   const handleBlur = () => setCurrentField(null);
 
   if (isLoading) return <Loading />;
+  // if (isSubmitting) {
+  //   return (
+  //     <section className="min-h-screen flex flex-col justify-center items-center gap-5">
+  //       <motion.div
+  //         {...Animate}
+  //         {...opacity}
+  //         className="inline-block animate-spin rounded-full h-40 w-40 border-b-2  border-third dark:border-primary"
+  //       />
+  //       <AnimatePresence mode="wait">
+  //         {TookLonger && (
+  //           <motion.div key={TookLonger} {...Animate} {...opacity}>
+  //             {TookLonger}
+  //           </motion.div>
+  //         )}
+  //       </AnimatePresence>
+  //     </section>
+  //   );
+  // }
+
   return (
     <section className="mt-20  max-w-xl mx-auto p-6 rounded-lg shadow-md">
       <motion.h2
@@ -173,6 +211,7 @@ export default function Page() {
         Update Your <span> Profile </span>
       </motion.h2>
 
+    <Update_Avatar/>
       <form onSubmit={handleSubmit} noValidate>
         <motion.div
           {...FadeUp}
@@ -253,39 +292,6 @@ export default function Page() {
           />
         </motion.div>
 
-        <motion.div
-          {...FadeUp}
-          animate={{
-            ...Animate.animatenly,
-            transition: { ...Animate.transition, delay: 0.4 },
-          }}
-          className="mb-4"
-        >
-          <label className="defaultLabel" htmlFor="avatar">
-            Avatar
-          </label>
-          <input
-            type="file"
-            id="avatar"
-            name="avatar"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className="defaultInput"
-          />
-          {formData.avatar && (
-            <div className="mt-2">
-              <Image
-                src={formData.avatar as string}
-                alt="Preview"
-                width={200}
-                height={200}
-                unoptimized
-                className="h-20 w-20 rounded-full object-cover"
-              />
-            </div>
-          )}
-        </motion.div>
-
         <motion.button
           {...FadeUp}
           animate={{
@@ -300,6 +306,9 @@ export default function Page() {
         >
           {isSubmitting ? "Updating..." : "Update Profile"}
         </motion.button>
+
+        {/* show general error */}
+        {error && <p className="mt-2 !text-red-600 text-sm">{error}</p>}
       </form>
     </section>
   );

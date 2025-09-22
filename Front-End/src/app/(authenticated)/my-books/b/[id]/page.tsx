@@ -1,13 +1,13 @@
 "use client";
 import { Animate, FadeLeft, FadeRight } from "@/animation";
 import Loading from "@/components/Loading";
+import { SimpleAnimatedImage } from "@/components/ui/AnimatedImage";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/axios";
 import { googleBooksApi } from "@/lib/googleBooks";
 import { MyBooks } from "@/types/Auth";
 import { Book } from "@/types/Books";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -215,25 +215,15 @@ export default function Page() {
 
   return (
     <section className="max-w-4xl min-h-screen mt-32 mx-auto flex flex-col lg:flex-row gap-5 justify-center items-start px-4 pb-10">
-      <motion.div {...Animate} {...FadeLeft} className="w-full lg:w-2/4 ">
-        {bookImage ? (
-          <Image
-            src={bookImage}
-            alt={`Cover of ${title}`}
-            width={300}
-            height={400}
-            draggable={false}
-            className="rounded-lg shadow-md max-w-full h-auto mx-auto"
-            priority
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Responsive sizes
-            placeholder="blur"
-            blurDataURL="/placeholder-book.webp"
-          />
-        ) : (
-          <div className="w-64 h-96 bg-gray-200 rounded-lg flex items-center justify-center mx-auto">
-            <span className="text-sm">No Cover Available</span>
-          </div>
-        )}
+      <motion.div {...Animate} {...FadeLeft} className="w-full lg:w-2/4  ">
+        <SimpleAnimatedImage
+          src={bookImage.replace("http://", "https://")}
+          alt={`Cover of ${title}`}
+          width={300}
+          height={400}
+          noAnimate={false}
+          className="rounded-lg max-w-full h-auto mx-auto shadow shadow-third dark:shadow-primary"
+        />
       </motion.div>
 
       <div className="w-full lg:w-2/4 space-y-6">

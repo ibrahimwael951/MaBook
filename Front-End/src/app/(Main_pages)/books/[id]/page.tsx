@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Book } from "@/types/Books";
 import {
   Star,
@@ -24,6 +23,7 @@ import Link from "next/link";
 import { Animate, FadeLeft, FadeRight } from "@/animation";
 import { useDetectLanguage } from "@/hooks/Language";
 import { useAuth } from "@/contexts/AuthContext";
+import { SimpleAnimatedImage } from "@/components/ui/AnimatedImage";
 
 interface BookDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -153,17 +153,12 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
               <div className="relative group">
                 <div className="relative">
                   <div className="absolute rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
-                  <Image
+                  <SimpleAnimatedImage
                     src={bookImage}
                     alt={`Cover of ${title}`}
                     width={1000}
                     height={1000}
-                    draggable={false}
-                    quality={85}
-                    priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    placeholder="blur"
-                    blurDataURL="/placeholder-book.webp"
+                    noAnimate={false}
                     className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
@@ -401,7 +396,7 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
             </h3>
             <div className="leading-relaxed">
               <div
-                className="!text-white text-xl"
+                className="!text-third dark:!text-primary text-xl"
                 dir={descriptionLang === "ar" ? "rtl" : "ltr"}
                 dangerouslySetInnerHTML={{
                   __html: description,

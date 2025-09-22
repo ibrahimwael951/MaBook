@@ -91,10 +91,9 @@ export interface RegisterCredentials {
   password: string;
 }
 export interface Update {
-  bio: string;
-  lastName: string;
-  firstName: string;
-  avatar?: string;
+  bio?: string;
+  lastName?: string;
+  firstName?: string;
 }
 export interface LoginCredentials {
   usernameOrEmail: string;

@@ -3,7 +3,7 @@ import React from "react";
 import { HowTOSaveIt } from "@/data/CommunityFeatures";
 import { FadeLeft, ViewPort } from "@/animation";
 import { motion } from "framer-motion";
-import AnimatedImage from "../ui/AnimatedImage";
+import { AnimatedImage } from "../ui/AnimatedImage";
 const CommunitySafe = () => {
   return (
     <section className="">

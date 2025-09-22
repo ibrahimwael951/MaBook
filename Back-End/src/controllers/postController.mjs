@@ -7,8 +7,8 @@ import {
 
 export const createPost = async (userData, postData, file) => {
   const hasText = postData.description?.trim().length > 0;
-  if (!hasText && !file) {
-    throw new Error("Post requires text or image");
+  if (!hasText || !file) {
+    throw new Error("Post requires text and image");
   }
 
   const image = file ? await handleImageUpload(file) : null;

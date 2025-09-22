@@ -4,6 +4,8 @@ import { checkSchema, matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../util/Hashing.mjs";
 import passport from "passport";
 import { user } from "../mongoose/schema/UserAuth.mjs";
+import { UpdateUserAvatar } from "../controllers/User_Avatar.mjs";
+import multer from "multer";
 
 const router = Router();
 
@@ -81,35 +83,51 @@ router.post("/api/auth/login", (req, res, next) => {
   })(req, res, next);
 });
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
+
 router.patch(
   "/api/auth/update",
+  upload.single("image"),
   passport.authenticate("session"),
   checkSchema(UpDateUserData),
   async (req, res) => {
     try {
       const result = validationResult(req);
       if (!result.isEmpty()) {
-        return res.status(400).json({
-          error: result.array(),
-        });
+        return res.status(400).json({ error: result.array() });
       }
+
       const data = matchedData(req);
+
       if (data.password) {
         return res.status(400).json({
-          error: "password cannot be updated here",
+          error: "Password cannot be updated here",
         });
       }
+
+      const updateFields = {
+        ...data,
+      };
+
+      if (data.firstName || data.lastName) {
+        updateFields.fullName = `${data.firstName || req.user.firstName} ${
+          data.lastName || req.user.lastName
+        }`;
+      }
+
       const updateUser = await user.findByIdAndUpdate(
         req.user._id,
-        { $set: data, fullName: `${data.firstName} ${data.lastName}` },
+        { $set: updateFields },
         { new: true, runValidators: true }
       );
 
       if (!updateUser) {
-        return res.status(400).json({
-          error: "User not Found",
-        });
+        return res.status(404).json({ error: "User not found" });
       }
+
       const safeUser = updateUser.toObject();
       delete safeUser.password;
       delete safeUser.__v;
@@ -120,6 +138,46 @@ router.patch(
       return res.status(500).json({
         message: "Update Error",
         error: err.message,
+      });
+    }
+  }
+);
+
+router.patch(
+  "/api/auth/update/avatar",
+  // NOTE: make sure this matches the <input name="avatar" /> from your client.
+  upload.single("avatar"),
+  passport.authenticate("session"),
+  async (req, res) => {
+    try {
+ 
+      if (!req.user) {
+        return res.status(401).json({ message: "Unauthenticated" });
+      }
+
+ 
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      if (!req.file.mimetype?.startsWith?.("image/")) {
+        return res
+          .status(400)
+          .json({ message: "Uploaded file is not an image" });
+      }
+
+      const updatedUser = await UpdateUserAvatar(req.user._id, req.file);
+
+      req.safeUser = updatedUser;
+
+      return res.status(200).json({
+        message: "Updated successfully",
+        user: updatedUser,
+      });
+    } catch (err) {
+      const status = err?.status || 500;
+      return res.status(status).json({
+        message: err?.message || "Failed to update avatar",
       });
     }
   }

@@ -1,5 +1,5 @@
 "use client";
-import Community from "@/components/Community";
+import Community from "@/components/community/Community";
 import Futures from "@/components/Features";
 import Hero from "@/components/Hero";
 import Loading from "@/components/Loading";

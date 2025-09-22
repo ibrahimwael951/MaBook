@@ -8,6 +8,7 @@ import { Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import Loading from "@/components/Loading";
+import Link from "next/link";
 
 interface Props {
   PostId: string;
@@ -27,8 +28,27 @@ const Comment: React.FC<Props> = ({ PostId }) => {
   };
 
   useEffect(() => {
+    if (!PostId) return;
+
+    let attemptCount = 0;
+    const maxAttempts = 3;
+    const intervalTime = 15000;
+
+    setLoading(true);
     fetchComments();
-  }, []);
+    attemptCount += 1;
+
+    const intervalId = setInterval(() => {
+      if (attemptCount < maxAttempts) {
+        fetchComments();
+        attemptCount += 1;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, intervalTime);
+
+    return () => clearInterval(intervalId);
+  }, [PostId]);
 
   if (loading) return <Loading />;
   if (error) return <div className="text-red-600">{error}</div>;
@@ -37,7 +57,7 @@ const Comment: React.FC<Props> = ({ PostId }) => {
     <section id="Comments" className="relative w-fit max-w-3xl min-h-96 pt-24">
       <h1 className="text-5xl lg:text-6xl font-semibold mb-10">Comments</h1>
       <div className="my-10 ">
-        <SendComment PostId={PostId} />
+        <SendComment onSuccess={fetchComments} PostId={PostId} />
       </div>
       {comments.length === 0 ? (
         <p className="min-h-52 w-full text-center text-2xl">
@@ -65,22 +85,27 @@ const CommentCard = ({ item }: { item: Comments }) => {
     setLoading(true);
     api
       .delete(`/api/Comments/${id}`)
-      .then(() => setDeleted(true))
+      .then(() => {
+        setDeleted(true),
+          toast.success("Deleted successfully", {
+            classNames: { toast: "!bg-green-600 !text-white" },
+          });
+      })
       .catch((err) => toast(`error :${err.message}`))
       .finally(() => setLoading(false));
   };
   if (Deleted) return null;
   return (
-    <div className="relative p-5 rounded-2xl border border-secondary w-full flex items-center justify-between">
+    <div className="relative p-5 rounded-2xl border border-secondary w-full flex items-center justify-between overflow-hidden">
       <div className="space-y-5">
-        <h1 className="text-2xl">{item.author}</h1>
+        <Link href={`/profile/${item.author}`} className="text-2xl">{item.author}</Link>
         <h1 className="text-3xl">{item.text}</h1>
       </div>
       <div>
         {item.author === user?.username && (
           <button
             onClick={() => deleteComment(item._id)}
-            className="absolute w-10 h-10 top-0 right-0 bg-red-600 text-white p-2 rounded"
+            className="absolute w-10 h-10 top-0 right-0 bg-red-600 text-white p-2 rounded-bl-2xl"
           >
             {loading ? (
               <div className="inline-block animate-spin rounded-full h-full w-full border-b-2  border-third dark:border-primary"></div>

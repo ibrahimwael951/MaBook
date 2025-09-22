@@ -3,8 +3,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FadeLeft, ViewPort } from "@/animation";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import AnimatedImage from "./ui/AnimatedImage";
+import { Button } from "../ui/button";
+import { AnimatedImage } from "../ui/AnimatedImage";
 const Community = () => {
   return (
     <section className="flex flex-col lg:flex-row items-center justify-evenly gap-10">

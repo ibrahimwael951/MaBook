@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import AnimatedImage from "../ui/AnimatedImage";
+import { AnimatedImage } from "../ui/AnimatedImage";
 import { motion } from "framer-motion";
 import { Animate, FadeLeft, FadeRight, FadeUp } from "@/animation";
 import { useIsMobile } from "@/hooks/useIsMobile";

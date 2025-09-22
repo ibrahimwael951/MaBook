@@ -157,7 +157,6 @@ const upload = multer({
 router.post(
   "/api/post",
   passport.authenticate("session"),
-
   upload.single("image"),
   checkSchema(PostSchema),
   async (req, res) => {

@@ -1,11 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
 import { Book } from "@/types/Books";
-import Image from "next/image";
 import { opacity, ViewPort } from "@/animation";
 import { Star } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { SimpleAnimatedImage } from "../ui/AnimatedImage";
 
 interface BookCardProps {
   book: Book;
@@ -13,8 +12,9 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { volumeInfo } = book;
-  const img = book.volumeInfo.imageLinks?.smallThumbnail;
-  const [imgSrc, setImgSrc] = useState(img || "/No image found.png");
+  const img =
+    book.volumeInfo.imageLinks?.smallThumbnail || "/No image found.png";
+
   return (
     <Link href={`/books/${book.id}`}>
       <motion.div
@@ -30,17 +30,11 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
       >
         <div className="flex-shrink-0">
           <div className="relative  h-full w-fit">
-            <Image
-              src={imgSrc}
+            <SimpleAnimatedImage
+              src={img.replace("http://", "https://")}
               alt={volumeInfo.title || "image without title"}
-              width={1000}
-              height={1000}
-              draggable={false}
-              placeholder="blur"
-              blurDataURL="/placeholder-book.webp"
+              noAnimate
               className="rounded object-cover h-full w-32"
-              priority={false}
-              onError={() => setImgSrc("/No image found.png")}
             />
           </div>
         </div>

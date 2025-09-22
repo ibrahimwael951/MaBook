@@ -212,7 +212,7 @@ export default function UpdatePostPage() {
     <section className="mt-20  flex justify-center items-center p-6">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-full max-w-md p-6 rounded-lg shadow"
+        className="flex flex-col gap-4 w-full max-w-2xl p-6 rounded-lg shadow"
       >
         <motion.h1 {...FadeUp} {...Animate} className="text-3xl font-bold">
           Update <span> Post</span>
@@ -281,7 +281,7 @@ export default function UpdatePostPage() {
               }}
               src={preview}
               alt="Preview"
-              className="w-full h-48 object-cover rounded-md border"
+              className="w-full  object-contain rounded-md border"
             />
           )}
         </AnimatePresence>

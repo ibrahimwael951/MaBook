@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FadeLeft, FadeUp, ViewPort } from "@/animation";
 import { features } from "@/data/Features";
-import AnimatedImage from "./ui/AnimatedImage";
+import {AnimatedImage} from "./ui/AnimatedImage";
 const Features = () => {
   return (
     <section className=" mb-20    ">

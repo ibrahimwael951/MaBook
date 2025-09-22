@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FadeLeft, FadeUp, ViewPort } from "@/animation";
-import AnimatedImage from "../ui/AnimatedImage";
+import { AnimatedImage } from "../ui/AnimatedImage";
 const Why_MaBook = () => {
   return (
     <section className="flex flex-col-reverse md:flex-row gap-10 items-center lg:gap-5 overflow-x-hidden ">

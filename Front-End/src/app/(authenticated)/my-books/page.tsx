@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import AnimatedImage from "@/components/ui/AnimatedImage";
+import {AnimatedImage} from "@/components/ui/AnimatedImage";
 import { Plus } from "lucide-react";
 import { Animate, FadeLeft, opacity } from "@/animation";
 

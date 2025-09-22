@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import AnimatedImage from "../ui/AnimatedImage";
+import { AnimatedImage } from "../ui/AnimatedImage";
 import { FadeLeft, ViewPort } from "@/animation";
 import { Features } from "@/data/CommunityFeatures";
 

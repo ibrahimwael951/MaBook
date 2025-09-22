@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Animate, FadeLeft } from "@/animation";
-import AnimatedImage from "../ui/AnimatedImage";
+import { AnimatedImage } from "../ui/AnimatedImage";
 
 const Hero = () => {
   return (

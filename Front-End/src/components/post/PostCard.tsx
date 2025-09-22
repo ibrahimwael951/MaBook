@@ -18,6 +18,7 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { useDetectLanguage } from "@/hooks/Language";
+import { SimpleAnimatedImage } from "../ui/AnimatedImage";
 
 const MotionLink = motion.create(Link);
 
@@ -317,7 +318,7 @@ const PostCard: React.FC<props> = ({ post }) => {
               }}
               src={post.image.url}
               alt="post image"
-              className=" w-full  h-96 object-cover rounded-2xl"
+              className="w-full max-w-[650px]  max-h-[650px] object-cover aspect-square rounded-2xl"
             />
           </div>
         )}
@@ -353,17 +354,18 @@ const PostCard: React.FC<props> = ({ post }) => {
               className="absolute top-0 left-0 w-full h-full bg-black opacity-70 -z-10"
               onClick={() => setShowImage(false)}
             />
-            <div>
+            <div className="py-20">
               <button
                 className="absolute top-20 right-5 lg:right-20 rounded-2xl bg-primary text-third p-2  "
                 onClick={() => setShowImage(false)}
               >
                 <X size={50} />
               </button>
-              <img
+              <SimpleAnimatedImage
                 src={post.image.url}
                 alt="post image"
-                className=" w-full max-w-3xl h-auto object-contain border rounded-2xl"
+                noAnimate={false}
+                className=" w-full max-w-3xl h-auto max-h-[90vh] object-contain border rounded-2xl"
               />
             </div>
           </motion.div>

@@ -10,7 +10,6 @@ import { FileX2, Hourglass } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AccountAge } from "@/hooks/AccountAge";
 import Link from "next/link";
-import Image from "next/image";
 
 const MotionButton = motion(Button);
 
@@ -133,7 +132,7 @@ function PostPage({ posts }: PostPageProps) {
       </div>
     );
   const MotionLink = motion.create(Link);
-  const MotionImage = motion.create(Image);
+
   return (
     <div className="w-full grid gap-2 sm:grid-cols-2 lg:grid-cols-3  2xl:grid-cols-4 ">
       {posts.map((item) => (
@@ -145,19 +144,15 @@ function PostPage({ posts }: PostPageProps) {
           href={`/posts/${item._id}`}
           className={`relative text-2xl  border border-secondaryHigh rounded-2xl bg-secondary text-white min-h-52 overflow-hidden cursor-pointer`}
         >
-          {item.image?.url && (
-            <MotionImage
-              transition={{ duration: 0.2 }}
-              whileHover={{ scale: 1.2 }}
-              src={item.image.url}
-              alt={`image - ${item.description}`}
-              width={200}
-              height={200}
-              unoptimized
-              className="w-full h-72 object-cover rounded-2xl "
-            />
-          )}
-
+          <motion.img
+            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.2 }}
+            src={item.image.url || "/No image found.png"}
+            alt={`image - ${item.description}`}
+            width={200}
+            height={200}
+            className="w-full h-72 object-cover rounded-2xl "
+          />
           <p className="text-xs absolute bottom-0 right-0 bg-secondary !text-white p-2 rounded-tl-2xl ">
             {AccountAge(item.createdAt)}
           </p>

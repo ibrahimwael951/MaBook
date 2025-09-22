@@ -21,42 +21,49 @@ export default function Page() {
 
   useEffect(() => {
     if (!id) return;
+
+    let attemptCount = 0;
+    const maxAttempts = 3;
+    const intervalTime = 15000;
+
+    const fetchPost = () => {
+      api
+        .get(`/api/post/${id}`)
+        .then((res) => {
+          setPost(res.data);
+        })
+        .catch((err) => {
+          const errorMessage =
+            err instanceof Error ? err.message : "Unknown error";
+          toast(`Load Failed`, {
+            description: `Try again later: ${errorMessage}`,
+            classNames: {
+              toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
+              description: "!text-white text-sm opacity-90",
+              actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
+            },
+            action: {
+              label: "OK",
+              onClick: () => console.log("OK"),
+            },
+          });
+        })
+        .finally(() => setLoading(false));
+    };
     setLoading(true);
-    api
-      .get(`/api/post/${id}`)
-      .then((res) => {
-        setPost(res.data);
-      })
-      .catch((err) => {
-        if (err instanceof Error) {
-          toast(`Load Failed`, {
-            description: `Try again letter  : ${err.message} `,
-            classNames: {
-              toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
-              description: "!text-white text-sm opacity-90",
-              actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
-            },
-            action: {
-              label: "OK",
-              onClick: () => console.log("OK"),
-            },
-          });
-        } else {
-          toast(`Load Failed`, {
-            description: `Try again letter  :Unknown error   `,
-            classNames: {
-              toast: "!bg-red-600 !text-white rounded-xl border border-red-700",
-              description: "!text-white text-sm opacity-90",
-              actionButton: "bg-white text-red-600 px-2 py-1 rounded-md",
-            },
-            action: {
-              label: "OK",
-              onClick: () => console.log("OK"),
-            },
-          });
-        }
-      })
-      .finally(() => setLoading(false));
+    fetchPost();
+    attemptCount += 1;
+
+    const intervalId = setInterval(() => {
+      if (attemptCount < maxAttempts) {
+        fetchPost();
+        attemptCount += 1;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, intervalTime);
+
+    return () => clearInterval(intervalId);
   }, [id]);
 
   if (loading) return <Loading />;
@@ -64,7 +71,7 @@ export default function Page() {
   return (
     <section className="min-h-screen mt-28 py-5 flex flex-col items-center justify-center  ">
       <PostCard post={post} />
-      <Comment   PostId={post._id} />
+      <Comment PostId={post._id} />
     </section>
   );
 }

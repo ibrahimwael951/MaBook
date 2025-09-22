@@ -1,16 +1,11 @@
 import multer from "multer";
-import cloudinary from "./Cloudinary.mjs";
+ 
 import streamifier from "streamifier";
 
 const storage = multer.memoryStorage();
 export const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-  fileFilter: (req, file, cb) => {
-    if (/^image\/(jpe?g|png|webp|gif)$/i.test(file.mimetype))
-      return cb(null, true);
-    cb(new Error("Only image files are allowed"));
-  },
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
 
 export const uploadBufferToCloudinary = (
