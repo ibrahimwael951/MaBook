@@ -356,7 +356,7 @@ const PostCard: React.FC<props> = ({ post }) => {
             />
             <div className="py-20">
               <button
-                className="absolute top-20 right-5 lg:right-20 rounded-2xl bg-primary text-third p-2  "
+                className="absolute top-20 right-0 lg:right-20 rounded-2xl bg-primary text-third p-2 z-20  "
                 onClick={() => setShowImage(false)}
               >
                 <X size={50} />
@@ -365,7 +365,7 @@ const PostCard: React.FC<props> = ({ post }) => {
                 src={post.image.url}
                 alt="post image"
                 noAnimate={false}
-                className=" w-full max-w-3xl h-auto max-h-[90vh] object-contain border rounded-2xl"
+               className="max-h-[90vh] max-w-[90vw] object-contain rounded-2xl border"
               />
             </div>
           </motion.div>

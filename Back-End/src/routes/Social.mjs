@@ -9,7 +9,15 @@ router.get(
   getUserByUsername,
   async (req, res) => {
     const { findUser } = req;
-    return res.status(200).send(findUser);
+    const UserData = { ...findUser };
+    if (req.user.gender === UserData.gender) {
+      if (UserData.avatar.url) {
+        UserData.avatar = UserData.avatar.url;
+      }
+    } else {
+      UserData.avatar = null;
+    }
+    return res.status(200).send(UserData);
   }
 );
 

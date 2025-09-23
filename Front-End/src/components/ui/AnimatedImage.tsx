@@ -128,7 +128,7 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
       controls.start("visible");
     }
   }, [inView, controls]);
-  const image = src.replace("http://", "https://") || "/No image found.png";
+  const image = src;
   const imageProps = {
     src: image,
     alt,
@@ -152,7 +152,7 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
               className="absolute w-full h-full left-0 top-0 flex flex-col gap-5 justify-center items-center bg-primary dark:bg-third text-2xl"
             >
               <div className="w-20 h-20 inline-block animate-spin rounded-full border-b-2 border-third dark:border-primary"></div>
-              Loading...
+         
             </motion.div>
           )}
         </AnimatePresence>

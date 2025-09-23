@@ -5,50 +5,129 @@ import {
   handleImageUpload,
 } from "../middleware/imageHandler.mjs";
 
-export const UpdateUserAvatar = async (_id, file) => {
-  if (!_id) {
-    const err = new Error("Missing user id");
-    err.status = 400;
-    throw err;
-  }
+import {
+  deleteImage,
+  getPublicIdFromUrl,
+  replaceImageOverwrite,
+  uploadBuffer,
+} from "../config/Cloudinary.mjs";
 
-  if (!file) {
-    const err = new Error("No file provided");
-    err.status = 400;
-    throw err;
-  }
-
-  let imageUrl;
-  try {
-    const result = await handleImageUpload(file);
-
-    imageUrl = typeof result === "string" ? result : result?.url;
-  } catch (uploadErr) {
-    const err = new Error(
-      `Image upload failed: ${uploadErr?.message || uploadErr}`
-    );
-    err.status = 500;
-    throw err;
-  }
-
-  if (!imageUrl) {
-    const err = new Error("Image upload did not return a valid URL");
-    err.status = 500;
-    throw err;
-  }
-
-  const updated = await user
-    .findOneAndUpdate({ _id }, { $set: { avatar: imageUrl } }, { new: true })
-    .lean();
-
-  if (!updated) {
-    const err = new Error("User not found");
-    err.status = 404;
-    throw err;
-  }
-
-  delete updated.password;
-  delete updated.__v;
-
-  return updated;
+const _normalizeUploadResult = (result = {}) => {
+  return {
+    url: result.secure_url || result.url || null,
+    public_id: result.public_id || null,
+    width: result.width || null,
+    height: result.height || null,
+    bytes: result.bytes || null,
+    format: result.format || null,
+    resource_type: result.resource_type || null,
+    raw: result,
+  };
 };
+
+export const handleAvatarUpload = async (file) => {
+  if (!file || !file.buffer) return null;
+
+  try {
+    const result = await uploadBuffer(file.buffer, {
+      folder: "myapp/Users_Avatars",
+      resource_type: "auto",
+    });
+
+    return {
+      url: result.secure_url || result.url,
+      public_id: result.public_id,
+      width: result.width,
+      height: result.height,
+      bytes: result.bytes,
+      format: result.format,
+      resource_type: result.resource_type,
+    };
+  } catch (error) {
+    console.error("Image upload failed:", error);
+    throw new Error("Failed to upload image");
+  }
+};
+
+export const AvatarReplace = async ({
+  file,
+  publicId,
+  url,
+  method = "overwrite",
+  options = {},
+} = {}) => {
+  if (!file || !file.buffer)
+    throw new Error("file with buffer is required to replace image");
+
+  if (!publicId) {
+    publicId = getPublicIdFromUrl(url);
+  }
+
+  try {
+    let uploadResult;
+
+    if (publicId) {
+      if (method === "deleteThenUpload") {
+        uploadResult = await replaceImageDeleteThenUpload(
+          file.buffer,
+          publicId,
+          {
+            resource_type: "auto",
+            invalidate: true,
+            folder: "myapp/Users_Avatars",
+            ...options,
+          }
+        );
+      } else {
+        uploadResult = await replaceImageOverwrite(file.buffer, publicId, {
+          resource_type: "auto",
+          overwrite: true,
+          invalidate: true,
+          folder: "myapp/Users_Avatars",
+          ...options,
+        });
+      }
+    } else {
+      uploadResult = await uploadBuffer(file.buffer, {
+        resource_type: "auto",
+        folder: "myapp/Users_Avatars",
+        ...options,
+      });
+    }
+
+    return _normalizeUploadResult(uploadResult);
+  } catch (error) {
+    console.error("Image replace failed:", error);
+    throw new Error("Failed to replace image");
+  }
+};
+
+
+
+
+
+
+
+export const handleAvatarRemove = async ({
+  publicId,
+  url,
+  options = { resource_type: "image" },
+} = {}) => {
+  if (!publicId && !url)
+    throw new Error("publicId or url is required to delete image");
+
+  if (!publicId && url && typeof getPublicIdFromUrl === "function") {
+    publicId = getPublicIdFromUrl(url);
+  }
+
+  if (!publicId) throw new Error("Could not determine public_id from url");
+
+  try {
+    const result = await deleteImage(publicId, options);
+    return result;
+  } catch (error) {
+    console.error("Image delete failed:", error);
+    throw new Error("Failed to delete image");
+  }
+};
+

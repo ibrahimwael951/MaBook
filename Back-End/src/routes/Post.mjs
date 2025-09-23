@@ -80,13 +80,17 @@ router.get("/api/posts", passport.authenticate("session"), async (req, res) => {
           postId: p._id,
         });
         const IsLiked = Liked ? true : false;
+        const AvatarImage =
+          req.user.gender === Author.gender
+            ? Author.avatar.url ?? Author.avatar
+            : null;
         return {
           ...p,
           author: {
             username: Author.username,
             fullName: Author.fullName,
             gender: Author.gender,
-            avatar: Author.avatar,
+            avatar: AvatarImage,
           },
           Liked: IsLiked,
           LikesCount,
@@ -120,6 +124,11 @@ router.get("/api/post/:id", async (req, res) => {
     const comments = await PostComments.find({ postId: id }).lean();
     const commentsCount = comments.length;
     const userId = req.user._id;
+    const AvatarImage =
+      req.user.gender === Author.gender
+        ? Author.avatar.url ?? Author.avatar
+        : null;
+
     const Liked = await Likes.findOne({
       postId: post._id,
       userId,
@@ -134,7 +143,7 @@ router.get("/api/post/:id", async (req, res) => {
         username: Author.username,
         fullName: Author.fullName,
         gender: Author.gender,
-        avatar: Author.avatar,
+        avatar: AvatarImage,
       },
       Liked: IsLiked,
       LikesCount,

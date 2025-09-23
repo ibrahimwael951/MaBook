@@ -35,7 +35,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
   avatar: {
-    type: String,
+    url: String,
+    public_id: String,
+    width: Number,
+    height: Number,
+    resource_type: String,
   },
   gender: {
     required: true,

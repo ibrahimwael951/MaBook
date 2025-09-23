@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Update } from "@/types/Auth";
@@ -211,7 +205,7 @@ export default function Page() {
         Update Your <span> Profile </span>
       </motion.h2>
 
-    <Update_Avatar/>
+      <Update_Avatar />
       <form onSubmit={handleSubmit} noValidate>
         <motion.div
           {...FadeUp}

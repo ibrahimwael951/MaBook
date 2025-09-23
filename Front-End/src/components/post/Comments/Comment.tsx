@@ -86,10 +86,10 @@ const CommentCard = ({ item }: { item: Comments }) => {
     api
       .delete(`/api/Comments/${id}`)
       .then(() => {
-        setDeleted(true),
-          toast.success("Deleted successfully", {
-            classNames: { toast: "!bg-green-600 !text-white" },
-          });
+        setDeleted(true);
+        toast.success("Deleted successfully", {
+          classNames: { toast: "!bg-green-600 !text-white" },
+        });
       })
       .catch((err) => toast(`error :${err.message}`))
       .finally(() => setLoading(false));
@@ -98,7 +98,9 @@ const CommentCard = ({ item }: { item: Comments }) => {
   return (
     <div className="relative p-5 rounded-2xl border border-secondary w-full flex items-center justify-between overflow-hidden">
       <div className="space-y-5">
-        <Link href={`/profile/${item.author}`} className="text-2xl">{item.author}</Link>
+        <Link href={`/profile/${item.author}`} className="text-2xl">
+          {item.author}
+        </Link>
         <h1 className="text-3xl">{item.text}</h1>
       </div>
       <div>
