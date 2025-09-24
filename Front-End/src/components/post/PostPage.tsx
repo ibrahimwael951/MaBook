@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Post } from "@/types/Auth";
 import api from "@/lib/axios";
-import PostCard from "./PostCard";
+import PostCard from "./postCard/PostCard";
 import Loading from "../Loading";
 
 const PostPage = () => {

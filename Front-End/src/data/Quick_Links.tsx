@@ -1,6 +1,7 @@
 import {
   Book,
   BookmarkCheck,
+  CirclePlus,
   Cog,
   Contact,
   Facebook,
@@ -11,7 +12,7 @@ import {
   Instagram,
   LucideIcon,
   NotebookTabs,
-  Podcast,
+  Tv,
   UsersRound,
   Youtube,
 } from "lucide-react";
@@ -35,10 +36,10 @@ export const Navbar: DefaultLinks[] = [
   { title: "Contact", href: "/contact", icon: Contact },
 ];
 export const Navbar_Logged_In: DefaultLinks[] = [
-  { title: "Home", href: "/", icon: Home },
-  { title: "Blogs", href: "/blogs", icon: Info },
+  { title: "Explore", href: "/", icon: Home },
+  { title: "Blogs", href: "/blogs", icon: Tv },
   { title: "Books", href: "/books", icon: Book },
-  { title: "New Post", href: "/newPost", icon: Podcast },
+  { title: "New Post", href: "/newPost", icon: CirclePlus },
 ];
 export const socialMedia: DefaultLinks[] = [
   { title: "instagram", href: "/", icon: Instagram },

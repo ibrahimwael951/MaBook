@@ -29,10 +29,11 @@ const SideBar: React.FC<Props> = ({ isSideBarOpened, setIsSideBarOpened }) => {
       <AnimatePresence>
         {isSideBarOpened && isMobile && (
           <motion.div
-            {...opacity}
+            initial={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
             onClick={() => setIsSideBarOpened(!isSideBarOpened)}
             animate={{ opacity: 0.6 }}
-            className="fixed top-0 left-0 w-full h-screen bg-black  z-40"
+            className="fixed top-0 left-0 w-full h-screen bg-third z-40"
           />
         )}
       </AnimatePresence>

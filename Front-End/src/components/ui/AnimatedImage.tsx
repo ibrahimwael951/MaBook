@@ -152,11 +152,10 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
               className="absolute w-full h-full left-0 top-0 flex flex-col gap-5 justify-center items-center bg-primary dark:bg-third text-2xl"
             >
               <div className="w-20 h-20 inline-block animate-spin rounded-full border-b-2 border-third dark:border-primary"></div>
-         
             </motion.div>
           )}
         </AnimatePresence>
-        <img {...imageProps} />
+        <img {...imageProps} loading="lazy" />
         <div className="absolute inset-0 z-10" />
       </div>
     );
@@ -189,6 +188,7 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
       <motion.img
         {...imageProps}
         animate={{ opacity: loading ? 0 : 1 }}
+        loading="lazy"
         className="w-full h-full object-cover"
       />
     </motion.div>

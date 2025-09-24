@@ -46,7 +46,12 @@ export default passport.use(
         delete SaveData.password;
         delete SaveData.__v;
 
-        return done(null, SaveData);
+        const UserDataToSend = { ...SaveData };
+        if (UserDataToSend.avatar.url) {
+          UserDataToSend.avatar = UserDataToSend.avatar.url;
+        }
+
+        return done(null, UserDataToSend);
       } catch (err) {
         return done(err, null);
       }

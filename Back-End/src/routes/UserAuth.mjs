@@ -32,10 +32,15 @@ router.post(
       req.login(savedUser, (err) => {
         if (err) return next(err);
 
-        const userToSend = savedUser.toObject();
+        const UserData = savedUser.toObject();
 
-        delete userToSend.password;
-        delete userToSend.__v;
+        delete UserData.password;
+        delete UserData.__v;
+        
+        const userToSend = { ...UserData };
+        if (userToSend.avatar.url) {
+          userToSend.avatar = userToSend.avatar.url;
+        }
 
         return res.status(201).json({
           user: userToSend,

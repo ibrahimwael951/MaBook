@@ -48,58 +48,58 @@ function Home() {
   };
 
   const fetchBooks = useCallback(async () => {
-  if (!q) return;
+    if (!q) return;
 
-  setLoading(true);
-  setError(null);
+    setLoading(true);
+    setError(null);
 
-  try {
-    const result: GoogleBooksResponse = await searchBooks(q, PAGE_SIZE, 0);
-    const items = result.items || [];
+    try {
+      const result: GoogleBooksResponse = await searchBooks(q, PAGE_SIZE, 0);
+      const items = result.items || [];
 
-    setBooks(items);
-    setTotalItems(result.totalItems || 0);
-  } catch (err) {
-    console.error("Search error:", err);
-    setError(
-      err instanceof Error
-        ? err.message
-        : "Failed to fetch books. Please try again."
-    );
-  } finally {
-    setLoading(false);
-  }
-}, [q]);
+      setBooks(items);
+      setTotalItems(result.totalItems || 0);
+    } catch (err) {
+      console.error("Search error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch books. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [q]);
 
-const loadMore = useCallback(async () => {
-  if (loading || books.length >= totalItems) return;
+  const loadMore = useCallback(async () => {
+    if (loading || books.length >= totalItems) return;
 
-  setLoading(true);
-  setError(null);
+    setLoading(true);
+    setError(null);
 
-  const nextIndex = books.length; 
+    const nextIndex = books.length;
 
-  try {
-    const result: GoogleBooksResponse = await searchBooks(
-      q,
-      PAGE_SIZE,
-      nextIndex
-    );
-    const items = result.items || [];
+    try {
+      const result: GoogleBooksResponse = await searchBooks(
+        q,
+        PAGE_SIZE,
+        nextIndex
+      );
+      const items = result.items || [];
 
-    setBooks((prev) => [...prev, ...items]);
-    setTotalItems(result.totalItems || 0);  
-  } catch (err) {
-    console.error("Load more error:", err);
-    setError(
-      err instanceof Error
-        ? err.message
-        : "Failed to load more books. Please try again."
-    );
-  } finally {
-    setLoading(false);
-  }
-}, [q, loading, books.length, totalItems]);  
+      setBooks((prev) => [...prev, ...items]);
+      setTotalItems(result.totalItems || 0);
+    } catch (err) {
+      console.error("Load more error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to load more books. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [q, loading, books.length, totalItems]);
   const handleRetry = () => {
     setError(null);
     fetchBooks();
@@ -126,7 +126,7 @@ const loadMore = useCallback(async () => {
           <motion.h1
             {...FadeUp}
             {...Animate}
-            className="text-7xl font-bold mb-4"
+            className="text-6xl lg:text-7xl font-bold mb-4"
           >
             Book <span> Search </span>
           </motion.h1>
@@ -210,7 +210,7 @@ const loadMore = useCallback(async () => {
         )}
 
         {showGrid && books.length < totalItems && !error && (
-          <div className="text-center mt-8">
+          <div className="text-center w-fit mx-auto mt-8">
             <Button onClick={loadMore} disabled={loading}>
               {loading ? "Loading..." : "Load More"}
             </Button>

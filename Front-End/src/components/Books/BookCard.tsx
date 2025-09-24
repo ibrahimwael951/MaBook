@@ -13,7 +13,7 @@ interface BookCardProps {
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { volumeInfo } = book;
   const img =
-    book.volumeInfo.imageLinks?.smallThumbnail || "/No image found.png";
+    book.volumeInfo.imageLinks?.thumbnail || "/No image found.png";
 
   return (
     <Link href={`/books/${book.id}`}>

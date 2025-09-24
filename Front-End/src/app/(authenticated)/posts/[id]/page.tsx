@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 import NotFound from "@/components/post/NotFound";
 
-import PostCard from "@/components/post/PostCard";
+import PostCard from "@/components/post/postCard/PostCard";
 import { toast } from "sonner";
 import Comment from "@/components/post/Comments/Comment";
 
@@ -70,7 +70,7 @@ export default function Page() {
   if (!post) return <NotFound />;
   return (
     <section className="min-h-screen mt-28 py-5 flex flex-col items-center justify-center  ">
-      <PostCard post={post} />
+      <PostCard post={post} AnimateIt/>
       <Comment PostId={post._id} />
     </section>
   );

@@ -70,38 +70,96 @@ const Navbar = () => {
         hasScrolled && "bg-primary dark:bg-third"
       }`}
     >
-      <Link
-        href="/"
-        className="flex items-center gap-1 text-2xl font-extrabold p-1.5 rounded-2xl"
-      >
-        <Image alt="logo" src="/open-book.png" width={50} height={50} />
-        Ma Book
-      </Link>
-      <div className="hidden lg:flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
-        {linksToRender.map((item, i) => (
-          <Link key={i} href={item.href}>
-            <motion.div
-              animate={
-                Pathname === item.href && {
-                  translateY: -3,
-                  transition: { duration: 0.2 },
+      {!user ? (
+        <Link
+          href="/"
+          className="flex items-center gap-1 text-2xl font-extrabold p-1.5 rounded-2xl"
+        >
+          <Image alt="logo" src="/open-book.png" width={50} height={50} />
+          Ma Book
+        </Link>
+      ) : (
+        <div></div>
+      )}
+      {user && (
+        <div className="flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
+          {linksToRender.map((item, i) => (
+            <Link key={i} title={`${item.title}`} href={item.href}>
+              <motion.div
+                animate={
+                  Pathname === item.href && {
+                    translateY: -3,
+                    transition: { duration: 0.2 },
+                  }
                 }
-              }
-              className={`${
-                Pathname === item.href && "bg-secondary text-white "
-              }  py-1 px-2 rounded-xl md:text-xl`}
+                className={`${
+                  Pathname === item.href && "bg-secondary text-white "
+                }  py-2 px-3 rounded-xl md:text-xl`}
+              >
+                <item.icon size={30} strokeWidth={1.2} />
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+      )}
+      <div className="flex justify-center items-center ">
+        <div className="hidden lg:flex">
+          {loading ? (
+            <div className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg border border-third dark:border-primary duration-100">
+              {" "}
+              Loading
+            </div>
+          ) : user ? (
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>
+                    <Avatar
+                      fullName={user.username}
+                      gender={user.gender}
+                      avatar={user.avatar}
+                      className="w-12 h-12"
+                    />
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {DashboardLinks.map((item) => (
+                        <ListItem
+                          key={item.title}
+                          title={item.title}
+                          href={item.href}
+                        >
+                          {item.description}
+                        </ListItem>
+                      ))}
+                      <ListItem
+                        key={ProfileLink.title}
+                        title={ProfileLink.title}
+                        href={ProfileLink.href}
+                      >
+                        {ProfileLink.description}
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          ) : (
+            <Link
+              href="/login"
+              className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg hover:bg-transparent dark:hover:bg-transparent hover:text-primary dark:hover:text-primary border border-third dark:border-primary duration-100"
             >
-              {item.title}
-            </motion.div>
-          </Link>
-        ))}
+              Login
+            </Link>
+          )}
+        </div>
+        <button
+          className="lg:hidden cursor-pointer p-1.5 rounded-2xl"
+          onClick={() => setIsMenuOpened((prev) => !prev)}
+        >
+          <Menu size={45} strokeWidth={2} />
+        </button>
       </div>
-      <button
-        className="lg:hidden cursor-pointer dark:bg-third dark:text-primary p-1.5 rounded-2xl"
-        onClick={() => setIsMenuOpened((prev) => !prev)}
-      >
-        <Menu size={40} />
-      </button>
 
       <AnimatePresence>
         {isMenuOpened && (
@@ -146,7 +204,7 @@ const Navbar = () => {
                             "bg-secondary my-2 text-white "
                           } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
                         >
-                          <item.icon size={30} />
+                          <item.icon size={30} strokeWidth={1.2} />
 
                           {item.title}
                         </motion.div>
@@ -175,7 +233,7 @@ const Navbar = () => {
                             "bg-secondary my-2 text-white "
                           } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
                         >
-                          <item.icon size={30} />
+                          <item.icon size={30} strokeWidth={1.2} />
 
                           {item.title}
                         </motion.div>
@@ -209,7 +267,7 @@ const Navbar = () => {
                           "bg-secondary my-2 text-white "
                         } flex items-center gap-2 text-3xl font-semibold ml-4 px-3 py-1 rounded-xl`}
                       >
-                        <item.icon size={30} />
+                        <item.icon size={30} strokeWidth={1.2} />
 
                         {item.title}
                       </motion.div>
@@ -270,56 +328,6 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="hidden lg:inline">
-        {loading ? (
-          <div className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg border border-third dark:border-primary duration-100">
-            {" "}
-            Loading
-          </div>
-        ) : user ? (
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  <Avatar
-                    fullName={user.username}
-                    gender={user.gender}
-                    avatar={user.avatar}
-                    className="w-12 h-12"
-                  />
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {DashboardLinks.map((item) => (
-                      <ListItem
-                        key={item.title}
-                        title={item.title}
-                        href={item.href}
-                      >
-                        {item.description}
-                      </ListItem>
-                    ))}
-                    <ListItem
-                      key={ProfileLink.title}
-                      title={ProfileLink.title}
-                      href={ProfileLink.href}
-                    >
-                      {ProfileLink.description}
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        ) : (
-          <Link
-            href="/login"
-            className=" py-2 px-5 bg-third text-primary dark:bg-primary dark:text-third rounded-lg hover:bg-transparent dark:hover:bg-transparent hover:text-primary dark:hover:text-primary border border-third dark:border-primary duration-100"
-          >
-            Login
-          </Link>
-        )}
-      </div>
     </motion.nav>
   );
 };

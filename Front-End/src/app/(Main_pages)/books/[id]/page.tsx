@@ -154,12 +154,12 @@ export default function BookDetailsPage({ params }: BookDetailsPageProps) {
                 <div className="relative">
                   <div className="absolute rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
                   <SimpleAnimatedImage
-                    src={bookImage}
+                    src={bookImage.replace("http://","https://")}
                     alt={`Cover of ${title}`}
                     width={1000}
                     height={1000}
                     noAnimate={false}
-                    className="relative rounded-2xl shadow-2xl max-w-full h-auto transform group-hover:scale-105 transition-transform duration-300"
+                    className="relative rounded-2xl shadow-2xl w-96 min-h-96 h-auto max-w-full transform group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               </div>

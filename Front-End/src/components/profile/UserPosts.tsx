@@ -10,6 +10,7 @@ import { FileX2, Hourglass } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AccountAge } from "@/hooks/AccountAge";
 import Link from "next/link";
+import { cloudinaryOptimize } from "@/hooks/cloudinaryOptimize";
 
 const MotionButton = motion(Button);
 
@@ -147,10 +148,13 @@ function PostPage({ posts }: PostPageProps) {
           <motion.img
             transition={{ duration: 0.2 }}
             whileHover={{ scale: 1.2 }}
-            src={item.image.url || "/No image found.png"}
+            src={
+              cloudinaryOptimize(item.image.url, 200) || "/No image found.png"
+            }
             alt={`image - ${item.description}`}
             width={200}
             height={200}
+            loading="lazy"
             className="w-full h-72 object-cover rounded-2xl "
           />
           <p className="text-xs absolute bottom-0 right-0 bg-secondary !text-white p-2 rounded-tl-2xl ">

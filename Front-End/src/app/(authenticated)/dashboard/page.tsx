@@ -28,10 +28,7 @@ export default function Page() {
       }}
       className="mt-16 lg:mt-5 px-5 lg:px-10  "
     >
-      <SideBar
-        isSideBarOpened={isSideBarOpened}
-        setIsSideBarOpened={setIsSideBarOpened}
-      />
+  
       <div className="w-full h-screen   ">
         <motion.div
           {...FadeUp}
@@ -163,7 +160,7 @@ export default function Page() {
               Reset your <span>Password</span> ?
             </h1>
           </motion.div>
-          <div className="relative overflow-hidden w-full border col-span-2 rounded-2xl p-5 bg-red-600 text-white text-4xl cursor-pointer">
+          <div className="relative overflow-hidden w-full border col-span-full md:col-span-2 rounded-2xl p-5 bg-red-600 text-white text-4xl cursor-pointer">
             Delete Account
           </div>
         </div>
