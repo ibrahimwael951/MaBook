@@ -1,11 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 // components
-import SideBar from "@/components/dashboard/SideBar";
 import Loading from "@/components/Loading";
 
 // animation
@@ -15,20 +13,10 @@ import { ModeToggle } from "@/components/ui/ThemeToggle";
 
 export default function Page() {
   const { loading, user } = useAuth();
-  const [isSideBarOpened, setIsSideBarOpened] = useState<boolean>(false);
-
-  const isMobile = useIsMobile();
 
   if (loading || !user) return <Loading />;
   return (
-    <motion.main
-      animate={{
-        marginLeft:
-          !isMobile && isSideBarOpened ? "240px" : isMobile ? "0" : "110px",
-      }}
-      className="mt-16 lg:mt-5 px-5 lg:px-10  "
-    >
-  
+    <motion.main className="mt-16 lg:mt-5 px-5 lg:px-10  ">
       <div className="w-full h-screen   ">
         <motion.div
           {...FadeUp}
@@ -55,7 +43,7 @@ export default function Page() {
             <p>coming soon</p>
           </div>
           <Link
-            href={`/Update_User_profile`}
+            href={`/dashboard/Update_User_profile`}
             className="  w-full col-span-4 md:col-span-2 "
           >
             <motion.div

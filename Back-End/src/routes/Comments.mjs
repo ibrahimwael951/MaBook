@@ -2,7 +2,7 @@ import { Router } from "express";
 import { findPostIdAndAuthor } from "../middleware/userMiddleware.mjs";
 
 import { PostComments } from "../mongoose/schema/PostsComments.mjs";
-import { PostComment } from "../util/ValidationSchema.mjs";
+import { PostComment } from "../validator/Post.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import passport from "passport";
 

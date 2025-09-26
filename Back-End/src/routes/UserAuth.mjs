@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpDateUserData, UserLoggingIn } from "../util/ValidationSchema.mjs";
+import { UpDateUserData, UserLoggingIn } from "../validator/UserAuth.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../util/Hashing.mjs";
 import passport from "passport";

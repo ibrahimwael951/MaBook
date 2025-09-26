@@ -4,6 +4,8 @@ import {
   handleImageReplace,
   handleImageUpload,
 } from "../middleware/imageHandler.mjs";
+import { PostComments } from "../mongoose/schema/PostsComments.mjs";
+import { Likes } from "../mongoose/schema/Likes.mjs";
 
 export const createPost = async (userData, postData, file) => {
   const hasText = postData.description?.trim().length > 0;
@@ -101,6 +103,18 @@ export const deletePost = async (postId, userData) => {
       } catch (remErr) {
         console.warn("Failed to remove image from Cloudinary:", remErr);
       }
+    }
+
+    try {
+      await PostComments.deleteMany({ postId });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+
+    try {
+      await Likes.deleteMany({ postId });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
 
     const res = await Posts.findByIdAndDelete(postId);

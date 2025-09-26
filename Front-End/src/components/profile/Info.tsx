@@ -109,7 +109,7 @@ const Info: React.FC<InfoProps> = (props) => {
               {...Animate}
               className="flex justify-center items-center gap-5 mt-5"
             >
-              <Link href="/Update_User_profile">
+              <Link href="/dashboard/Update_User_profile">
                 <Button variant="outline">Edit Profile</Button>
               </Link>
               {/* <Link href="/MyBookShelf"> */}

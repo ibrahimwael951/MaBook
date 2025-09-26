@@ -59,12 +59,14 @@ const Navbar = () => {
     description: "View and edit your personal information",
   };
 
+  const PathNameRight = Pathname.slice(0, 10) === "/dashboard";
+
   if (loading) return null;
   return (
     <motion.nav
-      initial={Pathname === "/dashboard" ? { y: 0 } : { y: "-100%" }}
-      animate={Pathname === "/dashboard" ? { y: "-100%" } : { y: 0 }}
-      exit={Pathname === "/dashboard" ? { y: 0 } : { y: "-100%" }}
+      initial={PathNameRight ? { y: 0 } : { y: "-100%" }}
+      animate={PathNameRight ? { y: "-100%" } : { y: 0 }}
+      exit={PathNameRight ? { y: 0 } : { y: "-100%" }}
       transition={{ duration: 0.36 }}
       className={`fixed top-0 left-0 lg:left-2/4 lg:-translate-x-2/4 py-3 w-full flex items-center justify-between max-w-6xl  px-5 md:px-10 z-50 ${
         hasScrolled && "bg-primary dark:bg-third"
@@ -81,27 +83,26 @@ const Navbar = () => {
       ) : (
         <div></div>
       )}
-      {user && (
-        <div className="flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
-          {linksToRender.map((item, i) => (
-            <Link key={i} title={`${item.title}`} href={item.href}>
-              <motion.div
-                animate={
-                  Pathname === item.href && {
-                    translateY: -3,
-                    transition: { duration: 0.2 },
-                  }
+      <div className="flex items-center gap-x-2 dark:bg-third dark:text-primary p-1.5 rounded-2xl ">
+        {linksToRender.map((item, i) => (
+          <Link key={i} title={`${item.title}`} href={item.href}>
+            <motion.div
+              animate={
+                Pathname === item.href && {
+                  translateY: -3,
+                  transition: { duration: 0.2 },
                 }
-                className={`${
-                  Pathname === item.href && "bg-secondary text-white "
-                }  py-2 px-3 rounded-xl md:text-xl`}
-              >
-                <item.icon size={30} strokeWidth={1.2} />
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-      )}
+              }
+              className={`${
+                Pathname === item.href && "bg-secondary text-white "
+              }  py-2 px-3 rounded-xl md:text-xl`}
+            >
+              {user ? <item.icon size={30} strokeWidth={1.2} /> : item.title}
+            </motion.div>
+          </Link>
+        ))}
+      </div>
+
       <div className="flex justify-center items-center ">
         <div className="hidden lg:flex">
           {loading ? (

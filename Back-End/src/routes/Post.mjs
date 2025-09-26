@@ -9,7 +9,7 @@ import { Likes } from "../mongoose/schema/Likes.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import multer from "multer";
 
-import { PostSchema } from "../util/ValidationSchema.mjs";
+import { PostSchema } from "../validator/Post.mjs";
 import * as postController from "../controllers/postController.mjs";
 
 const router = express.Router();

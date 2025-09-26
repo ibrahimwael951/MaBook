@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { user } from "../mongoose/schema/UserAuth.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
-import { CheckEmail, CheckUsername } from "../util/ValidationSchema.mjs";
+import { CheckEmail, CheckUsername } from "../validator/UserAuth.mjs";
 const route = Router();
 
 route.post(

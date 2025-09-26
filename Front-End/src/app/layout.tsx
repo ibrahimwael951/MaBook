@@ -5,7 +5,9 @@ import { EB_Garamond } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
+
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -36,8 +38,9 @@ export default function RootLayout({
           <AuthProvider>
             <Navbar />
             {children}
+            <SpeedInsights /> {/* For testing Website Speed  */}
             <Footer />
-             <Toaster />
+            <Toaster />
           </AuthProvider>
         </ThemeProvider>
       </body>

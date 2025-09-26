@@ -1,7 +1,7 @@
 import { myBooks } from "../mongoose/schema/Books.mjs";
 import { Router } from "express";
 import { checkSchema, matchedData, validationResult } from "express-validator";
-import { MyBookSchema } from "../util/ValidationSchema.mjs";
+import { MyBookSchema } from "../validator/Books.mjs";
 import passport from "passport";
 
 const router = Router();
