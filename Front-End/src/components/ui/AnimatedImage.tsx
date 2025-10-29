@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Animate, FadeUp } from "@/animation";
 
 interface AnimatedImageProps {
   src: string;
@@ -142,7 +143,7 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   if (noAnimate) {
     return (
-      <div ref={ref} className={cn("relative overflow-hidden", className)}>
+      <div ref={ref} className={cn("relative overflow-hidden select-none", className)}>
         <AnimatePresence>
           {loading && (
             <motion.div
@@ -155,6 +156,14 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
+        <motion.div
+          {...FadeUp}
+          animate={{
+            ...Animate.animate,
+            transition: { duration: 0.4, delay: 0.4 },
+          }}
+          className="absolute top-0 left-0 w-full h-full z-10"
+        />
         <img {...imageProps} loading="lazy" />
         <div className="absolute inset-0 z-10" />
       </div>
@@ -169,7 +178,7 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
         hidden: { opacity: 0, scale: 0.95 },
         visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
       }}
-      className={cn("relative overflow-hidden", className)}
+      className={cn("relative overflow-hidden select-none", className)}
     >
       <AnimatePresence>
         {loading && (
@@ -184,7 +193,14 @@ const SimpleAnimatedImage: React.FC<SimpleAnimatedImageProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
-
+      <motion.div
+        {...FadeUp}
+        animate={{
+          ...Animate.animate,
+          transition: { duration: 0.4, delay: 0.4 },
+        }}
+        className="absolute top-0 left-0 w-full h-full z-10"
+      />
       <motion.img
         {...imageProps}
         animate={{ opacity: loading ? 0 : 1 }}

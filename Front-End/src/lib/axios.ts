@@ -11,5 +11,5 @@ const api = axios.create({
 export const ImageApiSend = axios.create({
   baseURL: API,
   withCredentials: true,
-}); 
+});
 export default api;

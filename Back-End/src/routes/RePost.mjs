@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkSchema } from "express-validator";
+import { checkSchema, validationResult, matchedData } from "express-validator";
 import { RePost } from "../mongoose/schema/RePost.mjs";
 import {
   RePostsValidation,
@@ -19,9 +19,14 @@ router.get("/api/RePost", async (req, res) => {
       query.createdAt = { $lt: new Date(lastDate) };
     }
 
-    const rePosts = (await RePost.find(query))
-      .toSorted({ createdAt: -1 })
-      .limit(limit);
+    const rePosts = await RePost.find(query)
+      .sort({ createdAt: -1 }) 
+      .limit(limit)
+      .populate({
+        path: "postId",
+        model: "Posts",
+        select: "-__v -updatedAt",
+      });
 
     res.status(200).json(rePosts);
   } catch (err) {
@@ -30,6 +35,7 @@ router.get("/api/RePost", async (req, res) => {
       .json({ message: "Server Error", details: err.message });
   }
 });
+
 
 router.get("/api/RePost/:id", async (req, res) => {
   try {

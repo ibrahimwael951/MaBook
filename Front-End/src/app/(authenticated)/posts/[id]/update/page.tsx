@@ -1,5 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import {
+  FileText,
+  Image,
+  Upload,
+  CheckCircle,
+  AlertCircle,
+  X,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import api, { ImageApiSend } from "@/lib/axios";
 import { Post } from "@/types/Auth";
@@ -209,87 +217,188 @@ export default function UpdatePostPage() {
   if (!post) return <p>Post not found</p>;
 
   return (
-    <section className="mt-20  flex justify-center items-center p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-full max-w-2xl p-6 rounded-lg shadow"
-      >
-        <motion.h1 {...FadeUp} {...Animate} className="text-3xl font-bold">
-          Update <span> Post</span>
-        </motion.h1>
+    <section className="mt-20 flex justify-center items-center p-6">
+      <div className="w-full max-w-2xl">
+        <div className="bg-white dark:bg-third rounded-2xl shadow-xl dark:shadow-white/20 overflow-hidden">
+          {/* Header Section */}
+          <div className="bg-gradient-to-r from-secondary to-secondaryHigh p-8 text-white">
+            <motion.h1
+              {...FadeUp}
+              {...Animate}
+              className="text-4xl font-bold text-center"
+            >
+              Update Post
+            </motion.h1>
+            <motion.p
+              {...FadeUp}
+              animate={{
+                ...Animate.animatenly,
+                transition: { ...Animate.transition, delay: 0.1 },
+              }}
+              className="text-center mt-2 !text-white/90"
+            >
+              Edit your post content and image
+            </motion.p>
+          </div>
 
-        {error && <p className="text-red-500">{error}</p>}
+          {/* Form Section */}
+          <form onSubmit={handleSubmit} className="p-8 space-y-6">
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start gap-3"
+              >
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-semibold text-red-800 dark:text-red-200">
+                    Error
+                  </h3>
+                  <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+                    {error}
+                  </p>
+                </div>
+              </motion.div>
+            )}
 
-        {/* Description */}
-        <label>
-          <motion.span
-            {...FadeUp}
-            animate={{
-              ...Animate.animatenly,
-              transition: { ...Animate.transition, delay: 0.2 },
-            }}
-            className="defaultLabel"
-          >
-            Description
-          </motion.span>
-          <motion.textarea
-            {...FadeUp}
-            animate={{
-              ...Animate.animatenly,
-              transition: { ...Animate.transition, delay: 0.2 },
-            }}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="defaultInput"
-            rows={4}
-          />
-        </label>
-
-        {/* Image Upload */}
-        <label>
-          <motion.span
-            {...FadeUp}
-            animate={{
-              ...Animate.animatenly,
-              transition: { ...Animate.transition, delay: 0.2 },
-            }}
-            className="defaultLabel"
-          >
-            Upload Image (less than 10MB)
-          </motion.span>
-          <motion.input
-            {...FadeUp}
-            animate={{
-              ...Animate.animatenly,
-              transition: { ...Animate.transition, delay: 0.2 },
-            }}
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="defaultInput cursor-pointer"
-          />
-        </label>
-
-        {/* Preview */}
-        <AnimatePresence>
-          {preview && (
-            <motion.img
+            {/* Description */}
+            <motion.div
               {...FadeUp}
               animate={{
                 ...Animate.animatenly,
                 transition: { ...Animate.transition, delay: 0.2 },
               }}
-              src={preview}
-              alt="Preview"
-              className="w-full  object-contain rounded-md border"
-            />
-          )}
-        </AnimatePresence>
+            >
+              <label
+                className="defaultLabel flex items-center gap-2 mb-2"
+                htmlFor="description"
+              >
+                <FileText className="w-4 h-4" />
+                Description
+                <span className="text-xs text-gray-500 font-normal ml-auto">
+                  {description.length} characters
+                </span>
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="defaultInput transition-all duration-200 focus:border-secondary focus:ring-secondary resize-none"
+                rows={6}
+                placeholder="What's on your mind?"
+              />
+              <p className="mt-2 text-xs text-gray-500">
+                Share your thoughts, ideas, or updates with your audience.
+              </p>
+            </motion.div>
 
-        <Button type="submit" variant="secondary" className="w-full">
-          Update
-        </Button>
-      </form>
+            {/* Image Upload */}
+            <motion.div
+              {...FadeUp}
+              animate={{
+                ...Animate.animatenly,
+                transition: { ...Animate.transition, delay: 0.3 },
+              }}
+            >
+              <label className="defaultLabel flex items-center gap-2 mb-2">
+                <Image className="w-4 h-4" />
+                Update Image
+              </label>
+
+              <div className="relative">
+                <label
+                  htmlFor="imageUpload"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-secondary dark:hover:border-secondary transition-colors duration-200 cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <Upload className="w-5 h-5 text-gray-500" />
+                  <span className="text-sm font-medium !text-gray-700 dark:!text-gray-300">
+                    Choose a new image
+                  </span>
+                </label>
+                <input
+                  id="imageUpload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                PNG, JPG (max. 10MB)
+              </p>
+            </motion.div>
+
+            {/* Preview */}
+            <AnimatePresence>
+              {preview && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="relative rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700 shadow-md"
+                >
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="w-full max-h-96 object-contain bg-gray-50 dark:bg-gray-900"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreview(null);
+                      const fileInput = document.getElementById(
+                        "imageUpload"
+                      ) as HTMLInputElement;
+                      if (fileInput) fileInput.value = "";
+                    }}
+                    className="absolute top-3 right-3 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                    <p className="text-white text-sm font-medium flex items-center gap-2">
+                      <Image className="w-4 h-4" />
+                      New image selected
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Submit Button */}
+            <motion.div
+              {...FadeUp}
+              animate={{
+                ...Animate.animatenly,
+                transition: { ...Animate.transition, delay: 0.4 },
+              }}
+            >
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 py-3 px-6 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-secondary to-secondaryHigh hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-all duration-200"
+              >
+                <CheckCircle className="w-5 h-5" />
+                Update Post
+              </motion.button>
+            </motion.div>
+          </form>
+        </div>
+
+        {/* Helper Text */}
+        <motion.p
+          {...FadeUp}
+          animate={{
+            ...Animate.animatenly,
+            transition: { ...Animate.transition, delay: 0.5 },
+          }}
+          className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6"
+        >
+          Changes will be visible immediately after updating
+        </motion.p>
+      </div>
     </section>
   );
 }

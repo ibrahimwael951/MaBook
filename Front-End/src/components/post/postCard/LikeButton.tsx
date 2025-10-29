@@ -9,6 +9,7 @@ import { toast } from "sonner";
 interface Props {
   likesCount: number;
   liked: boolean;
+  NoAnimate?: boolean;
   postId: string;
 }
 interface data {
@@ -19,7 +20,12 @@ interface data {
 
 const MotionButton = motion.create(Button);
 
-const LikeButton: React.FC<Props> = ({ likesCount, postId, liked }) => {
+const LikeButton: React.FC<Props> = ({
+  likesCount,
+  postId,
+  liked,
+  NoAnimate,
+}) => {
   const [Liked, setLiked] = useState<boolean>(liked);
   const [postLikes, setPostLikes] = useState<number>(likesCount);
 
@@ -54,41 +60,48 @@ const LikeButton: React.FC<Props> = ({ likesCount, postId, liked }) => {
       );
     }
   };
+  const ButtonAnimation = {
+    whileHover: { scale: 1.1 },
+    whileTap: { scale: 0.9 },
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.3 },
+  };
   return (
     <>
-    <div>
-      {postLikes} Likes
-    </div>
-    <MotionButton
-      onClick={ handleLike}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="w-full p-2 flex "
-      aria-label={Liked ? "Unlike" : "Like"}
-      title={Liked ? "Unlike" : "Like"}
-    >
-      <motion.div
-        animate={{ scale: Liked ? 1.2 : 1 }}
-        transition={{ type: "spring", stiffness: 300 }}
+      <div>{postLikes} Likes</div>
+      <MotionButton
+        onClick={handleLike}
+        className="w-full p-2 flex "
+        {...(!NoAnimate && ButtonAnimation)}
+        aria-label={Liked ? "Unlike" : "Like"}
+        title={Liked ? "Unlike" : "Like"}
+        NoAnimate={NoAnimate}
       >
-        <Heart
-          size={24}
-          fill={Liked ? "currentColor" : "none"}
-          stroke={Liked ? "none" : "currentColor"}
-          className="text-red-600"
-        />
-      </motion.div>
-      <AnimatePresence>
-        {Liked && (
-          <motion.p {...FadeLeft} {...Animate} className="hidden lg:inline">
-            Liked!
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </MotionButton></>
+        <motion.div
+          animate={{ scale: Liked ? 1.2 : 1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <Heart
+            size={24}
+            fill={Liked ? "currentColor" : "none"}
+            stroke={Liked ? "none" : "currentColor"}
+            className="text-red-600"
+          />
+        </motion.div>
+        <AnimatePresence>
+          {Liked && (
+            <motion.p
+              {...(!NoAnimate && FadeLeft)}
+              {...(!NoAnimate && Animate)}
+              className="hidden lg:inline"
+            >
+              Liked!
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </MotionButton>
+    </>
   );
 };
 

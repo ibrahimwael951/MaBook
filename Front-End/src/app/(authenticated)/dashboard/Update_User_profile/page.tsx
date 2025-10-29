@@ -3,6 +3,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { User, FileText, CheckCircle, AlertCircle } from "lucide-react";
 import { Update } from "@/types/Auth";
 import Loading from "@/components/Loading";
 import { Animate, FadeUp } from "@/animation";
@@ -196,114 +197,239 @@ export default function Page() {
   // }
 
   return (
-    <section className="mt-20  max-w-xl mx-auto p-6 rounded-lg shadow-md">
-      <motion.h2
-        {...Animate}
+    <section className=" max-w-2xl mx-auto p-8">
+      <div className="bg-white dark:bg-third rounded-2xl shadow-xl dark:shadow-white/20 overflow-hidden">
+        {/* Header Section */}
+        <div className="bg-gradient-to-r from-secondary to-secondaryHigh p-8 text-white">
+          <motion.h2
+            {...Animate}
+            {...FadeUp}
+            className="text-4xl font-bold text-center"
+          >
+            Update Your Profile
+          </motion.h2>
+          <motion.p
+            {...FadeUp}
+            animate={{
+              ...Animate.animatenly,
+              transition: { ...Animate.transition, delay: 0.1 },
+            }}
+            className="text-center mt-2 !text-white/90"
+          >
+            Keep your information up to date
+          </motion.p>
+        </div>
+
+        {/* Form Section */}
+        <div className="p-8">
+          {/* Avatar Section */}
+          <Update_Avatar />
+
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            {/* Name Fields Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* First Name */}
+              <motion.div
+                {...FadeUp}
+                animate={{
+                  ...Animate.animatenly,
+                  transition: { ...Animate.transition, delay: 0.2 },
+                }}
+              >
+                <label
+                  className="defaultLabel flex items-center gap-2 mb-2"
+                  htmlFor="firstName"
+                >
+                  <User className="w-4 h-4" />
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  onFocus={handleFocus("firstName")}
+                  onBlur={handleBlur}
+                  aria-invalid={!!fieldErrors.firstName}
+                  className={`defaultInput transition-all duration-200 ${
+                    fieldErrors.firstName
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : "focus:border-secondary focus:ring-secondary"
+                  }`}
+                  placeholder="Enter your first name"
+                />
+                {fieldErrors.firstName && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 text-sm text-red-600 flex items-center gap-1"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    {fieldErrors.firstName}
+                  </motion.p>
+                )}
+              </motion.div>
+
+              {/* Last Name */}
+              <motion.div
+                {...FadeUp}
+                animate={{
+                  ...Animate.animatenly,
+                  transition: { ...Animate.transition, delay: 0.3 },
+                }}
+              >
+                <label
+                  className="defaultLabel flex items-center gap-2 mb-2"
+                  htmlFor="lastName"
+                >
+                  <User className="w-4 h-4" />
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  onFocus={handleFocus("lastName")}
+                  onBlur={handleBlur}
+                  aria-invalid={!!fieldErrors.lastName}
+                  className={`defaultInput transition-all duration-200 ${
+                    fieldErrors.lastName
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : "focus:border-secondary focus:ring-secondary"
+                  }`}
+                  placeholder="Enter your last name"
+                />
+                {fieldErrors.lastName && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 text-sm text-red-600 flex items-center gap-1"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    {fieldErrors.lastName}
+                  </motion.p>
+                )}
+              </motion.div>
+            </div>
+
+            {/* Bio Field */}
+            <motion.div
+              {...FadeUp}
+              animate={{
+                ...Animate.animatenly,
+                transition: { ...Animate.transition, delay: 0.4 },
+              }}
+            >
+              <label
+                className="defaultLabel flex items-center gap-2 mb-2"
+                htmlFor="bio"
+              >
+                <FileText className="w-4 h-4" />
+                Bio
+                <span className="text-xs text-gray-500 font-normal ml-auto">
+                  {formData.bio ? formData.bio.length : 0} characters
+                </span>
+              </label>
+              <textarea
+                id="bio"
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                onFocus={handleFocus("bio")}
+                onBlur={handleBlur}
+                className="defaultInput transition-all duration-200 focus:border-secondary focus:ring-secondary resize-none"
+                rows={5}
+                placeholder="Tell us about yourself..."
+              />
+              <p className="mt-2 text-xs text-gray-500">
+                Share a brief description about yourself, your interests, or
+                what you do.
+              </p>
+            </motion.div>
+
+            {/* Submit Button */}
+            <motion.div
+              {...FadeUp}
+              animate={{
+                ...Animate.animatenly,
+                transition: { ...Animate.transition, delay: 0.5 },
+              }}
+            >
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-2 py-3 px-6 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-secondary to-secondaryHigh hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg
+                      className="animate-spin h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-5 h-5" />
+                    Update Profile
+                  </>
+                )}
+              </motion.button>
+            </motion.div>
+
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start gap-3"
+              >
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-semibold text-red-800 dark:text-red-200">
+                    Error
+                  </h3>
+                  <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+                    {error}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </form>
+        </div>
+      </div>
+
+      {/* Helper Text */}
+      <motion.p
         {...FadeUp}
-        className="text-4xl font-bold mb-6 text-center"
+        animate={{
+          ...Animate.animatenly,
+          transition: { ...Animate.transition, delay: 0.6 },
+        }}
+        className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6"
       >
-        Update Your <span> Profile </span>
-      </motion.h2>
-
-      <Update_Avatar />
-      <form onSubmit={handleSubmit} noValidate>
-        <motion.div
-          {...FadeUp}
-          animate={{
-            ...Animate.animatenly,
-            transition: { ...Animate.transition, delay: 0.1 },
-          }}
-          className="mb-4"
-        >
-          <label className="defaultLabel" htmlFor="firstName">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            onFocus={handleFocus("firstName")}
-            onBlur={handleBlur}
-            aria-invalid={!!fieldErrors.firstName}
-            className="defaultInput"
-          />
-          {fieldErrors.firstName && (
-            <p className="mt-1 text-sm !text-red-600">
-              {fieldErrors.firstName}
-            </p>
-          )}
-        </motion.div>
-
-        <motion.div
-          {...FadeUp}
-          animate={{
-            ...Animate.animatenly,
-            transition: { ...Animate.transition, delay: 0.2 },
-          }}
-          className="mb-4"
-        >
-          <label className="defaultLabel" htmlFor="lastName">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            onFocus={handleFocus("lastName")}
-            onBlur={handleBlur}
-            aria-invalid={!!fieldErrors.lastName}
-            className="defaultInput"
-          />
-          {fieldErrors.lastName && (
-            <p className="mt-1 text-sm !text-red-600">{fieldErrors.lastName}</p>
-          )}
-        </motion.div>
-
-        <motion.div
-          {...FadeUp}
-          animate={{
-            ...Animate.animatenly,
-            transition: { ...Animate.transition, delay: 0.3 },
-          }}
-          className="mb-4"
-        >
-          <label className="defaultLabel" htmlFor="bio">
-            Bio
-          </label>
-          <textarea
-            id="bio"
-            name="bio"
-            value={formData.bio}
-            onChange={handleChange}
-            onFocus={handleFocus("bio")}
-            onBlur={handleBlur}
-            className="defaultInput"
-            rows={5}
-          />
-        </motion.div>
-
-        <motion.button
-          {...FadeUp}
-          animate={{
-            ...Animate.animatenly,
-            transition: { ...Animate.transition, delay: 0.5 },
-          }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary hover:bg-secondaryHigh focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondaryHigh disabled:opacity-50 disabled:cursor-not-allowed  "
-        >
-          {isSubmitting ? "Updating..." : "Update Profile"}
-        </motion.button>
-
-        {/* show general error */}
-        {error && <p className="mt-2 !text-red-600 text-sm">{error}</p>}
-      </form>
+        Your information is secure and will only be visible to you
+      </motion.p>
     </section>
   );
 }

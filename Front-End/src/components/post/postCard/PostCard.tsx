@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeletePost from "./DeletePost";
 import { cloudinaryOptimize } from "@/hooks/cloudinaryOptimize";
+import SavePost from "./SavePost";
+import RePost from "./Repost";
 
 const MotionLink = motion.create(Link);
 
@@ -48,7 +50,6 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   const isPostMine = user?.username === post?.author.username;
-
   useEffect(() => {
     if (!isDeleted) return;
     const timer = setTimeout(() => {
@@ -74,6 +75,9 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
       document.body.style.overflow = "";
     };
   }, [warning]);
+
+  const ImgHandler =
+    cloudinaryOptimize(post.image.url, 600) || "/No image found.png";
 
   if (isDeleted)
     return (
@@ -105,11 +109,16 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
         <motion.div
           {...(AnimateIt && FadeRight)}
           {...(AnimateIt && Animate)}
-          className="absolute right-0 top-2"
+          className="absolute right-0 top-2 grid grid-cols-2 gap-2"
         >
+          <SavePost postId={post._id} IsSaved={post.Saved} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="third" className="py-6">
+              <Button
+                variant="third"
+                className="py-6"
+                NoAnimate={AnimateIt ? false : true}
+              >
                 <Ellipsis size={30} />
               </Button>
             </DropdownMenuTrigger>
@@ -134,10 +143,6 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
                   <DropdownMenuItem>
                     <MessageCircleWarning />
                     Report
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Save />
-                    Save
                   </DropdownMenuItem>
                 </>
               )}
@@ -183,47 +188,48 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
             {AccountAge(post.createdAt)}
           </motion.p>
         </div>
-        {post.image && (
-          <div
-            className="relative select-none"
-            onClick={() => setShowImage(true)}
-          >
-            <motion.div
-              {...FadeUp}
-              animate={{
-                ...(AnimateIt && Animate.animate),
-                transition: { duration: 0.4, delay: 0.4 },
-              }}
-              className="absolute top-0 left-0 w-full h-full z-10"
-            />
-            <SimpleAnimatedImage
-              src={cloudinaryOptimize(post.image.url, 600)}
-              alt="post image"
-              className="w-full max-w-[650px]  max-h-[650px] object-cover aspect-auto rounded-2xl"
-            />
-          </div>
-        )}
-        <div className="grid grid-cols-5 gap-x-1.5 lg:gap-x-5 ">
-          <div className="col-span-2">{post.commentsCount} Comments</div>
-          <div className="col-span-2">{0} Reposts</div>
 
+        <div
+          className="relative select-none"
+          onClick={() => setShowImage(true)}
+        >
+          <SimpleAnimatedImage
+            src={ImgHandler}
+            alt="post image"
+            noAnimate={AnimateIt ? false : true}
+            className="w-full max-w-[650px]  max-h-[650px] object-cover aspect-auto rounded-2xl"
+          />
+        </div>
+
+        <div className="grid grid-cols-5 gap-x-1.5 lg:gap-x-5 ">
           <div className="row-span-2 row-start-1">
             <LikeButton
               liked={post.Liked}
               likesCount={post.LikesCount}
               postId={post._id}
+              NoAnimate={AnimateIt ? false : true}
             />
           </div>
+          <div className="col-span-2">
+            <div>{post.commentsCount} Comments</div>
 
-          <Link href={`/posts/${post._id}`} className="col-span-2">
-            <Button variant="third_2" className="w-full ">
-              Comment
-            </Button>
-          </Link>
-
-          <Button variant="third_2" className="w-full col-span-2">
-            Repost
-          </Button>
+            <Link href={`/posts/${post._id}`}>
+              <Button
+                variant="third_2"
+                className="w-full "
+                NoAnimate={AnimateIt ? false : true}
+              >
+                Comment
+              </Button>
+            </Link>
+          </div>
+          <div className="row-span-2 col-span-2 ">
+            <RePost
+              postId={post._id}
+              RePostsCount={post.RePostCount}
+              RePosted={post.RePosted}
+            />
+          </div>
         </div>
       </div>
       <AnimatePresence>
@@ -245,7 +251,7 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
                 <X size={50} />
               </button>
               <img
-                src={cloudinaryOptimize(post.image.url, 600)}
+                src={ImgHandler}
                 alt="post image"
                 className="max-h-[90vh] max-w-[90vw] object-contain rounded-2xl border"
               />

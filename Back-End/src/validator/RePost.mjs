@@ -12,10 +12,6 @@ export const RePostsValidation = {
     isString: {
       errorMessage: "must be string",
     },
-    isLength: {
-      options: { min: 3, max: 200 },
-      errorMessage: "Reason must be between 3 and 200 characters",
-    },
   },
   feelings: {
     optional: true,

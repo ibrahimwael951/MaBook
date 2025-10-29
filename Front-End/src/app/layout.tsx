@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
-
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const ebGaramond = EB_Garamond({
@@ -39,6 +39,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <SpeedInsights /> {/* For testing Website Speed  */}
+            <Analytics /> {/* For Web Analytics */}
             <Footer />
             <Toaster />
           </AuthProvider>

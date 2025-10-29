@@ -11,6 +11,8 @@ import multer from "multer";
 
 import { PostSchema } from "../validator/Post.mjs";
 import * as postController from "../controllers/postController.mjs";
+import { SavePost } from "../mongoose/schema/SavePost.mjs";
+import { RePost } from "../mongoose/schema/RePost.mjs";
 
 const router = express.Router();
 
@@ -76,6 +78,9 @@ router.get("/api/posts", passport.authenticate("session"), async (req, res) => {
           postId: p._id,
           userId,
         });
+        const Saved = await SavePost.exists({ postId: p._id });
+        const RePosted = await RePost.exists({ postId: p._id });
+        const RePostCount = await RePost.countDocuments({ postId: p._id });
         const LikesCount = await Likes.countDocuments({
           postId: p._id,
         });
@@ -92,6 +97,9 @@ router.get("/api/posts", passport.authenticate("session"), async (req, res) => {
             gender: Author.gender,
             avatar: AvatarImage,
           },
+          RePosted,
+          RePostCount,
+          Saved,
           Liked: IsLiked,
           LikesCount,
           commentsCount,
@@ -129,6 +137,8 @@ router.get("/api/post/:id", async (req, res) => {
         ? Author.avatar.url ?? Author.avatar
         : null;
 
+    const Saved = await SavePost.exists({ postId: id });
+
     const Liked = await Likes.findOne({
       postId: post._id,
       userId,
@@ -145,6 +155,7 @@ router.get("/api/post/:id", async (req, res) => {
         gender: Author.gender,
         avatar: AvatarImage,
       },
+      Saved,
       Liked: IsLiked,
       LikesCount,
       commentsCount,

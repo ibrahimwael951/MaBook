@@ -55,11 +55,26 @@ export interface Post {
     gender: string;
   };
   Liked: boolean;
+  Saved: boolean;
+  RePosted: boolean;
+  RePostCount: number;
   description: string;
   createdAt: string;
   commentsCount: number;
   LikesCount: number;
   image: image;
+}
+export interface SavedPost {
+  _id: string;
+  postId: Post;
+  createdAt: string;
+}
+export interface RePost {
+  _id: string;
+  postId: Post;
+  userId:string
+  text:string;
+  createdAt: string;
 }
 export interface Comments {
   _id: string;

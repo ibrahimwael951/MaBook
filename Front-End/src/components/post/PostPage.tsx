@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { Virtuoso } from "react-virtuoso";
 import { Post } from "@/types/Auth";
 import api from "@/lib/axios";
 import PostCard from "./postCard/PostCard";
@@ -13,7 +14,7 @@ const PostPage = () => {
   const fetchedIdsRef = useRef(new Set<string>());
 
   const fetchPosts = async (cursor?: string | null) => {
-    if (loading) return;
+    if (loading || !hasMore) return;
     setLoading(true);
     try {
       const res = await api.get("/api/posts", {
@@ -24,7 +25,6 @@ const PostPage = () => {
       const unique = fetched.filter((p) => !fetchedIdsRef.current.has(p._id));
       unique.forEach((p) => fetchedIdsRef.current.add(p._id));
 
-      console.log(res.data);
       setPosts((prev) => [...prev, ...unique]);
       setNextCursor(res.data.nextCursor ?? null);
       setHasMore(Boolean(res.data.hasMore));
@@ -38,28 +38,33 @@ const PostPage = () => {
   useEffect(() => {
     fetchPosts(null);
   }, []);
-  if(loading)return <Loading/>
-  return (
-    <section className="min-h-screen">
-      <div className="mt-20 max-w-2xl mx-auto space-y-20 p-4">
-        {posts.map((post) => (
-          <PostCard key={post._id} post={post} />
-        ))}
 
-        {hasMore ? (
-          <div className="flex justify-center">
-            <button
-              onClick={() => fetchPosts(nextCursor)}
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-60"
-            >
-              Load more
-            </button>
+  if (!posts.length && loading) return <Loading />;
+  return (
+    <section className="min-h-screen mt-20 !px-0">
+      <Virtuoso
+        style={{
+          height: "100vh",
+          width: "100%",
+          scrollbarWidth: "none",
+        }}
+        totalCount={posts.length}
+        itemContent={(index) => (
+          <div className="p-2 my-5 w-full flex justify-center items-center">
+            <PostCard
+              key={posts[index]._id}
+              post={posts[index]}
+              AnimateIt={false}
+            />
           </div>
-        ) : (
-          <p className="text-center text-gray-500">No more posts</p>
         )}
-      </div>
+        endReached={() => fetchPosts(nextCursor)}
+        components={{
+          Footer: () =>
+            loading ? <div className="py-4 text-center">Loading...</div> : null,
+        }}
+        className="[&::-webkit-scrollbar]:hidden"
+      />
     </section>
   );
 };

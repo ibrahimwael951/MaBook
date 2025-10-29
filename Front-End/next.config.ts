@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: "C:\\Users\\Apolo\\Coding\\MaBook\\Front-End",
+  },
   reactStrictMode: true,
   images: {
     domains: ["books.google.com"],
