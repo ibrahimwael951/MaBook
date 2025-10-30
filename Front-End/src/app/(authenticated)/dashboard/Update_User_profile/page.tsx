@@ -198,7 +198,7 @@ export default function Page() {
 
   return (
     <section className=" max-w-2xl mx-auto p-8">
-      <div className="bg-white dark:bg-third rounded-2xl shadow-xl dark:shadow-white/20 overflow-hidden">
+      <div className="bg-white dark:bg-third rounded-2xl shadow-xl  overflow-hidden">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-secondary to-secondaryHigh p-8 text-white">
           <motion.h2

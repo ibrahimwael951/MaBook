@@ -223,7 +223,7 @@ export default function CreatePostPage() {
   return (
     <section className="mt-12 sm:mt-16 lg:mt-10 min-h-screen p-4 flex flex-col lg:flex-row justify-evenly gap-10 items-center">
       <div className="w-full lg:w-2/4 max-w-2xl">
-        <div className="bg-white dark:bg-third rounded-2xl shadow-xl dark:shadow-white/20 overflow-hidden">
+        <div className="bg-white dark:bg-third rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
           <div className="bg-gradient-to-r from-secondary to-secondaryHigh p-8 text-white">
             <motion.h1
