@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { Shelf, Book } from "@/types/shelf";
 
@@ -112,20 +113,32 @@ const initialShelves: Shelf[] = [
 ];
 
 export const useBookStorage = () => {
-  const [shelves, setShelves] = useState<Shelf[]>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : initialShelves;
-  });
+  const [shelves, setShelves] = useState<Shelf[]>(initialShelves);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(shelves));
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        setShelves(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error("Failed to parse bookshelf data from localStorage", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(shelves));
+    } catch (e) {
+      console.error("Failed to save bookshelf data to localStorage", e);
+    }
   }, [shelves]);
 
   const moveBook = (bookId: string, newShelfId: string, newPosition: number) => {
     setShelves((prevShelves) => {
       const newShelves = [...prevShelves];
-      
-      // Find the book and its current shelf
       let book: Book | undefined;
       let oldShelfIndex = -1;
       let oldBookIndex = -1;
@@ -141,22 +154,15 @@ export const useBookStorage = () => {
       }
 
       if (!book) return prevShelves;
-
-      // Remove from old shelf
       newShelves[oldShelfIndex].books.splice(oldBookIndex, 1);
-
-      // Update positions in old shelf
       newShelves[oldShelfIndex].books = newShelves[oldShelfIndex].books.map(
         (b, idx) => ({ ...b, position: idx })
       );
 
-      // Add to new shelf
       const newShelfIndex = newShelves.findIndex((s) => s.id === newShelfId);
       if (newShelfIndex !== -1) {
         book = { ...book, shelfId: newShelfId, position: newPosition };
         newShelves[newShelfIndex].books.splice(newPosition, 0, book);
-
-        // Update positions in new shelf
         newShelves[newShelfIndex].books = newShelves[newShelfIndex].books.map(
           (b, idx) => ({ ...b, position: idx })
         );
@@ -186,7 +192,7 @@ export const useBookStorage = () => {
     });
   };
 
-  const updateShelfWidth = (shelfId: string, width: 'full' | 'half') => {
+  const updateShelfWidth = (shelfId: string, width: "full" | "half") => {
     setShelves((prevShelves) =>
       prevShelves.map((s) => (s.id === shelfId ? { ...s, width } : s))
     );
@@ -209,17 +215,23 @@ export const useBookStorage = () => {
 
   const resetShelves = () => {
     setShelves(initialShelves);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialShelves));
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(initialShelves));
+      } catch (e) {
+        console.error("Failed to reset bookshelf data in localStorage", e);
+      }
+    }
   };
 
-  return { 
-    shelves, 
-    moveBook, 
-    addShelf, 
-    deleteShelf, 
-    updateShelfWidth, 
+  return {
+    shelves,
+    moveBook,
+    addShelf,
+    deleteShelf,
+    updateShelfWidth,
     updateShelfName,
     reorderShelves,
-    resetShelves 
+    resetShelves,
   };
 };
