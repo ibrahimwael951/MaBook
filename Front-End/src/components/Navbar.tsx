@@ -75,25 +75,22 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        {!user ? (
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-secondary to-secondaryHigh rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
-              <Image
-                alt="logo"
-                src="/open-book.png"
-                width={40}
-                height={40}
-                className="relative"
-              />
-            </div>
-            <span className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-secondary to-secondaryHigh bg-clip-text text-transparent hidden sm:inline">
-              Ma Book
-            </span>
-          </Link>
-        ) : (
-          <div className="w-10"></div>
-        )}
+
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary to-secondaryHigh rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <Image
+              alt="logo"
+              src="/open-book.png"
+              width={40}
+              height={40}
+              className="relative"
+            />
+          </div>
+          <span className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-secondary to-secondaryHigh bg-clip-text text-transparent hidden sm:inline">
+            Ma Book
+          </span>
+        </Link>
 
         {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center gap-2 bg-gray-100 dark:bg-third p-1.5 rounded-2xl shadow-inner">

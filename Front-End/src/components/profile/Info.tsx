@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { SimpleAnimatedImage } from "../ui/AnimatedImage";
 import { AccountAge } from "@/hooks/AccountAge";
-import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "../Loading";
 import { UserProfile } from "@/types/Auth";
@@ -11,9 +10,7 @@ import { Animate, FadeLeft, FadeUp } from "@/animation";
 import Link from "next/link";
 import {
   Calendar,
-  Users,
   UserPlus,
-  BookOpen,
   Edit3,
   Library,
   MessageCircle,
@@ -90,7 +87,7 @@ const Info: React.FC<InfoProps> = (props) => {
           </motion.div>
 
           {/* Profile Info */}
-          <div className="flex-1 space-y-6 text-center sm:text-left min-w-0">
+          <div className="flex-1 space-y-6 text-center sm:text-left min-w-0 mx-auto">
             {/* Name & Username */}
             <div className="space-y-2">
               <motion.div
