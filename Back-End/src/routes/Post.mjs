@@ -138,6 +138,7 @@ router.get("/api/post/:id", async (req, res) => {
         : null;
 
     const Saved = await SavePost.exists({ postId: id });
+    const RePosted = await RePost.exists({ postId: id });
 
     const Liked = await Likes.findOne({
       postId: post._id,
@@ -157,6 +158,7 @@ router.get("/api/post/:id", async (req, res) => {
       },
       Saved,
       Liked: IsLiked,
+      RePosted,
       LikesCount,
       commentsCount,
     };

@@ -223,13 +223,13 @@ const PostCard: React.FC<props> = ({ post, AnimateIt = false }) => {
               </Button>
             </Link>
           </div>
-          <div className="row-span-2 col-span-2 ">
+          {/* <div className="row-span-2 col-span-2 ">
             <RePost
               postId={post._id}
               RePostsCount={post.RePostCount}
               RePosted={post.RePosted}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <AnimatePresence>

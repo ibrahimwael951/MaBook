@@ -64,7 +64,7 @@ export default function Page() {
     );
 
   return (
-    <main className="min-h-screen mt-20">
+    <main className="min-h-screen">
       <Info {...UserProfile} />
 
       {/* ----------------Posts Section------------- */}

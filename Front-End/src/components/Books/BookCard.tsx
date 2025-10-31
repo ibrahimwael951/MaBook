@@ -15,7 +15,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const img = book.volumeInfo.imageLinks?.thumbnail || "/No image found.png";
 
   return (
-    <Link href={`/books/${book.id}`}>
+    <Link href={`/books/${book.id}`} className="w-full overflow-hidden">
       <motion.div
         {...opacity}
         viewport={{
@@ -26,7 +26,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           transition: { duration: 0.172 },
         }}
         whileHover={{ scale: 1.02, y: -4 }}
-        className="min-h-64 h-full flex gap-5 rounded-2xl p-5 border-2 dark:border-primary/30 border-third/30 hover:border-secondary dark:hover:border-secondary cursor-pointer bg-white dark:bg-third shadow-md hover:shadow-xl transition-all duration-300"
+        className=" min-h-64 h-full flex gap-5 rounded-2xl p-5 border-2 dark:border-primary/30 border-third/30 hover:border-secondary dark:hover:border-secondary cursor-pointer bg-white dark:bg-third shadow-md hover:shadow-xl transition-all duration-300"
       >
         {/* Book Cover */}
         <div className="flex-shrink-0">

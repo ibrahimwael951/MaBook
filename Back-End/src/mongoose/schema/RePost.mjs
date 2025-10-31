@@ -7,10 +7,10 @@ const RePostSchema = new mongoose.Schema(
       required: true,
       refPath: "type",
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
+    author: {
+      type: String,
       required: true,
-      ref: "user",
+      trim: true,
     },
     text: {
       type: String,

@@ -6,10 +6,10 @@ import { Animate, opacity } from "@/animation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Post, RePost, SavedPost } from "@/types/Auth";
 import Loading from "../Loading";
-import { Hourglass } from "lucide-react";
 import SavedPage from "./Sections/Saved";
 import PostPage from "./Sections/Posts";
-import RePosts from "./Sections/Reposts";
+import { BookmarkCheck, Grid3x3, Repeat2 } from "lucide-react";
+// import RePosts from "./Sections/Reposts";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 
@@ -60,7 +60,8 @@ const UserPosts: React.FC<Props> = ({ username }) => {
   if (!user) return <Loading />;
   return (
     <section className="my-5 !px-0 lg:!px-10 w-full">
-      <div className="flex justify-center gap-5 p-3">
+      {/* Tab Navigation */}
+      <div className="flex justify-center gap-3 p-4">
         <MotionButton
           variant={page === "Posts" ? "secondary_2" : "third_2"}
           onClick={() => setPage("Posts")}
@@ -70,12 +71,14 @@ const UserPosts: React.FC<Props> = ({ username }) => {
             scale: page === "Posts" ? 1.06 : 1,
           }}
           transition={{ duration: 0.1 }}
-          className="text-lg"
+          className="text-lg font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
         >
+          <Grid3x3 className="w-5 h-5" />
           Posts
         </MotionButton>
+
         {user.username === username &&
-          (["RePosts", "Saved"] as const).map((item) => (
+          (["Saved"] as const).map((item) => (
             <MotionButton
               variant={page === item ? "secondary_2" : "third_2"}
               key={item}
@@ -86,12 +89,15 @@ const UserPosts: React.FC<Props> = ({ username }) => {
                 scale: page === item ? 1.06 : 1,
               }}
               transition={{ duration: 0.1 }}
-              className="text-lg"
+              className="text-lg font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
             >
+              <BookmarkCheck className="w-5 h-5" />
               {item}
             </MotionButton>
           ))}
       </div>
+
+      {/* Content Area */}
       <div className="mt-10">
         <AnimatePresence mode="wait">
           {page === "Posts" && (
@@ -117,7 +123,7 @@ const UserPosts: React.FC<Props> = ({ username }) => {
             </motion.div>
           )}
 
-          {page === "RePosts" && (
+          {/* {page === "RePosts" && (
             <motion.div
               key={page}
               {...Animate}
@@ -126,10 +132,23 @@ const UserPosts: React.FC<Props> = ({ username }) => {
             >
               <RePosts post={rePosts} />
             </motion.div>
-          )}
+          )} */}
         </AnimatePresence>
       </div>
-      <p className="w-full text-center mt-5">End of the page</p>
+
+      {/* End Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="w-full flex justify-center mt-10 mb-5"
+      >
+        <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400">
+          <div className="h-px w-16 bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+          <span className="text-sm font-medium">End of content</span>
+          <div className="h-px w-16 bg-gradient-to-l from-transparent to-gray-300 dark:to-gray-600"></div>
+        </div>
+      </motion.div>
     </section>
   );
 };

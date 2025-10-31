@@ -72,9 +72,23 @@ export interface SavedPost {
 export interface RePost {
   _id: string;
   postId: Post;
-  userId:string
-  text:string;
+  author: string;
+  text: string;
   createdAt: string;
+}
+export interface RePostpage {
+  RePost: {
+    _id: string;
+    postId: Post;
+    author: {
+      username: string;
+      avatar?: string;
+    };
+    text: string;
+    updatedAt: string;
+    createdAt: string;
+  };
+  post: Post;
 }
 export interface Comments {
   _id: string;
