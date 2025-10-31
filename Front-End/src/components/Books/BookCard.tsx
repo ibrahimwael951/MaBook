@@ -15,7 +15,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const img = book.volumeInfo.imageLinks?.thumbnail || "/No image found.png";
 
   return (
-    <Link href={`/books/${book.id}`} className="w-full overflow-hidden">
+    <Link href={`/books/${book.id}`} className="w-full overflow-hid den">
       <motion.div
         {...opacity}
         viewport={{

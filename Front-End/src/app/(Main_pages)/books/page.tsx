@@ -285,7 +285,7 @@ function Home() {
               </p>
             </motion.div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8  w-full">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-8  w-full">
               {books.map((book) => (
                 <BookCard key={book.id} book={book} />
               ))}
