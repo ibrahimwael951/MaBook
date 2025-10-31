@@ -4,15 +4,19 @@ First Book Readers Community
 
 ![Screenshot](/Front-End/public/Ma_Book.png)
 
-MaBook is a simple, friendly, and inspiring platform built for book lovers who want to share their reading journey with others. Whether you’re reading your first book or your 100th, MaBook gives you a space to express, connect, and inspire through books.
+MaBook is a cozy and uplifting space where book lovers come together to share their reading journeys, discover new stories, and inspire one another.
 
 ## PlatForm Future
 
-- Best ui/ux design
-- Easy to use for client 
-- 
-- API collecting some dishes from all countries
-- Web can answer ur every day Question (what i will eat today)
+- light mode and dark mode to save your eyes.
+- post your daily book or your vlogs.
+- comment , like and repost other people posts.
+- Store your books on digital Shelf.
+- Badges to encourage you to read books.
+- Follow others to see their content again.
+- It supports Arabic and English languages.
+- Best community for Books readers ever.
+- All user data is protected and secure.
 
 ## Tools and Dependencies
 
@@ -23,7 +27,7 @@ MaBook is a simple, friendly, and inspiring platform built for book lovers who w
 - Framer Motion
 - ShadCN UI
 - Lucide Icons
-- API ( Google Books )
+- Google Books
 - Axios
 - Web3Forms
 
@@ -32,4 +36,3 @@ MaBook is a simple, friendly, and inspiring platform built for book lovers who w
 - Express.Js
 - MongoDB
 - Cloudinary
-- passport
