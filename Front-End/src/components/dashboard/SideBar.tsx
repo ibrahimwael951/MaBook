@@ -2,16 +2,14 @@
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence, motion } from "framer-motion";
-
 import { DashboardLinks } from "@/data/Quick_Links";
-
-import { Animate, FadeUp, opacity } from "@/animation";
-
 import { SideBarButton } from "./SideBarButton";
-import { X, LogOut, ChevronRight } from "lucide-react";
+import { LogOut, ChevronRight } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { SimpleAnimatedImage } from "../ui/AnimatedImage";
 import Link from "next/link";
+
+const MotionLink = motion.create(Link);
 
 interface Props {
   isSideBarOpened: boolean;
@@ -92,12 +90,10 @@ const SideBar: React.FC<Props> = ({ isSideBarOpened, setIsSideBarOpened }) => {
         </div>
 
         {/* User Section & Logout */}
-        <Link
-          href={`/profile/${user?.username}`}
-          className="p-4 border-t border-white/10 space-y-3 overflow-hidden"
-        >
+        <div className="p-4 border-t border-white/10 space-y-3 overflow-hidden">
           {user && isSideBarOpened && (
-            <motion.div
+            <MotionLink
+              href={`/profile/${user?.username}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-3 p-3 bg-white/10 rounded-xl backdrop-blur-sm"
@@ -123,7 +119,7 @@ const SideBar: React.FC<Props> = ({ isSideBarOpened, setIsSideBarOpened }) => {
                   @{user.username}
                 </p>
               </div>
-            </motion.div>
+            </MotionLink>
           )}
 
           <SideBarButton
@@ -133,7 +129,7 @@ const SideBar: React.FC<Props> = ({ isSideBarOpened, setIsSideBarOpened }) => {
             className="flex items-center gap-3 px-3 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-red-100 transition-all"
             onClick={() => setIsLogoutPopOpened(true)}
           />
-        </Link>
+        </div>
       </motion.div>
 
       {/* Logout Confirmation Modal */}
