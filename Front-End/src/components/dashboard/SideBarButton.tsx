@@ -9,7 +9,7 @@ import Image from "next/image";
 
 interface Props {
   href?: string;
-  onCLick?: () => void;
+  onClick?: () => void;
   title: string;
   Icon: LucideIcon | string;
   isMenuOpened: boolean;
@@ -22,7 +22,7 @@ export const SideBarButton: React.FC<Props> = ({
   title,
   Icon,
   href,
-  onCLick,
+  onClick,
   className,
   WithAnimation = true,
 }) => {
@@ -66,7 +66,7 @@ export const SideBarButton: React.FC<Props> = ({
               filter: "blur(0px)",
               transition: { duration: 0.2, delay: 0.2 },
             }}
-            className="absolute top-2/4 -translate-y-2/4 left-full w-40"
+            className="pl-1 absolute top-2/4 -translate-y-2/4 left-full w-40"
           >
             {title}
           </motion.div>
@@ -96,6 +96,6 @@ export const SideBarButton: React.FC<Props> = ({
   );
 
   if (href) return <Link href={href}>{renderButton()}</Link>;
-  if (onCLick) return <div onClick={onCLick}>{renderButton()}</div>;
+  if (onClick) return <div onClick={onClick}>{renderButton()}</div>;
   return renderButton();
 };
