@@ -42,7 +42,11 @@ export const Navbar_Logged_In: DefaultLinks[] = [
   { title: "New Post", href: "/newPost", icon: CirclePlus },
 ];
 export const socialMedia: DefaultLinks[] = [
-  { title: "instagram", href: "/", icon: Instagram },
+  {
+    title: "instagram",
+    href: "https://www.instagram.com/ma_book95/",
+    icon: Instagram,
+  },
   { title: "Facebook", href: "/about", icon: Facebook },
   { title: "Youtube", href: "/books", icon: Youtube },
 ];
