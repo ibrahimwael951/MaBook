@@ -69,8 +69,8 @@ export const DashboardLinks: DashLinks[] = [
     description: "See and manage your published blogs",
   },
   {
-    title: "My Book",
-    href: "/MyBookShelf",
+    title: "My shelf",
+    href: "/shelf",
     icon: BookmarkCheck,
     description: "Access your saved bookmarks",
   },
